@@ -33,7 +33,13 @@ const userSchema = new Schema({
         type: String,
     },
     // will back here soon
-    refreshToken:{
+    bio: {
+        type: String
+    },
+    link: {
+        type: String
+    },
+    refreshToken: {
         type: String
     }
 }
