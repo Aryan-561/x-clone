@@ -1,13 +1,13 @@
 import { v2 as cloudinary } from 'cloudinary'
-import ApiErrors from './ApiErrors.js';
+import ApiErrors from "./ApiErrors.js"
 import fs from "fs/promises"
-import dotenv from "dotenv"
-dotenv.config()
+import conf from '../conf/conf.js'
 
+console.log(conf);
 cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME || "missing  name",
-    api_key: process.env.CLOUD_API_KEY || "missing  key",
-    api_secret: process.env.CLOUD_API_SECRET || "missing  secret"
+    cloud_name: conf.name ,
+    api_key: conf.key ,
+    api_secret: conf.secret 
 });
 
 // upload images return only url of imge
