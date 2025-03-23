@@ -3,7 +3,7 @@ import ApiErrors from "./ApiErrors.js"
 import fs from "fs/promises"
 import conf from '../conf/conf.js'
 
-console.log(conf);
+// console.log(conf);
 cloudinary.config({
     cloud_name: conf.name ,
     api_key: conf.key ,

@@ -1,4 +1,4 @@
-import mongoose, { connect } from "mongoose";
+import { connect } from "mongoose";
 
 // Connect to MongoDB
 const database = async (url) => {
