@@ -16,7 +16,7 @@ const uploadCloudinary = async (filepath) => {
         if (!filepath) throw new ApiErrors(404, 'File path not found')
         const image = await cloudinary.uploader.upload(filepath, {
             resource_type: 'image',
-            folder: 'tweetMedia',
+            folder: 'tweetDb',
         });
         console.log(" upload image :", image.secure_url);
 
@@ -27,6 +27,8 @@ const uploadCloudinary = async (filepath) => {
 
         return image.secure_url;
     } catch (error) {
+        await fs.unlink(filepath);
+
         console.log('Error uploading image:', error);
         throw new ApiErrors(500, 'Failed to upload image', error)
     }
