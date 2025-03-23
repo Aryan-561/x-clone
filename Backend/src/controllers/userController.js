@@ -1,7 +1,7 @@
 import ApiErrors from "../utils/ApiErrors.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
-import User from "../models/User.js";
+import User from "../models/User.model.js";
 import { uploadCloudinary, deleteCloudinary } from "../utils/cloudinary.js";
 import conf from "../conf/conf.js";
 import jwt from "jsonwebtoken";
@@ -226,7 +226,7 @@ const updateUserAccountDetails = asyncHandler(async (req, res) => {
 
     const currentUser = await User.findById(id).select("-password -refreshToken")
     if (!currentUser) throw new ApiErrors(404, "User not found, please login again");
-    
+
     // update user details
     currentUser.userName = userName || currentUser.userName;
     currentUser.fullName = fullName || "";
