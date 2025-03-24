@@ -1,53 +1,66 @@
-import { v2 as cloudinary } from 'cloudinary'
-import ApiErrors from "./ApiErrors.js"
-import fs from "fs/promises"
-import conf from '../conf/conf.js'
+import { v2 as cloudinary } from "cloudinary";
+import ApiErrors from "./ApiErrors.js";
+import fs from "fs/promises";
+import conf from "../conf/conf.js";
 
 // console.log(conf);
 cloudinary.config({
-    cloud_name: conf.name ,
-    api_key: conf.key ,
-    api_secret: conf.secret 
+    cloud_name: conf.name,
+    api_key: conf.key,
+    api_secret: conf.secret,
 });
 
-// upload images return only url of imge
-const uploadCloudinary = async (filepath) => {
+// function for uploading media file on cloundinary and return url
+
+const uploadCloudinary = async (filepath, resourceType = "auto") => {
     try {
-        if (!filepath) throw new ApiErrors(404, 'File path not found')
-        const image = await cloudinary.uploader.upload(filepath, {
-            resource_type: 'image',
-            folder: 'tweetDb',
+        if (!filepath) throw new ApiErrors(404, "File path not found");
+        const uploadedMedia = await cloudinary.uploader.upload(filepath, {
+            resource_type: resourceType,
+            folder: "tweetDb",
         });
-        console.log(" upload image :", image.secure_url);
-
+        console.log(" uploaded media file :", uploadedMedia.secure_url);
 
         await fs.unlink(filepath);
-        console.log("Temporary file deleted:", filepath);
+        console.log("Temporary media file deleted:", filepath);
 
-
-        return image.secure_url;
+        return uploadedMedia.secure_url;
     } catch (error) {
         await fs.unlink(filepath);
 
-        console.log('Error uploading image:', error);
-        throw new ApiErrors(500, 'Failed to upload image', error)
+        console.log("Error uploading media file:", error);
+        throw new ApiErrors(500, "Failed to upload media file:", error);
     }
-}
+};
 
-// delete images, need only public id of image
-const deleteCloudinary = async (filePublicId) => {
+
+// delete media file , url needed
+
+const deleteCloudinary = async (url) => {
+
     try {
-        if (!filePublicId) throw new ApiErrors(404, 'File id not found')
-        const deleteImage = await cloudinary.uploader.destroy(filePublicId)
-        console.log("delete image files", deleteImage);
-        return deleteImage;
+
+        if (!url) throw new ApiErrors(404, "File url not found");
+
+        // extract file public id from url
+        const filePublicId = url.split("/").pop().split(".")[0];
+
+        // extract file resource type form url
+        const resourceType = url.split("/")[4]
+
+
+        const deleteMedia = await cloudinary.uploader.destroy(filePublicId, {
+            resource_type: resourceType,
+        });
+
+        console.log("delete media files", deleteMedia);
+        return deleteMedia;
 
     } catch (error) {
-        console.log('Error deleting image:', error);
-        throw new ApiErrors(500, 'Failed to delete images file', error)
+        
+        console.log("Error deleting media:", error);
+
+        throw new ApiErrors(500, "Failed to delete media file", error);
     }
-}
-export {
-    uploadCloudinary,
-    deleteCloudinary
-}
+};
+export { uploadCloudinary, deleteCloudinary };
