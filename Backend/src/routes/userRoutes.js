@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
     createUser,
     currentUser,
+    deleteUser,
     jwtRefreshToken,
     loginuser,
     logoutUser,
@@ -33,12 +34,13 @@ router.route("/login").post(parseFormData, loginuser)
 router.route("/logout").get(verifyJwt, logoutUser)
 
 //  for refreshing token
-router.route("/re-refreshtoken").get(verifyJwt, jwtRefreshToken)
+router.route("/re-refreshtoken").post(verifyJwt, jwtRefreshToken)
 
 //  for updating user details
 router.route("/update-account-details").post(parseFormData, verifyJwt, updateUserAccountDetails)
-router.route("/update-coverimage").post(verifyJwt, updateUserCoverImage)
-router.route("/update-profileimage").post(verifyJwt, updateUserProfileImage)
+router.route("/update-coverimage").patch(verifyJwt, upload.single('coverImage'), updateUserCoverImage)
+router.route("/update-profileimage").patch(verifyJwt,upload.single('profileImage'), updateUserProfileImage)
+router.route("/deleteuser").delete(verifyJwt, deleteUser)
 
 
 

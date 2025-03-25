@@ -28,12 +28,13 @@ const userSchema = new Schema(
             required: true
         },
         coverImage: {
-            type: String,
+            url: { type: String, },
+            publicId: { type: String, }
         },
         profileImage: {
-            type: String,
+            url: { type: String },
+            publicId: { type: String, }
         },
-        // will back here soon
         bio: {
             type: String,
         },
@@ -52,7 +53,7 @@ const userSchema = new Schema(
 // hash the password before saving it to the database
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
-    this.password =  await bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(this.password, 10);
     next();
 });
 //  compare the password

@@ -1,7 +1,7 @@
 import ApiErrors from "../utils/ApiErrors.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
-import User from "../models/User.model.js";
+import User from "../models/user.model.js";
 import { uploadCloudinary, deleteCloudinary } from "../utils/cloudinary.js";
 import conf from "../conf/conf.js";
 import jwt from "jsonwebtoken";
@@ -71,23 +71,26 @@ const createUser = asyncHandler(async (req, res) => {
         throw new ApiErrors(400, "Profile image is required")
     }
 
-    const uploadCoverImageToCloudinary = await uploadCloudinary(coverImageFile)
-    const uploadProfileImageToCloudinary = await uploadCloudinary(profileImageFile)
+    const [uploadCoverImageToCloudinary, uploadProfileImageToCloudinary] = await Promise.all([
+        uploadCloudinary(coverImageFile),
+        uploadCloudinary(profileImageFile)]
+    )
 
-
-
-    console.log(
-        `\n Cover Image uploaded to cloudinary: ${uploadCoverImageToCloudinary} \n`,
-        `\nProfile Image uploaded to cloudinary: ${uploadProfileImageToCloudinary}\n`
-    );
 
     //  creating new db document
     const user = await User.create({
         userName,
         fullName,
         email,
-        coverImage: uploadCoverImageToCloudinary || "",
-        profileImage: uploadProfileImageToCloudinary || "",
+        coverImage: {
+            url: uploadCoverImageToCloudinary?.secure_url || "",
+            publicId: uploadCoverImageToCloudinary?.public_id || "",
+
+        },
+        profileImage: {
+            url: uploadProfileImageToCloudinary?.secure_url || "",
+            publicId: uploadProfileImageToCloudinary?.public_id || "",
+        },
         password,
         bio,
         link
@@ -237,14 +240,85 @@ const updateUserAccountDetails = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, "User details updated successfully", currentUser))
 })
 
-const updateUserProfileImage = asyncHandler(async (req, res) => {
-    console.log("hello: updateUserProfileImage");
-})
-
 const updateUserCoverImage = asyncHandler(async (req, res) => {
-    console.log("hello: updateUserCoverImage");
+    const coverImage = req.file?.path
+    const public_id = req.user.coverImage.publicId
+
+
+    if (!coverImage) {
+        throw new ApiErrors(400, "coverImage image is required");
+    }
+    const uploadProfileImageToCloudinary = await uploadCloudinary(coverImage)
+    if (uploadProfileImageToCloudinary) {
+        deleteCloudinary(public_id)
+    }
+    // update user profile image
+    const updatedCoverImage = await User.findByIdAndUpdate(req.user.id, {
+        coverImage: {
+            url: uploadProfileImageToCloudinary?.secure_url || "",
+            publicId: uploadProfileImageToCloudinary?.public_id || "",
+        }
+    },
+        {
+            new: true,
+            runValidators: false,
+        }
+    )
+    return res.status(200).json(new ApiResponse(200, "Profile image updated successfully", updatedCoverImage))
 })
 
+const updateUserProfileImage = asyncHandler(async (req, res) => {
+    const profileImage = req.file?.path
+    const public_id = req.user.profileImage?.publicId
+
+
+    if (!profileImage) {
+        throw new ApiErrors(400, "Profile image is required");
+    }
+    const uploadProfileImageToCloudinary = await uploadCloudinary(profileImage)
+
+    // delete profile image when new one uplaoded
+    if (uploadProfileImageToCloudinary) {
+        deleteCloudinary(public_id)
+    }
+    // update user profile image
+    const updatedProfileImage = await User.findByIdAndUpdate(req.user.id, {
+        profileImage: {
+            url: uploadProfileImageToCloudinary?.secure_url || "",
+            publicId: uploadProfileImageToCloudinary?.public_id || "",
+        }
+    },
+        {
+            new: true,
+            runValidators: true,
+        }
+    )
+    return res.status(200).json(new ApiResponse(200, "Profile image updated successfully", updatedProfileImage))
+})
+
+const deleteUser = asyncHandler(async (req, res) => {
+    const { id } = req.user
+
+    const user = await User.findById(id)
+    if (!user) throw new ApiErrors(404, "User not found,please login again");
+
+    // delete profile image from cloudinary
+    if (user.profileImage?.publicId) await deleteCloudinary(user.profileImage.publicId);
+    if (user.coverImage?.publicId) await deleteCloudinary(user.coverImage.publicId);
+
+    // delete user from database
+
+    await user.deleteOne()
+
+    // clear cookies
+    res
+        .status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+
+    return res.status(200).json(new ApiResponse(200, "User deleted successfully", user))
+
+})
 
 // make api endpoint for user profile followr, following etc...
 export {
@@ -256,5 +330,6 @@ export {
     updateUserProfileImage,
     updateUserCoverImage,
     updateUserAccountDetails,
+    deleteUser,
 };
 

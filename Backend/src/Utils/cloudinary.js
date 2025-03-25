@@ -23,8 +23,9 @@ const uploadCloudinary = async (filepath, resourceType = "auto") => {
 
         await fs.unlink(filepath);
         console.log("Temporary media file deleted:", filepath);
-
-        return uploadedMedia.secure_url;
+        // console.log("response:", uploadedMedia);
+            
+        return uploadedMedia;
     } catch (error) {
         await fs.unlink(filepath);
 
@@ -41,17 +42,18 @@ const deleteCloudinary = async (url) => {
     try {
 
         if (!url) throw new ApiErrors(404, "File url not found");
+        
+        // hehe i commented code here and mine work fine now and make change in your file
+        // 😒 added public id in db instead of performing js operation., 
 
         // extract file public id from url
-        const filePublicId = url.split("/").pop().split(".")[0];
+        // const filePublicId = url.split("/").pop().split(".")[0];
 
         // extract file resource type form url
-        const resourceType = url.split("/")[4]
+        // const resourceType = url.split("/")[4]
 
 
-        const deleteMedia = await cloudinary.uploader.destroy(filePublicId, {
-            resource_type: resourceType,
-        });
+        const deleteMedia = await cloudinary.uploader.destroy(url);
 
         console.log("delete media files", deleteMedia);
         return deleteMedia;
