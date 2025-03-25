@@ -12,7 +12,15 @@ const postSchema = Schema({
     },
 
     media:{
-        type:String, //cloundinary link
+        url:{
+            type:String, //cloundinary link
+        },
+        publicId:{
+            type:String 
+        },
+        resourseType:{
+            type:String
+        }
     },
 
     views:{

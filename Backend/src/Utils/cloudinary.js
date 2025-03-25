@@ -16,7 +16,7 @@ const uploadCloudinary = async (filepath, resourceType = "auto") => {
     try {
         if (!filepath) throw new ApiErrors(404, "File path not found");
         const uploadedMedia = await cloudinary.uploader.upload(filepath, {
-            resource_type: resourceType,
+            resource_type: "auto",
             folder: "tweetDb",
         });
         console.log(" uploaded media file :", uploadedMedia.secure_url);
@@ -37,11 +37,11 @@ const uploadCloudinary = async (filepath, resourceType = "auto") => {
 
 // delete media file , url needed
 
-const deleteCloudinary = async (url) => {
+const deleteCloudinary = async (publicId, resourceType="image") => {
 
     try {
 
-        if (!url) throw new ApiErrors(404, "File url not found");
+        if (!publicId) throw new ApiErrors(404, "File public Id not found");
         
         // hehe i commented code here and mine work fine now and make change in your file
         // 😒 added public id in db instead of performing js operation., 
@@ -53,7 +53,7 @@ const deleteCloudinary = async (url) => {
         // const resourceType = url.split("/")[4]
 
 
-        const deleteMedia = await cloudinary.uploader.destroy(url);
+        const deleteMedia = await cloudinary.uploader.destroy(publicId,{resource_type:resourceType});
 
         console.log("delete media files", deleteMedia);
         return deleteMedia;

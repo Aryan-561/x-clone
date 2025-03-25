@@ -27,8 +27,10 @@ app.use(express.urlencoded({ extended: true }));
 // Cookie Parser Middleware ,parse cookies from request headers, available under the req.cookies property
 app.use(cookieParser());
 
+import postRouter from "./routes/post.routes.js"
+
 // Routes
 app.use("/api/v1/users",router)
-
+app.use("/api/v1/post", postRouter)
 
 export default app
