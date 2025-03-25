@@ -10,11 +10,11 @@ import {
     updateUserCoverImage,
     updateUserProfileImage
 
-} from '../controllers/userController.js';
+} from '../controllers/user.controller.js';
 import multer from "multer";
 
 import upload from '../middleware/multer.middleware.js';
-import verifyJwt from '../middleware/authMiddleware.js';
+import verifyJwt from '../middleware/auth.middleware.js';
 const router = Router()
 // remove it soon
 const parseFormData = multer().none(); // Middleware for text-only FormData

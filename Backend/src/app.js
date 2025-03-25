@@ -1,7 +1,9 @@
 import express from 'express';
 import cookieParser from "cookie-parser"
 import conf from './conf/conf.js';
-import router from './routes/userRoutes.js';
+import UserRouter from './routes/user.routes.js';
+
+import likeRouter from './routes/like.routes.js';
 import cors from 'cors';
 const app = express();
 // Middleware
@@ -30,7 +32,10 @@ app.use(cookieParser());
 import postRouter from "./routes/post.routes.js"
 
 // Routes
-app.use("/api/v1/users",router)
+app.use("/api/v1/users", UserRouter)
 app.use("/api/v1/post", postRouter)
+app.use("/api/v1/like",likeRouter )
+
+
 
 export default app
