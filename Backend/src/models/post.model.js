@@ -1,7 +1,8 @@
 import mongoose, {Schema} from "mongoose"
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2"; 
 
 const postSchema = Schema({
-    user:{
+    createdBy:{
         type: Schema.Types.ObjectId,
         ref: "User",
     },
@@ -29,5 +30,7 @@ const postSchema = Schema({
     }
 
 },{timestamps:true})
+
+postSchema.plugin(mongooseAggregatePaginate);
 
 export const Post = mongoose.model("Post",postSchema)
