@@ -1,7 +1,7 @@
 import {Router} from "express"
 import verifyJwt from "../middleware/auth.middleware.js"
 import upload from "../middleware/multer.middleware.js"
-import { createPost, deletePost, getAllPost, getFollowerPost, getPostById, getUserPost, updatePost } from "../controllers/post.controllers.js"
+import { createPost, deletePost, getAllPost, getFollowingUserPost, getPostById, getUserPost, updatePost } from "../controllers/post.controllers.js"
 
 const router =  Router()
 

@@ -249,7 +249,7 @@ const getUserPost = asyncHandler(async(req, res)=>{
 
 
 // fn for get following user post
-const getFollowerUserPost = asyncHandler(async(req, res)=>{
+const getFollowingUserPost = asyncHandler(async(req, res)=>{
 
     const {userId} = req.params
 
