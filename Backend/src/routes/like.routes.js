@@ -1,15 +1,25 @@
-import { getAllLikePost, toggleCommentLike, togglePostLike } from "../controllers/likes.controller.js";
-import  {
-    Router,
+import {
+    getAllLikePost,
+    toggleCommentLike,
+    togglePostLike,
+    getAllLikeComment
+} from "../controllers/likes.controller.js";
 
-} from "express"
-const router = Router()
+import { Router } from "express";
+import verifyJwt from "../middleware/auth.middleware.js";
 
-router.route("/post/:postId/like").post(togglePostLike)
+const router = Router();
 
-router.route("/post/:postId/comment/:commentId/like").post(toggleCommentLike)
+// Toggle like on a post
+router.post("/toggle/post/:postId", verifyJwt, togglePostLike);
 
-router.route("/post/:postId/likes").get(getAllLikePost)
+// Toggle like on a comment
+router.post("/toggle/comment/:commentId", verifyJwt, toggleCommentLike);
+
+// Get all likes on a post
+router.get("/posts",verifyJwt, getAllLikePost);
+
+// Get all likes on a comment
+router.get("/comments", getAllLikeComment);
 
 export default router;
-
