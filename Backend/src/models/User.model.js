@@ -69,7 +69,7 @@ userSchema.methods.generateAccessToken = function () {
         userName: this.userName,
     },
         conf.accessSecretToken,
-        { expiresIn: "15m" }
+        { expiresIn: "7d" }
     )
     return token;
 }

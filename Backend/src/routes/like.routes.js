@@ -3,7 +3,7 @@ import {
     toggleCommentLike,
     togglePostLike,
     getAllLikeComment
-} from "../controllers/likes.controller.js";
+} from "../controllers/like.controller.js";
 
 import { Router } from "express";
 import verifyJwt from "../middleware/auth.middleware.js";

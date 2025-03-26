@@ -7,7 +7,7 @@ const commentSchema = Schema({
         required:true
     },
 
-    commetBy:{
+    commentBy:{
         type:Schema.Types.ObjectId,
         ref:"User"
     },
