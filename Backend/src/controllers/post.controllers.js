@@ -5,7 +5,7 @@ import {Post} from "../models/post.model.js"
 import asyncHandler from "../utils/asyncHandler.js"
 import { uploadCloudinary } from "../utils/cloudinary.js"
 import mongoose, { isValidObjectId } from "mongoose"
-
+import { Subscription } from "../models/subscription.model.js"
 
 // fn for create post
 const createPost = asyncHandler(async(req, res)=>{
@@ -114,7 +114,7 @@ const getPostById =  asyncHandler(async(req, res)=>{
 // fn for get all post
 const getAllPost = asyncHandler(async(req, res)=>{
 
-    const {page=1, limit=20, } = req.params
+    const {page=1, limit=20, } = req.query
 
     const allPosts = await Post.aggregate([
         {
@@ -126,6 +126,24 @@ const getAllPost = asyncHandler(async(req, res)=>{
                 localField:"createdBy",
                 foreignField:"_id",
                 as:"user",
+                pipeline:[
+                    {
+                        $lookup:{
+                            from:"subscriptions",
+                            localField:"_id",
+                            foreignField:"follower",
+                            as:"followingDoc"
+                        },
+                    },
+                    {
+                        $lookup:{
+                            from:"subscriptions",
+                            localField:"_id",
+                            foreignField:"following",
+                            as:"followerDoc"
+                        },
+                    }
+                ]
             }
         },
         {
@@ -138,6 +156,9 @@ const getAllPost = asyncHandler(async(req, res)=>{
                     username:"$user.username",
                     fullName:"$user.fullName",
                     profileImage:"$user.profileImage",
+                    bio:"$user.bio",
+                    follower:{$size:"$user.followerDoc"},
+                    following:{$size:"$user.followingDoc"}
                 }
                 
             }
@@ -151,6 +172,11 @@ const getAllPost = asyncHandler(async(req, res)=>{
                 updatedAt:1,
                 userDetails:1,
 
+            }
+        },
+        {
+            $sort:{
+                createdAt:-1
             }
         },
         {
@@ -176,7 +202,8 @@ const getAllPost = asyncHandler(async(req, res)=>{
 
 // fn for get user post
 const getUserPost = asyncHandler(async(req, res)=>{
-    const {userId, page=1, limit=10} = req.params
+    const {userId} = req.params
+    const {page=1, limit=10} = req.query
 
     if(!userId){
         throw new ApiErrors(400, "User id is required!")
@@ -199,6 +226,24 @@ const getUserPost = asyncHandler(async(req, res)=>{
                 localField:"createdBy",
                 foreignField:"_id",
                 as:"user",
+                pipeline:[
+                    {
+                        $lookup:{
+                            from:"subscriptions",
+                            localField:"_id",
+                            foreignField:"follower",
+                            as:"followingDoc"
+                        },
+                    },
+                    {
+                        $lookup:{
+                            from:"subscriptions",
+                            localField:"_id",
+                            foreignField:"following",
+                            as:"followerDoc"
+                        },
+                    }
+                ]
             }
         },
         {
@@ -211,6 +256,9 @@ const getUserPost = asyncHandler(async(req, res)=>{
                     username:"$user.username",
                     fullName:"$user.fullName",
                     profileImage:"$user.profileImage",
+                    bio:"$user.bio",
+                    follower:{$size:"$user.followerDoc"},
+                    following:{$size:"$user.followingDoc"}
                 }
                 
             }
@@ -224,6 +272,11 @@ const getUserPost = asyncHandler(async(req, res)=>{
                 updatedAt:1,
                 userDetails:1,
 
+            }
+        },
+        {
+            $sort:{
+                createdAt:-1
             }
         },
         {
@@ -252,13 +305,14 @@ const getUserPost = asyncHandler(async(req, res)=>{
 const getFollowingUserPost = asyncHandler(async(req, res)=>{
 
     const {userId} = req.params
-
+    const {page=1, limit=20} = req.query
+    
     if(!userId){
         throw new ApiErrors(400, "User id is required!")
     }
 
     if(!isValidObjectId(userId)){
-        throw new ApiErrors(400, "Invalid user id!")
+        throw new ApiErrors(400, "Invalid user Id!")
     }
 
     const posts = await Subscription.aggregate([
@@ -282,6 +336,24 @@ const getFollowingUserPost = asyncHandler(async(req, res)=>{
                             localField:"createdBy",
                             foreignField:"_id",
                             as:"user",
+                            pipeline:[
+                                {
+                                    $lookup:{
+                                        from:"subscriptions",
+                                        localField:"_id",
+                                        foreignField:"follower",
+                                        as:"followingDoc"
+                                    },
+                                },
+                                {
+                                    $lookup:{
+                                        from:"subscriptions",
+                                        localField:"_id",
+                                        foreignField:"following",
+                                        as:"followerDoc"
+                                    },
+                                }
+                            ]
                         }
                     },
                     {
@@ -294,6 +366,9 @@ const getFollowingUserPost = asyncHandler(async(req, res)=>{
                                 username:"$user.username",
                                 fullName:"$user.fullName",
                                 profileImage:"$user.profileImage",
+                                bio:"$user.bio",
+                                follower:{$size:"$user.followerDoc"},
+                                following:{$size:"$user.followingDoc"}
                             }
                             
                         }
@@ -310,6 +385,7 @@ const getFollowingUserPost = asyncHandler(async(req, res)=>{
             
                         }
                     },
+                   
                 ]
             }
         },
@@ -320,9 +396,20 @@ const getFollowingUserPost = asyncHandler(async(req, res)=>{
 
         {
             $project:{
-                _id:0,
+               
                 posts:1
             }
+        },
+        {
+            $sort:{
+                "posts.createdAt":-1
+            }
+        },
+        {
+            $skip:(Number(page)-1)*Number(limit)
+        },
+        {
+            $limit:Number(limit)
         }
 
     ])
