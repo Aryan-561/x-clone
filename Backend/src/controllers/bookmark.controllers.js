@@ -77,7 +77,7 @@ const toggleBookmarkedComment = asyncHandler(async(req, res)=>{
 
 // fn for get all posts which bookmarked by user
 const getAllbookmarkedPost = asyncHandler(async(req, res)=>{
-
+    const {page=1, limit=20} = req.query
     const bookmarkedPosts = await Bookmark.aggregate([
 
         {
@@ -163,6 +163,7 @@ const getAllbookmarkedPost = asyncHandler(async(req, res)=>{
                 _id:"$bookmarkedPost._id",
                 text:"$bookmarkedPost.text",
                 media:"$bookmarkedPost.media",
+                views:"$bookmarkedPost.views",
                 userDetails:"$bookmarkedPost.userDetails",
                 createdAt:"$bookmarkedPost.createdAt",
                 updatedAt:"$bookmarkedPost.updatedAt",
