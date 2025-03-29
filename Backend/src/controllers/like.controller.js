@@ -102,7 +102,7 @@ const getAllLikePost = asyncHandler(async (req, res) => {
 const getAllLikeComment = asyncHandler(async (req, res) => {
     const likeComment = await Like.aggregate([
         {
-            match: {
+            $match: {
                 likedBy: req.user._id,
                 comment: { $exists: true }
             }

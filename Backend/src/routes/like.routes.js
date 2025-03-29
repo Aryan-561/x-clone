@@ -20,6 +20,6 @@ router.post("/toggle/comment/:commentId", verifyJwt, toggleCommentLike);
 router.get("/posts",verifyJwt, getAllLikePost);
 
 // Get all likes on a comment
-router.get("/comments", getAllLikeComment);
+router.get("/comments",verifyJwt, getAllLikeComment);
 
 export default router;
