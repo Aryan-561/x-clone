@@ -31,6 +31,7 @@ import UserRouter from './routes/user.routes.js';
 import likeRouter from './routes/like.routes.js';
 import commentRouter from './routes/comment.routes.js'
 import subscriptionRouter from "./routes/subscription.routes.js"
+import bookmarkRouter from "./routes/bookmark.routes.js"
 
 // Routes
 app.use("/api/v1/users", UserRouter)
@@ -38,6 +39,7 @@ app.use("/api/v1/post", postRouter)
 app.use("/api/v1/like",likeRouter )
 app.use("/api/v1/comment",commentRouter )
 app.use("/api/v1/subscription", subscriptionRouter)
+app.use("/api/v1/bookmark", bookmarkRouter)
 
 
 
