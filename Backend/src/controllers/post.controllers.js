@@ -88,7 +88,7 @@ const updatePost = asyncHandler(async(req, res)=>{
     
 })
 
-
+// fn for get post by id
 const getPostById =  asyncHandler(async(req, res)=>{
     const {postId} = req.params
     
@@ -100,13 +100,75 @@ const getPostById =  asyncHandler(async(req, res)=>{
         throw new ApiErrors(400, "Invalid Id!")
     }
 
-    const post =  await Post.findById(postId)
+    // const post =  await Post.findById(postId)
+    const post = await Post.aggregate([
+        
+        {
+            $match: {_id:new mongoose.Types.ObjectId(postId)}
+        },
 
-    if(!post){
+        {
+            $lookup:{
+                from:"users",
+                localField:"createdBy",
+                foreignField:"_id",
+                as:"user",
+                pipeline:[
+                    {
+                        $lookup:{
+                            from:"subscriptions",
+                            localField:"_id",
+                            foreignField:"follower",
+                            as:"followingDoc"
+                        },
+                    },
+                    {
+                        $lookup:{
+                            from:"subscriptions",
+                            localField:"_id",
+                            foreignField:"following",
+                            as:"followerDoc"
+                        },
+                    }
+                ]
+            }
+        },
+        {
+            $unwind:"$user"
+        },
+        {
+            $addFields:{
+                userDetails:{
+                    userId:"$user._id",
+                    username:"$user.username",
+                    fullName:"$user.fullName",
+                    profileImage:"$user.profileImage",
+                    bio:"$user.bio",
+                    follower:{$size:"$user.followerDoc"},
+                    following:{$size:"$user.followingDoc"}
+                }
+                
+            }
+        },
+        {
+            $project:{
+                text:1,
+                media:1,
+                views:1,
+                userDetails:1,
+                createdAt:1,
+                updatedAt:1
+            }
+        }
+
+    ]) 
+
+    
+    if(post.length===0){
         throw new ApiErrors(404,"Post not Fount!")
     }
 
-    return res.status(200).json(new ApiResponse(200, "Post fetched successfully.", post))
+    return res.status(200).json(new ApiResponse(200, "Post fetched successfully.", post[0]))
     
 })
 
@@ -168,6 +230,7 @@ const getAllPost = asyncHandler(async(req, res)=>{
                 _id:1,
                 text:1,
                 media:1,
+                views:1,
                 createdAt:1,
                 updatedAt:1,
                 userDetails:1,
@@ -268,6 +331,7 @@ const getUserPost = asyncHandler(async(req, res)=>{
                 _id:1,
                 text:1,
                 media:1,
+                views:1,
                 createdAt:1,
                 updatedAt:1,
                 userDetails:1,
@@ -396,13 +460,18 @@ const getFollowingUserPost = asyncHandler(async(req, res)=>{
 
         {
             $project:{
-               
-                posts:1
+               _id:"$posts._id",
+               text:"$posts.text",
+               media:"$posts.media",
+               views:"$posts.views",
+               userDetails:"$posts.userDetails",
+               createdAt:"$posts.createdAt",
+               updatedAt:"$posts.updatedAt",
             }
         },
         {
             $sort:{
-                "posts.createdAt":-1
+                createdAt:-1
             }
         },
         {
