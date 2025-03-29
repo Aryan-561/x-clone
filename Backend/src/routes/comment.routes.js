@@ -4,30 +4,25 @@ import {
     createComment,
     updateComment,
     deleteComment,
-    getAllPostComment,
+    getAllPostComments,
     getComment,
-    replyToComment,
-    createReplyComment
-
-} from "../controllers/comment.controller.js"
+    createReplyComment,
+    getCommentReplies
+} from "../controllers/comment.controller.js";
 
 import verifyJwt from "../middleware/auth.middleware.js";
 
-// Create a new comment
-router.route("/create").post(verifyJwt, createComment)
-router.route("/createreply/commentId").post(verifyJwt, createReplyComment)
+// Comment Routes
+router.post("/create/:postId", verifyJwt, createComment);
+router.get("/:commentId", getComment);
+router.put("/:commentId", verifyJwt, updateComment);
+router.delete("/:commentId", verifyJwt, deleteComment);
 
-// Update a comment
-router
-    .route("/:commentId")
-    .put(verifyJwt, updateComment)
-    .delete(verifyJwt, deleteComment)
-    .get(getComment)
-
-// Get all replies to a comment
-router.route("/replies/:commentId").get(verifyJwt, replyToComment)
+// Reply Routes
+router.post("/reply/:commentId", verifyJwt, createReplyComment);
+router.get("/replies/:commentId", getCommentReplies);
 
 // Get all comments for a post
-router.route("/getAllPostcomment/:postId").get(getAllPostComment)
+router.get("/post/:postId", getAllPostComments);
 
 export default router;

@@ -14,8 +14,10 @@ const commentSchema = Schema({
 
     post:{
         type:Schema.Types.ObjectId,
-        ref:"Post"
-    },
+        ref:"Post",
+        required:true
+
+    }, 
 
     replies:[
         {
