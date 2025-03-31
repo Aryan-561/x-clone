@@ -125,6 +125,9 @@ const getAllLikePost = asyncHandler(async (req, res) => {
                 "postDetails.text": 1,
                 "postDetails.media": 1,
                 "postDetails.views": 1,
+                "postDetails.createdAt": 1,
+                "postDetails.updatedAt": 1,
+
                 "postOwnerDetails._id": 1,
                 "postOwnerDetails.userName": 1,
                 "postOwnerDetails.profileImage": 1,
