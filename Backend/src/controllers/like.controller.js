@@ -81,22 +81,61 @@ const getAllLikePost = asyncHandler(async (req, res) => {
                 from: "posts",
                 localField: "post",
                 foreignField: "_id",
-                as: "postDetails",
+                as: "postDetails"
+            }
+        },
+        { $unwind: "$postDetails" },
+        {
+            $lookup: {
+                from: "users",
+                localField: "postDetails.createdBy",
+                foreignField: "_id",
+                as: "postOwnerDetails"
+            }
+        },
+        { $unwind: "$postOwnerDetails" },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "postOwnerDetails._id",
+                foreignField: "follower",
+                as: "followingDoc"
             }
         },
         {
-            $unwind: "$postDetails"
+            $lookup: {
+                from: "subscriptions",
+                localField: "postOwnerDetails._id",
+                foreignField: "following",
+                as: "followerDoc"
+            }
+        },
+        {
+            $addFields: {
+                "postOwnerDetails.followingCount": { $size: "$followingDoc" },
+                "postOwnerDetails.followerCount": { $size: "$followerDoc" }
+            }
         },
         {
             $project: {
-                _id: 0,
-                postId: "$post",
-                likeBy: "$likedBy",
-                postDetails: "$postDetails",
+                _id: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                "postDetails._id": 1,
+                "postDetails.text": 1,
+                "postDetails.media": 1,
+                "postDetails.views": 1,
+                "postOwnerDetails._id": 1,
+                "postOwnerDetails.userName": 1,
+                "postOwnerDetails.profileImage": 1,
+                "postOwnerDetails.followingCount": 1,
+                "postOwnerDetails.followerCount": 1
             }
-        }])
-    return res.status(200).json(new ApiResponse(200, "All Like Posts", likePost));
-})
+        }
+    ]);
+
+    return res.status(200).json(new ApiResponse(200, "All Liked Posts", likePost));
+});
 
 // get all like comment by user
 const getAllLikeComment = asyncHandler(async (req, res) => {
@@ -116,11 +155,55 @@ const getAllLikeComment = asyncHandler(async (req, res) => {
             }
         },
         {
+            $unwind: "$commentDetails"
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "commentDetails.commentBy",
+                foreignField: "_id",
+                as: "commentOwnerDetails"
+            }
+        },
+        {
+            $unwind: "$commentOwnerDetails"
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "commentOwnerDetails._id",
+                foreignField: "follower",
+                as: "followingDoc"
+            }
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "commentOwnerDetails._id",
+                foreignField: "following",
+                as: "followerDoc"
+            }
+        },
+        {
+            $addFields: {
+                "postOwnerDetails.followingCount": { $size: "$followingDoc" },
+                "postOwnerDetails.followerCount": { $size: "$followerDoc" }
+            }
+        },
+        {
             $project: {
-                _id: 0,
-                commentId: "$comment",
-                likeBy: "$likedBy",
-                commentDetails: "$commentDetails",
+                _id: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                "commentDetails._id": 1,
+                "commentDetails.text": 1,
+                "commentDetails.media": 1,
+                "commentDetails.views": 1,
+                "commentOwnerDetails._id": 1,
+                "commentOwnerDetails.userName": 1,
+                "commentOwnerDetails.profileImage": 1,
+                "commentOwnerDetails.followingCount": 1,
+                "commentOwnerDetails.followerCount": 1
             }
         }
 
