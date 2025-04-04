@@ -150,11 +150,28 @@ const getPostById =  asyncHandler(async(req, res)=>{
                 
             }
         },
+        
+        {
+            $lookup:{
+                from:"likes",
+                localField:"_id",
+                foreignField:"post",
+                as:"likedDoc",
+            }
+        },
+
+        {
+            $addFields:{
+                likes:{$size:"$likedDoc"}
+            }
+        },
+
         {
             $project:{
                 text:1,
                 media:1,
                 views:1,
+                likes:1,
                 userDetails:1,
                 createdAt:1,
                 updatedAt:1
@@ -226,10 +243,25 @@ const getAllPost = asyncHandler(async(req, res)=>{
             }
         },
         {
+            $lookup:{
+                from:"likes",
+                localField:"_id",
+                foreignField:"post",
+                as:"likedDoc",
+            }
+        },
+
+        {
+            $addFields:{
+                likes:{$size:"$likedDoc"}
+            }
+        },
+        {
             $project:{
                 _id:1,
                 text:1,
                 media:1,
+                likes:1,
                 views:1,
                 createdAt:1,
                 updatedAt:1,
@@ -327,11 +359,27 @@ const getUserPost = asyncHandler(async(req, res)=>{
             }
         },
         {
+            $lookup:{
+                from:"likes",
+                localField:"_id",
+                foreignField:"post",
+                as:"likedDoc",
+            }
+        },
+
+        {
+            $addFields:{
+                likes:{$size:"$likedDoc"}
+            }
+        },
+
+        {
             $project:{
                 _id:1,
                 text:1,
                 media:1,
                 views:1,
+                likes:1,
                 createdAt:1,
                 updatedAt:1,
                 userDetails:1,
@@ -439,10 +487,27 @@ const getFollowingUserPost = asyncHandler(async(req, res)=>{
                     },
 
                     {
+                        $lookup:{
+                            from:"likes",
+                            localField:"_id",
+                            foreignField:"post",
+                            as:"likedDoc",
+                        }
+                    },
+            
+                    {
+                        $addFields:{
+                            likes:{$size:"$likedDoc"}
+                        }
+                    },
+
+                    {
                         $project:{
                             _id:1,
                             text:1,
                             media:1,
+                            views:1,
+                            likes:1,
                             createdAt:1,
                             updatedAt:1,
                             userDetails:1,
@@ -464,6 +529,7 @@ const getFollowingUserPost = asyncHandler(async(req, res)=>{
                text:"$posts.text",
                media:"$posts.media",
                views:"$posts.views",
+               likes:"$posts.likes",
                userDetails:"$posts.userDetails",
                createdAt:"$posts.createdAt",
                updatedAt:"$posts.updatedAt",

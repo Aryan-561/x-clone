@@ -139,10 +139,27 @@ const getAllbookmarkedPost = asyncHandler(async(req, res)=>{
                     },
 
                     {
+                        $lookup:{
+                            from:"likes",
+                            localField:"_id",
+                            foreignField:"post",
+                            as:"likedDoc",
+                        }
+                    },
+            
+                    {
+                        $addFields:{
+                            likes:{$size:"$likedDoc"}
+                        }
+                    },
+
+                    {
                         $project:{
                             _id:1,
                             text:1,
                             media:1,
+                            views:1,
+                            likes:1,
                             createdAt:1,
                             updatedAt:1,
                             userDetails:1,
@@ -164,6 +181,7 @@ const getAllbookmarkedPost = asyncHandler(async(req, res)=>{
                 text:"$bookmarkedPost.text",
                 media:"$bookmarkedPost.media",
                 views:"$bookmarkedPost.views",
+                likes:"$bookmarkedPost.likes",
                 userDetails:"$bookmarkedPost.userDetails",
                 createdAt:"$bookmarkedPost.createdAt",
                 updatedAt:"$bookmarkedPost.updatedAt",
@@ -260,10 +278,27 @@ const getAllbookmarkedComment = asyncHandler(async(req, res)=>{
                     },
 
                     {
+                        $lookup:{
+                            from:"likes",
+                            localField:"_id",
+                            foreignField:"post",
+                            as:"likedDoc",
+                        }
+                    },
+            
+                    {
+                        $addFields:{
+                            likes:{$size:"$likedDoc"}
+                        }
+                    },
+
+                    {
                         $project:{
                             _id:1,
                             text:1,
                             media:1,
+                            views:1,
+                            likes:1,
                             createdAt:1,
                             updatedAt:1,
                             userDetails:1,
@@ -284,6 +319,8 @@ const getAllbookmarkedComment = asyncHandler(async(req, res)=>{
             $project:{
                 _id:"$bookmarkedComment._id",
                 text:"$bookmarkedComment.text",
+                views:"$bookmarkedComment.views",
+                likes:"$bookmarkedComment.likes",
                 userDetails:"$bookmarkedComment.userDetails",
                 createdAt:"$bookmarkedComment.createdAt",
                 updatedAt:"$bookmarkedComment.updatedAt",
