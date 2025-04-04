@@ -83,12 +83,96 @@ const getComment = asyncHandler(async (req, res) => {
 });
 
 // Get all comments for a post
+// const getAllPostComments = asyncHandler(async (req, res) => {
+//     const { postId } = req.params;
+//     validateId(postId);
+//     const comments = await Comment.find({ post: postId }).populate("commentBy", "username email");
+
+//     res.status(200).json(new ApiResponse(200, "Comments fetched successfully.", comments));
+// });
 const getAllPostComments = asyncHandler(async (req, res) => {
     const { postId } = req.params;
     validateId(postId);
-    const comments = await Comment.find({ post: postId }).populate("commentBy", "username email");
+    const comments = await Comment.aggregate([
+        {
+            $match: {
+                post: new mongoose.Types.ObjectId(postId),
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "commentBy",
+                foreignField: "_id",
+                as: "commentBy"
+            }
+        },
+        {
+            $unwind: "$commentBy"
+        },
+        {
+            $lookup: {
+                from: "likes",
+                localField: "likes",
+                foreignField: "_id",
+                as: "likes"
 
+            }
+        },
+        {
+            $addFields: { likeCount: { $size: "$likes" } }
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "postOwnerDetails._id",
+                foreignField: "follower",
+                as: "followingDoc"
+            }
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "postOwnerDetails._id",
+                foreignField: "following",
+                as: "followerDoc"
+            }
+        },
+        {
+            $addFields: {
+                "postOwnerDetails.followingCount": { $size: "$followingDoc" },
+                "postOwnerDetails.followerCount": { $size: "$followerDoc" }
+            }
+        },
+        {
+            $unwind: "$commentBy"
+        },
+        {
+            $project: {
+                _id: 1,
+                text: 1,
+                createdAt: 1,
+                replies: 1,
+                likeCount: "$likeCount",
+                commentBy: {
+                    _id: "$commentBy._id",
+                    username: "$commentBy.userName",
+                    email: "$commentBy.email",
+                    profileImage: "$commentBy.profileImage"
+                },
+                "postOwnerDetails.followingCount": 1, // show zero, may check it
+                "postOwnerDetails.followerCount": 1
+
+
+            }
+        },
+
+        {
+            $sort: { createdAt: -1 }
+        }
+    ])
     res.status(200).json(new ApiResponse(200, "Comments fetched successfully.", comments));
+
 });
 
 // Get all replies to a comment
@@ -97,19 +181,67 @@ const getCommentReplies = asyncHandler(async (req, res) => {
 
     validateId(commentId);
 
-    // Fetch the comment and get the replies array
-    const comment = await Comment.findById(commentId).populate({
-        path: "replies",
-        populate: { path: "commentBy", select: "username email" } // Fetch username & email of each replier
-    });
+    const comments = await Comment.aggregate([
+        {
+            $match: {
+                _id: new mongoose.Types.ObjectId(commentId)
+            }
+        },
+        {
+            $lookup: {
+                from: "comments",
+                localField: "replies",
+                foreignField: "_id",
+                as: "replies"
+            }
+        },
+        {
+            $unwind: { path: "$replies", preserveNullAndEmptyArrays: true }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "replies.commentBy",
+                foreignField: "_id",
+                as: "replies.commentBy"
+            }
+        },
+        {
+            $unwind: { path: "$replies.commentBy", preserveNullAndEmptyArrays: true }
+        },
+        {
+            $lookup: {
+                from: "comments",
+                localField: "replies.replies",
+                foreignField: "_id",
+                as: "replies.replies"
+            }
+        },
+        {
+            $group: {
+                _id: "$_id",
+                replies: {
+                    $push: {
+                        _id: "$replies._id",
+                        text: "$replies.text",
+                        commentBy: {
+                            _id: "$replies.commentBy._id",
+                            username: "$replies.commentBy.username",
+                            profileImage: "$replies.commentBy.profileImage",
+                            fullName: "$replies.commentBy.fullName",
+                            bio: "$replies.commentBy.bio",
+                        },
+                        replies: "$replies.replies" // Nested replies
+                    }
+                }
+            }
+        }
+    ]);
 
-    if (!comment) {
-        return res.status(404).json(new ApiResponse(404, "Comment not found"));
-    }
+    const replies = comments.length > 0 ? comments[0].replies : [];
 
-    res.status(200).json(new ApiResponse(200, "Replies fetched successfully.", comment.replies));
+    res.status(200).json(new ApiResponse(200, "Replies fetched successfully.", replies));
 });
-
 
 // Create a reply to a comment
 const createReplyComment = asyncHandler(async (req, res) => {
@@ -128,11 +260,12 @@ const createReplyComment = asyncHandler(async (req, res) => {
         {
             text,
             commentBy: userId,
-            post: parentComment.post
+            parentComment: parentComment
         })
     if (!childComment) throw new ApiErrors(400, "Failed to create a new reply!");
     const updatedParentComment = await Comment.findByIdAndUpdate(
         commentId,
+
         { $push: { replies: childComment._id } },
         { new: true }
     ).populate("replies", "text commentBy ");
@@ -148,4 +281,4 @@ export {
     getComment,
     createReplyComment,
     getCommentReplies
-};
+}

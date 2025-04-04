@@ -118,7 +118,6 @@ const getAllLikePost = asyncHandler(async (req, res) => {
         },
         {
             $project: {
-                _id: 1,
                 createdAt: 1,
                 updatedAt: 1,
                 "postDetails._id": 1,
@@ -133,6 +132,10 @@ const getAllLikePost = asyncHandler(async (req, res) => {
                 "postOwnerDetails.profileImage": 1,
                 "postOwnerDetails.followingCount": 1,
                 "postOwnerDetails.followerCount": 1
+            }
+        },{
+            $sort: {
+                createdAt: -1
             }
         }
     ]);
