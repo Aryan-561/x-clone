@@ -320,6 +320,32 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 })
 
+const search = asyncHandler(async (req, res) => {
+    const { queries } = req.params
+
+    const query = await User.aggregate([
+        {
+            $match: {
+                userName: {
+                    $regex: queries,
+                    $options: "i"
+                }
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                userName: 1,
+            }
+        }
+    ])
+    if (query.length===0) res.status(400).json(new ApiResponse(
+        400, "user match not found"
+    ))
+
+    return res.status(200).json(new ApiResponse(200, "query fetched  successfully", query))
+})
+
 // make api endpoint for user profile followr, following etc...
 export {
     createUser,
@@ -331,5 +357,6 @@ export {
     updateUserCoverImage,
     updateUserAccountDetails,
     deleteUser,
+    search
 };
 

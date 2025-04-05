@@ -8,7 +8,8 @@ import {
     logoutUser,
     updateUserAccountDetails,
     updateUserCoverImage,
-    updateUserProfileImage
+    updateUserProfileImage,
+    search
 
 } from '../controllers/user.controller.js';
 import multer from "multer";
@@ -41,6 +42,8 @@ router.route("/update-account-details").post(parseFormData, verifyJwt, updateUse
 router.route("/update-coverimage").patch(verifyJwt, upload.single('coverImage'), updateUserCoverImage)
 router.route("/update-profileimage").patch(verifyJwt,upload.single('profileImage'), updateUserProfileImage)
 router.route("/deleteuser").delete(verifyJwt, deleteUser)
+router.route("/search/:queries").post(verifyJwt, search)
+
 
 
 
