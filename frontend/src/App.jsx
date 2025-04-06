@@ -6,9 +6,9 @@ import {Sidebar,Container, Input,Rightsidebar} from './component'
 const App = () => {
   return (
     <>
-      <Container className='w-full flex min-h-screen px-10'>
+      <Container className='w-full flex min-h-screen sm:px-10'>
         <Sidebar/>
-        {/* <Card /> */}
+        <Card />
         <Rightsidebar/>
       </Container>
 
