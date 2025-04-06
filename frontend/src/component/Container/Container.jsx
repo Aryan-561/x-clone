@@ -1,8 +1,8 @@
 import React from 'react'
 
-function Container({ children, className = "" }) {
+function Container({ children, className = "w-full " }) {
     return (
-        <div className={`${className}` }>
+        <div className={ ` ${className}` }>
             {children}
         </div>
     )
