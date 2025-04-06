@@ -159,10 +159,43 @@ const getPostById =  asyncHandler(async(req, res)=>{
                 as:"likedDoc",
             }
         },
+        
+        {
+            $lookup:{
+                from:"comment",
+                localField:"_id",
+                foreignField:"post",
+                as:"commentDoc"
+            }    
+        },
+
+        {
+            $lookup:{
+                from:"bookmarks",
+                localField:"_id",
+                foreignField:"post",
+                as:"bookmarkedDoc"
+            }
+        },
 
         {
             $addFields:{
-                likes:{$size:"$likedDoc"}
+                likeCount:{$size:"$likedDoc"},
+                isLiked:{
+                    $cond:{
+                        if:{$in:[req.user._id,"$likedDoc.likedBy"]},
+                        then:true,
+                        else:false
+                    }
+                },
+                commentCount:{$size:"$commentDoc"},
+                isBookmarked:{
+                    $cond:{
+                        if:{$in:[req.user._id,"$bookmarkedDoc.bookmarkedBy"]},
+                        then:true,
+                        else:false
+                    }
+                }
             }
         },
 
@@ -171,7 +204,10 @@ const getPostById =  asyncHandler(async(req, res)=>{
                 text:1,
                 media:1,
                 views:1,
-                likes:1,
+                likeCount:1,
+                commentCount:1,
+                isLiked:1,
+                isBookmarked:1,
                 userDetails:1,
                 createdAt:1,
                 updatedAt:1
@@ -250,23 +286,58 @@ const getAllPost = asyncHandler(async(req, res)=>{
                 as:"likedDoc",
             }
         },
+        
+        {
+            $lookup:{
+                from:"comment",
+                localField:"_id",
+                foreignField:"post",
+                as:"commentDoc"
+            }    
+        },
+
+        {
+            $lookup:{
+                from:"bookmarks",
+                localField:"_id",
+                foreignField:"post",
+                as:"bookmarkedDoc"
+            }
+        },
 
         {
             $addFields:{
-                likes:{$size:"$likedDoc"}
+                likeCount:{$size:"$likedDoc"},
+                isLiked:{
+                    $cond:{
+                        if:{$in:[req.user._id,"$likedDoc.likedBy"]},
+                        then:true,
+                        else:false
+                    }
+                },
+                commentCount:{$size:"$commentDoc"},
+                isBookmarked:{
+                    $cond:{
+                        if:{$in:[req.user._id,"$bookmarkedDoc.bookmarkedBy"]},
+                        then:true,
+                        else:false
+                    }
+                }
             }
         },
+
         {
             $project:{
-                _id:1,
                 text:1,
                 media:1,
-                likes:1,
                 views:1,
-                createdAt:1,
-                updatedAt:1,
+                likeCount:1,
+                commentCount:1,
+                isLiked:1,
+                isBookmarked:1,
                 userDetails:1,
-
+                createdAt:1,
+                updatedAt:1
             }
         },
         {
@@ -366,24 +437,58 @@ const getUserPost = asyncHandler(async(req, res)=>{
                 as:"likedDoc",
             }
         },
+        
+        {
+            $lookup:{
+                from:"comment",
+                localField:"_id",
+                foreignField:"post",
+                as:"commentDoc"
+            }    
+        },
+
+        {
+            $lookup:{
+                from:"bookmarks",
+                localField:"_id",
+                foreignField:"post",
+                as:"bookmarkedDoc"
+            }
+        },
 
         {
             $addFields:{
-                likes:{$size:"$likedDoc"}
+                likeCount:{$size:"$likedDoc"},
+                isLiked:{
+                    $cond:{
+                        if:{$in:[req.user._id,"$likedDoc.likedBy"]},
+                        then:true,
+                        else:false
+                    }
+                },
+                commentCount:{$size:"$commentDoc"},
+                isBookmarked:{
+                    $cond:{
+                        if:{$in:[req.user._id,"$bookmarkedDoc.bookmarkedBy"]},
+                        then:true,
+                        else:false
+                    }
+                }
             }
         },
 
         {
             $project:{
-                _id:1,
                 text:1,
                 media:1,
                 views:1,
-                likes:1,
-                createdAt:1,
-                updatedAt:1,
+                likeCount:1,
+                commentCount:1,
+                isLiked:1,
+                isBookmarked:1,
                 userDetails:1,
-
+                createdAt:1,
+                updatedAt:1
             }
         },
         {
@@ -494,24 +599,58 @@ const getFollowingUserPost = asyncHandler(async(req, res)=>{
                             as:"likedDoc",
                         }
                     },
+                    
+                    {
+                        $lookup:{
+                            from:"comment",
+                            localField:"_id",
+                            foreignField:"post",
+                            as:"commentDoc"
+                        }    
+                    },
+            
+                    {
+                        $lookup:{
+                            from:"bookmarks",
+                            localField:"_id",
+                            foreignField:"post",
+                            as:"bookmarkedDoc"
+                        }
+                    },
             
                     {
                         $addFields:{
-                            likes:{$size:"$likedDoc"}
+                            likeCount:{$size:"$likedDoc"},
+                            isLiked:{
+                                $cond:{
+                                    if:{$in:[req.user._id,"$likedDoc.likedBy"]},
+                                    then:true,
+                                    else:false
+                                }
+                            },
+                            commentCount:{$size:"$commentDoc"},
+                            isBookmarked:{
+                                $cond:{
+                                    if:{$in:[req.user._id,"$bookmarkedDoc.bookmarkedBy"]},
+                                    then:true,
+                                    else:false
+                                }
+                            }
                         }
                     },
-
+            
                     {
                         $project:{
-                            _id:1,
                             text:1,
                             media:1,
                             views:1,
-                            likes:1,
-                            createdAt:1,
-                            updatedAt:1,
+                            likeCount:1,
+                            commentCount:1,
+                            isLiked:1,
+                            isBookmarked:1,
                             userDetails:1,
-            
+                            createdAt:1,
+                            updatedAt:1
                         }
                     },
                    
@@ -529,7 +668,10 @@ const getFollowingUserPost = asyncHandler(async(req, res)=>{
                text:"$posts.text",
                media:"$posts.media",
                views:"$posts.views",
-               likes:"$posts.likes",
+               likeCount:"$posts.likeCount",
+               commentCount:"$posts.commentCount",
+               isLiked:"$posts.isLiked",
+               isBookmarked:"$posts.isBookmarked",
                userDetails:"$posts.userDetails",
                createdAt:"$posts.createdAt",
                updatedAt:"$posts.updatedAt",
