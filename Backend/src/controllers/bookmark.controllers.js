@@ -146,24 +146,58 @@ const getAllbookmarkedPost = asyncHandler(async(req, res)=>{
                             as:"likedDoc",
                         }
                     },
+                    
+                    {
+                        $lookup:{
+                            from:"comment",
+                            localField:"_id",
+                            foreignField:"post",
+                            as:"commentDoc"
+                        }    
+                    },
+            
+                    {
+                        $lookup:{
+                            from:"bookmarks",
+                            localField:"_id",
+                            foreignField:"post",
+                            as:"bookmarkedDoc"
+                        }
+                    },
             
                     {
                         $addFields:{
-                            likes:{$size:"$likedDoc"}
+                            likeCount:{$size:"$likedDoc"},
+                            isLiked:{
+                                $cond:{
+                                    if:{$in:[req.user._id,"$likedDoc.likedBy"]},
+                                    then:true,
+                                    else:false
+                                }
+                            },
+                            commentCount:{$size:"$commentDoc"},
+                            isBookmarked:{
+                                $cond:{
+                                    if:{$in:[req.user._id,"$bookmarkedDoc.bookmarkedBy"]},
+                                    then:true,
+                                    else:false
+                                }
+                            }
                         }
                     },
-
+            
                     {
                         $project:{
-                            _id:1,
                             text:1,
                             media:1,
                             views:1,
-                            likes:1,
-                            createdAt:1,
-                            updatedAt:1,
+                            likeCount:1,
+                            commentCount:1,
+                            isLiked:1,
+                            isBookmarked:1,
                             userDetails:1,
-            
+                            createdAt:1,
+                            updatedAt:1
                         }
                     },
                    
@@ -181,7 +215,10 @@ const getAllbookmarkedPost = asyncHandler(async(req, res)=>{
                 text:"$bookmarkedPost.text",
                 media:"$bookmarkedPost.media",
                 views:"$bookmarkedPost.views",
-                likes:"$bookmarkedPost.likes",
+                likeCount:"$bookmarkedPost.likeCount",
+                commentCount:"$bookmarkedPost.commentCount",
+                isLiked:"$bookmarkedPost.isLiked",
+                isBookmarked:"$bookmarkedPost.isBookmarked",
                 userDetails:"$bookmarkedPost.userDetails",
                 createdAt:"$bookmarkedPost.createdAt",
                 updatedAt:"$bookmarkedPost.updatedAt",
@@ -281,28 +318,61 @@ const getAllbookmarkedComment = asyncHandler(async(req, res)=>{
                         $lookup:{
                             from:"likes",
                             localField:"_id",
-                            foreignField:"post",
+                            foreignField:"comment",
                             as:"likedDoc",
+                        }
+                    },
+                    
+                    {
+                        $lookup:{
+                            from:"comment",
+                            localField:"_id",
+                            foreignField:"comment",
+                            as:"commentDoc"
+                        }    
+                    },
+            
+                    {
+                        $lookup:{
+                            from:"bookmarks",
+                            localField:"_id",
+                            foreignField:"comment",
+                            as:"bookmarkedDoc"
                         }
                     },
             
                     {
                         $addFields:{
-                            likes:{$size:"$likedDoc"}
+                            likeCount:{$size:"$likedDoc"},
+                            isLiked:{
+                                $cond:{
+                                    if:{$in:[req.user._id,"$likedDoc.likedBy"]},
+                                    then:true,
+                                    else:false
+                                }
+                            },
+                            commentCount:{$size:"$commentDoc"},
+                            isBookmarked:{
+                                $cond:{
+                                    if:{$in:[req.user._id,"$bookmarkedDoc.bookmarkedBy"]},
+                                    then:true,
+                                    else:false
+                                }
+                            }
                         }
                     },
-
+            
                     {
                         $project:{
-                            _id:1,
                             text:1,
-                            media:1,
                             views:1,
-                            likes:1,
-                            createdAt:1,
-                            updatedAt:1,
+                            likeCount:1,
+                            commentCount:1,
+                            isLiked:1,
+                            isBookmarked:1,
                             userDetails:1,
-            
+                            createdAt:1,
+                            updatedAt:1
                         }
                     },
                    
@@ -320,7 +390,10 @@ const getAllbookmarkedComment = asyncHandler(async(req, res)=>{
                 _id:"$bookmarkedComment._id",
                 text:"$bookmarkedComment.text",
                 views:"$bookmarkedComment.views",
-                likes:"$bookmarkedComment.likes",
+                likeCount:"$bookmarkedComment.likeCount",
+                commentCount:"$bookmarkedComment.commentCount",
+                isLiked:"$bookmarkedComment.isLiked",
+                isBookmarked:"$bookmarkedComment.isBookmarked",
                 userDetails:"$bookmarkedComment.userDetails",
                 createdAt:"$bookmarkedComment.createdAt",
                 updatedAt:"$bookmarkedComment.updatedAt",
