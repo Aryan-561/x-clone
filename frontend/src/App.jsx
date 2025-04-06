@@ -1,14 +1,17 @@
 import React from 'react'
 import Card from './component/Card/Card'
-import Sidebar from './component/sidebar/Sidebar'
+import {Sidebar,Container, Input,Rightsidebar} from './component'
+
 
 const App = () => {
   return (
     <>
-      <div className='w-[70%] mx-auto'>
-        <Card />
+      <Container className='w-full flex min-h-screen px-10'>
         <Sidebar/>
-      </div>
+        {/* <Card /> */}
+        <Rightsidebar/>
+      </Container>
+
     </>
   )
 }
