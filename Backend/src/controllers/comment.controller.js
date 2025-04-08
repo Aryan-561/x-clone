@@ -72,24 +72,145 @@ const deleteComment = asyncHandler(async (req, res) => {
 
 // Get a single comment by ID
 const getComment = asyncHandler(async (req, res) => {
-    const { commentId } = req.params;
 
+    const { commentId } = req.params;
     validateId(commentId);
-    const comment = await Comment.findById(commentId).populate("commentBy", "username email");
+
+    const comment = await Comment.aggregate([
+        {
+            $match: { _id: new mongoose.Types.ObjectId(commentId) }
+        },
+        {
+            $lookup: {
+                from: "users",
+                foreignField: "_id",
+                localField: "commentBy",
+                as: "user",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "subscriptions",
+                            localField: "_id",
+                            foreignField: "follower",
+                            as: "followingDoc"
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "subscriptions",
+                            localField: "_id",
+                            foreignField: "following",
+                            as: "followerDoc"
+                        },
+                    }
+                ]
+            },
+        },
+        {
+            $unwind: "$user"
+        },
+        {
+            $addFields: {
+                userDetails: {
+                    userId: "$user._id",
+                    username: "$user.userName",
+                    fullName: "$user.fullName",
+                    profileImage: "$user.profileImage",
+                    bio: "$user.bio",
+                    follower: { $size: "$user.followerDoc" },
+                    following: { $size: "$user.followingDoc" }
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: "likes",
+                localField: "_id",
+                foreignField: "comment",
+                as: "like"
+            }
+        },
+        {
+            $addFields: {
+                likeCount: { $size: "$like" },
+                isLiked: {
+                    $cond: {
+                        if: { $in: [req.user._id, "$like.likedBy"] },
+                        then: true,
+                        else: false
+                    }
+                },
+            }
+        },
+        {
+            $lookup: {
+                from: "bookmarks",
+                let: { commentId: "$_id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$comment", "$$commentId"] },
+                                    { $eq: ["$bookmarkedBy", new mongoose.Types.ObjectId(req.user._id)] }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                as: "bookmark"
+            }
+        },
+        {
+            $addFields: {
+                isBookmarked: { $gt: [{ $size: "$bookmark" }, 0] }
+            }
+        },
+        {
+            $lookup: {
+                from: "comments",
+                localField: "_id",
+                foreignField: "parentComment",
+                as: "replies"
+            }
+        },
+        {
+            $addFields: {
+                commentCount: { $size: "$replies" }
+            }
+        },
+        {
+            $addFields: {
+                isFollowed: {
+                    $cond: {
+                        if: { $in: [new mongoose.Types.ObjectId(req.user._id), "$user.followerDoc.follower"] },
+                        then: true,
+                        else: false
+                    }
+                }
+            }
+        },
+        {
+            $project: {
+                text: 1,
+                isBookmarked: 1,
+                views: 1,
+                likeCount: 1,
+                commentCount: 1,
+                isLiked: 1,
+                userDetails: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                isFollowed: 1
+            }
+        }
+    ])
 
     if (!comment) throw new ApiErrors(404, "Comment not found");
 
     res.status(200).json(new ApiResponse(200, "Comment fetched successfully.", comment));
 });
 
-// Get all comments for a post
-// const getAllPostComments = asyncHandler(async (req, res) => {
-//     const { postId } = req.params;
-//     validateId(postId);
-//     const comments = await Comment.find({ post: postId }).populate("commentBy", "username email");
-
-//     res.status(200).json(new ApiResponse(200, "Comments fetched successfully.", comments));
-// });
 const getAllPostComments = asyncHandler(async (req, res) => {
     const { postId } = req.params;
     validateId(postId);
@@ -104,66 +225,123 @@ const getAllPostComments = asyncHandler(async (req, res) => {
                 from: "users",
                 localField: "commentBy",
                 foreignField: "_id",
-                as: "commentBy"
+                as: "user",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "subscriptions",
+                            localField: "_id",
+                            foreignField: "follower",
+                            as: "followingDoc"
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "subscriptions",
+                            localField: "_id",
+                            foreignField: "following",
+                            as: "followerDoc"
+                        },
+                    }
+                ]
             }
         },
         {
-            $unwind: "$commentBy"
+            $unwind: "$user"
+        },
+        {
+            $addFields: {
+                userDetails: {
+                    userId: "$user._id",
+                    username: "$user.userName",
+                    fullName: "$user.fullName",
+                    profileImage: "$user.profileImage",
+                    bio: "$user.bio",
+                    follower: { $size: "$user.followerDoc" },
+                    following: { $size: "$user.followingDoc" }
+                }
+            }
         },
         {
             $lookup: {
                 from: "likes",
                 localField: "likes",
                 foreignField: "_id",
-                as: "likes"
-
-            }
-        },
-        {
-            $addFields: { likeCount: { $size: "$likes" } }
-        },
-        {
-            $lookup: {
-                from: "subscriptions",
-                localField: "postOwnerDetails._id",
-                foreignField: "follower",
-                as: "followingDoc"
-            }
-        },
-        {
-            $lookup: {
-                from: "subscriptions",
-                localField: "postOwnerDetails._id",
-                foreignField: "following",
-                as: "followerDoc"
+                as: "like"
             }
         },
         {
             $addFields: {
-                "postOwnerDetails.followingCount": { $size: "$followingDoc" },
-                "postOwnerDetails.followerCount": { $size: "$followerDoc" }
+                likeCount: { $size: "$like" },
+                isLiked: {
+                    $cond: {
+                        if: { $in: [new mongoose.Types.ObjectId(req.user._id), "$like.likedBy"] },
+                        then: true,
+                        else: false
+                    }
+                }
             }
         },
         {
-            $unwind: "$commentBy"
+            $lookup: {
+                from: "bookmarks",
+                let: { commentId: "$_id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$comment", "$$commentId"] },
+                                    { $eq: ["$bookmarkedBy", new mongoose.Types.ObjectId(req.user._id)] }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                as: "bookmark"
+            }
+        },
+        {
+            $addFields: {
+                isBookmarked: { $gt: [{ $size: "$bookmark" }, 0] }
+            }
+        },
+        {
+            $lookup: {
+                from: "comments",
+                localField: "_id",
+                foreignField: "parentComment",
+                as: "replies"
+            }
+        },
+        {
+            $addFields: {
+                commentCount: { $size: "$replies" }
+            }
+        },
+        {
+            $addFields: {
+                isFollowed: {
+                    $cond: {
+                        if: { $in: [new mongoose.Types.ObjectId(req.user._id), "$user.followerDoc.follower"] },
+                        then: true,
+                        else: false
+                    }
+                }
+            }
         },
         {
             $project: {
-                _id: 1,
                 text: 1,
+                isBookmarked: 1,
+                views: 1,
+                likeCount: 1,
+                commentCount: 1,
+                isLiked: 1,
+                userDetails: 1,
                 createdAt: 1,
-                replies: 1,
-                likeCount: "$likeCount",
-                commentBy: {
-                    _id: "$commentBy._id",
-                    username: "$commentBy.userName",
-                    email: "$commentBy.email",
-                    profileImage: "$commentBy.profileImage"
-                },
-                "postOwnerDetails.followingCount": 1, // show zero, may check it
-                "postOwnerDetails.followerCount": 1
-
-
+                updatedAt: 1,
+                isFollowed: 1
             }
         },
 
@@ -178,67 +356,148 @@ const getAllPostComments = asyncHandler(async (req, res) => {
 // Get all replies to a comment
 const getCommentReplies = asyncHandler(async (req, res) => {
     const { commentId } = req.params;
-
     validateId(commentId);
 
-    const comments = await Comment.aggregate([
+    const replies = await Comment.aggregate([
         {
             $match: {
-                _id: new mongoose.Types.ObjectId(commentId)
+                parentComment: new mongoose.Types.ObjectId(commentId)
+            }
+        },
+        // Lookup commentBy user
+        {
+            $lookup: {
+                from: "users",
+                localField: "commentBy",
+                foreignField: "_id",
+                as: "user",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "subscriptions",
+                            localField: "_id",
+                            foreignField: "follower",
+                            as: "followingDoc"
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "subscriptions",
+                            localField: "_id",
+                            foreignField: "following",
+                            as: "followerDoc"
+                        }
+                    }
+                ]
             }
         },
         {
+            $unwind: "$user"
+        },
+        {
+            $addFields: {
+                userDetails: {
+                    userId: "$user._id",
+                    username: "$user.userName",
+                    fullName: "$user.fullName",
+                    profileImage: "$user.profileImage",
+                    bio: "$user.bio",
+                    follower: { $size: "$user.followerDoc" },
+                    following: { $size: "$user.followingDoc" }
+                }
+            }
+        },
+        // Like info
+        {
+            $lookup: {
+                from: "likes",
+                localField: "likes",
+                foreignField: "_id",
+                as: "like"
+            }
+        },
+        {
+            $addFields: {
+                likeCount: { $size: "$like" },
+                isLiked: {
+                    $cond: {
+                        if: { $in: [new mongoose.Types.ObjectId(req.user._id), "$like.likedBy"] },
+                        then: true,
+                        else: false
+                    }
+                }
+            }
+        },
+        // Bookmark info
+        {
+            $lookup: {
+                from: "bookmarks",
+                let: { commentId: "$_id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$comment", "$$commentId"] },
+                                    { $eq: ["$bookmarkedBy", new mongoose.Types.ObjectId(req.user._id)] }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                as: "bookmark"
+            }
+        },
+        {
+            $addFields: {
+                isBookmarked: { $gt: [{ $size: "$bookmark" }, 0] }
+            }
+        },
+        // Fetch nested replies count
+        {
             $lookup: {
                 from: "comments",
-                localField: "replies",
-                foreignField: "_id",
+                localField: "_id",
+                foreignField: "parentComment",
                 as: "replies"
             }
         },
         {
-            $unwind: { path: "$replies", preserveNullAndEmptyArrays: true }
-        },
-        {
-            $lookup: {
-                from: "users",
-                localField: "replies.commentBy",
-                foreignField: "_id",
-                as: "replies.commentBy"
+            $addFields: {
+                commentCount: { $size: "$replies" }
             }
         },
+        // Follow status
         {
-            $unwind: { path: "$replies.commentBy", preserveNullAndEmptyArrays: true }
-        },
-        {
-            $lookup: {
-                from: "comments",
-                localField: "replies.replies",
-                foreignField: "_id",
-                as: "replies.replies"
-            }
-        },
-        {
-            $group: {
-                _id: "$_id",
-                replies: {
-                    $push: {
-                        _id: "$replies._id",
-                        text: "$replies.text",
-                        commentBy: {
-                            _id: "$replies.commentBy._id",
-                            username: "$replies.commentBy.username",
-                            profileImage: "$replies.commentBy.profileImage",
-                            fullName: "$replies.commentBy.fullName",
-                            bio: "$replies.commentBy.bio",
-                        },
-                        replies: "$replies.replies" // Nested replies
+            $addFields: {
+                isFollowed: {
+                    $cond: {
+                        if: { $in: [new mongoose.Types.ObjectId(req.user._id), "$user.followerDoc.follower"] },
+                        then: true,
+                        else: false
                     }
                 }
             }
+        },
+        // Clean output
+        {
+            $project: {
+                text: 1,
+                isBookmarked: 1,
+                views: 1,
+                likeCount: 1,
+                commentCount: 1,
+                isLiked: 1,
+                userDetails: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                isFollowed: 1
+            }
+        },
+        {
+            $sort: { createdAt: -1 }
         }
     ]);
-
-    const replies = comments.length > 0 ? comments[0].replies : [];
 
     res.status(200).json(new ApiResponse(200, "Replies fetched successfully.", replies));
 });
@@ -272,6 +531,8 @@ const createReplyComment = asyncHandler(async (req, res) => {
 
     res.status(201).json(new ApiResponse(201, "Reply created successfully.", updatedParentComment));
 });
+
+// incremnt of views count
 
 export {
     createComment,

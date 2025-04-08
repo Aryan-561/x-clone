@@ -14,15 +14,15 @@ import verifyJwt from "../middleware/auth.middleware.js";
 
 // Comment Routes
 router.post("/create/:postId", verifyJwt, createComment);
-router.get("/:commentId", getComment);
+router.get("/:commentId", verifyJwt, getComment);
 router.put("/:commentId", verifyJwt, updateComment);
 router.delete("/:commentId", verifyJwt, deleteComment);
 
 // Reply Routes
 router.post("/reply/:commentId", verifyJwt, createReplyComment);
-router.get("/replies/:commentId", getCommentReplies);
+router.get("/replies/:commentId", verifyJwt,getCommentReplies);
 
 // Get all comments for a post
-router.get("/post/:postId", getAllPostComments);
+router.get("/post/:postId", verifyJwt, getAllPostComments);
 
 export default router;
