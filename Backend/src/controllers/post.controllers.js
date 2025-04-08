@@ -140,12 +140,19 @@ const getPostById =  asyncHandler(async(req, res)=>{
             $addFields:{
                 userDetails:{
                     userId:"$user._id",
-                    username:"$user.username",
+                    username:"$user.userName",
                     fullName:"$user.fullName",
                     profileImage:"$user.profileImage",
                     bio:"$user.bio",
                     follower:{$size:"$user.followerDoc"},
-                    following:{$size:"$user.followingDoc"}
+                    following:{$size:"$user.followingDoc"},
+                    isFollowed:{
+                        $cond:{
+                            if:{$in:[req.user._id,"$user.followerDoc.follower"]},
+                            then:true,
+                            else:false
+                        }
+                    }
                 }
                 
             }
@@ -268,12 +275,19 @@ const getAllPost = asyncHandler(async(req, res)=>{
             $addFields:{
                 userDetails:{
                     userId:"$user._id",
-                    username:"$user.username",
+                    username:"$user.userName",
                     fullName:"$user.fullName",
                     profileImage:"$user.profileImage",
                     bio:"$user.bio",
                     follower:{$size:"$user.followerDoc"},
-                    following:{$size:"$user.followingDoc"}
+                    following:{$size:"$user.followingDoc"},
+                    isFollowed:{
+                        $cond:{
+                            if:{$in:[req.user._id,"$user.followerDoc.follower"]},
+                            then:true,
+                            else:false
+                        }
+                    }
                 }
                 
             }
@@ -419,12 +433,19 @@ const getUserPost = asyncHandler(async(req, res)=>{
             $addFields:{
                 userDetails:{
                     userId:"$user._id",
-                    username:"$user.username",
+                    username:"$user.userName",
                     fullName:"$user.fullName",
                     profileImage:"$user.profileImage",
                     bio:"$user.bio",
                     follower:{$size:"$user.followerDoc"},
-                    following:{$size:"$user.followingDoc"}
+                    following:{$size:"$user.followingDoc"},
+                    isFollowed:{
+                        $cond:{
+                            if:{$in:[req.user._id,"$user.followerDoc.follower"]},
+                            then:true,
+                            else:false
+                        }
+                    }
                 }
                 
             }
@@ -580,12 +601,19 @@ const getFollowingUserPost = asyncHandler(async(req, res)=>{
                         $addFields:{
                             userDetails:{
                                 userId:"$user._id",
-                                username:"$user.username",
+                                username:"$user.userName",
                                 fullName:"$user.fullName",
                                 profileImage:"$user.profileImage",
                                 bio:"$user.bio",
                                 follower:{$size:"$user.followerDoc"},
-                                following:{$size:"$user.followingDoc"}
+                                following:{$size:"$user.followingDoc"},
+                                isFollowed:{
+                                    $cond:{
+                                        if:{$in:[req.user._id,"$user.followerDoc.follower"]},
+                                        then:true,
+                                        else:false
+                                    }
+                                }
                             }
                             
                         }
