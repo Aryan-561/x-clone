@@ -42,7 +42,7 @@ router.route("/update-account-details").post(parseFormData, verifyJwt, updateUse
 router.route("/update-coverimage").patch(verifyJwt, upload.single('coverImage'), updateUserCoverImage)
 router.route("/update-profileimage").patch(verifyJwt,upload.single('profileImage'), updateUserProfileImage)
 router.route("/deleteuser").delete(verifyJwt, deleteUser)
-router.route("/search/:queries").post(verifyJwt, search)
+router.route("/search/:queries").get(verifyJwt, search)
 
 
 
