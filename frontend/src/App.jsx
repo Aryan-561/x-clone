@@ -1,15 +1,17 @@
 import React from 'react'
 import Card from './component/Card/Card'
-import {Sidebar,Container, Input,Rightsidebar} from './component'
+import { Sidebar, Container, Rightsidebar, Login } from './component'
 
 
 const App = () => {
   return (
     <>
-      <Container className='w-full flex min-h-screen sm:px-10'>
-        <Sidebar/>
+      <Container className='w-full  bg-black text-amber-50 flex min-h-screen sm:px-10'>
+        {/* <Sidebar/>
         <Card />
-        <Rightsidebar/>
+        <Rightsidebar/> */}
+
+        <Login />
       </Container>
 
     </>
