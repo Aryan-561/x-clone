@@ -27,7 +27,7 @@ class Userservice {
 
         } catch (error) {
             console.log("Userservice :: createUser :: Errors", error.response?.data?.message);
-            throw new Error("Userservice :: createUser :: Errors", error.response?.data?.message || "something went wrong while createUser")
+            throw new Error(`Userservice :: createUser :: Errors ${error.response?.data?.message || "something went wrong while createUser"}`)
         }
     }
 
@@ -43,7 +43,7 @@ class Userservice {
             return response.data.data
         } catch (error) {
             console.log("Userservice :: loginUser :: Errors", error.response?.data?.message);
-            throw new Error("Userservice :: loginUser :: Errors", error.response?.data?.message || "something went wrong while loginUser")
+            throw new Error(`Userservice :: loginUser :: Errors ${error.response?.data?.message || "something went wrong while loginUser"}`)
         }
     }
 
@@ -56,7 +56,7 @@ class Userservice {
             return response
         } catch (error) {
             console.log("Userservice :: deleteUser :: Errors", error.response?.data?.message);
-            throw new Error("Userservice :: deleteUser :: Errors", error.response?.data?.message || "something went wrong while deleteUser")
+            throw new Error(`Userservice :: deleteUser :: Errors ${error.response?.data?.message || "something went wrong while deleteUser"}`)
         }
     }
 
@@ -73,7 +73,7 @@ class Userservice {
 
         } catch (error) {
             console.log("Userservice :: jwtRefreshToken :: Errors", error.response?.data?.message);
-            throw new Error("Userservice :: jwtRefreshToken :: Errors", error.response?.data?.message || "something went wrong while  refreshing jwtRefreshToken")
+            throw new Error(`Userservice :: jwtRefreshToken :: Errors ${error.response?.data?.message || "something went wrong while jwtRefreshToken"}`)
         }
     }
 
@@ -84,7 +84,7 @@ class Userservice {
             return response
         } catch (error) {
             console.log("Userservice :: logoutUser :: Errors", error.response?.data?.message);
-            throw new Error("Userservice :: logoutUser :: Errors", error.response?.data?.message || "something went wrong while logoutUser")
+            throw new Error(`Userservice :: logoutUser :: Errors ${error.response?.data?.message || "something went wrong while logoutUser"}`)
 
         }
     }
@@ -104,7 +104,7 @@ class Userservice {
             return response
         } catch (error) {
             console.log("Userservice :: updateUserAccountDetails :: Errors", error.response?.data?.message);
-            throw new Error("Userservice :: updateUserAccountDetails :: Errors", error.response?.data?.message || "something went wrong while updateUserAccountDetails")
+            throw new Error(`Userservice :: updateUserAccountDetails :: Errors ${error.response?.data?.message || "something went wrong while updateUserAccountDetails"}`)
         }
     }
     async updateUserCoverImage(coverImage) {
@@ -122,7 +122,7 @@ class Userservice {
             return response
         } catch (error) {
             console.log("Userservice :: updateUserCoverImage :: Errors", error.response?.data?.message);
-            throw new Error("Userservice :: updateUserCoverImage :: Errors", error.response?.data?.message || "something went wrong while updateUserCoverImage")
+            throw new Error(`Userservice :: updateUserCoverImage :: Errors ${error.response?.data?.message || "something went wrong while updateUserCoverImage"}`)
 
         }
     }
@@ -141,7 +141,8 @@ class Userservice {
             return response
         } catch (error) {
             console.log("Userservice :: updateUserProfileImage :: Errors", error.response?.data?.message);
-            throw new Error("Userservice :: updateUserProfileImage :: Errors", error.response?.data?.message || "something went wrong while updateUserProfileImage")
+            throw new Error(`Userservice :: updateUserProfileImage :: Errors ${error.response?.data?.message || "something went wrong while updateUserProfileImage"}`)
+
         }
     }
 
@@ -156,7 +157,7 @@ class Userservice {
 
         } catch (error) {
             console.log("Userservice :: getCurrentUser :: Errors", error.response?.data?.message);
-            throw new Error("Userservice :: getCurrentUser :: Errors", error.response?.data?.message || "something went wrong while getCurrentUser")
+            throw new Error(`Userservice :: getCurrentUser :: Errors ${error.response?.data?.message || "something went wrong while getCurrentUser"}`)
         }
 
     }
@@ -169,7 +170,7 @@ class Userservice {
         } catch (error) {
 
             console.log("Userservice :: searchUser :: Errors", error.response?.data?.message);
-            throw new Error("Userservice :: searchUser :: Errors", error.response?.data?.message || "something went wrong while searchUser")
+            throw new Error(`Userservice :: searchUser :: Errors ${error.response?.data?.message || "something went wrong while searchUser"}`)
         }
     }
 }
