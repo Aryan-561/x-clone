@@ -1,15 +1,18 @@
 
 // authSlice
-import authSlice from "./auth/authSlice"
+import authReducer from "./auth/authSlice"
 
 // userslice
-import userSlice from "./user/userSlice"
+import userReducer from "./user/userSlice"
 import { loginUser, jwtRefreshToken, logoutUser } from "./auth/authSlice"
 
+// postSlice
+import postReducer from "./post/postSlice"
 export {
-    authSlice,
-    userSlice,
+    authReducer,
+    userReducer,
     loginUser,
     jwtRefreshToken,
-    logoutUser
+    logoutUser,
+    postReducer
 }
