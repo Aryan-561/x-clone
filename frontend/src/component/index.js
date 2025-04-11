@@ -5,7 +5,7 @@ import Input from "./Input/Input";
 import Sidebar from "./sidebar/Sidebar";
 import Rightsidebar from "./Sidebar/Rightsidebar";
 import Sidebarfooter from "./Sidebar/Sidebarfooter.jsx"
-
+import Login from "./Login/login.jsx";
 
 export {
     Button,
@@ -14,6 +14,8 @@ export {
     Sidebar,
     Input,
     Rightsidebar,
-    Sidebarfooter
+    Sidebarfooter,
+    Login
+
 
 }
