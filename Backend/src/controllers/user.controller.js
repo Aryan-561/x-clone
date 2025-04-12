@@ -8,9 +8,9 @@ import jwt from "jsonwebtoken";
 
 const options = {
     httpOnly: true,
-    secure: true,
+    secure: false, 
     // samesite: "none", // just in case cookie not working properly
-}
+};
 
 const generateAccessAndRefreshToken = async function (id) {
     // Generate access token

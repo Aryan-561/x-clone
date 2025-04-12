@@ -11,7 +11,8 @@ app.use(express.static('public'))
 // Enable CORS (Cross-Origin Resource Sharing)
 app.use(cors(
     {
-        origin: "*",
+        origin: "http://localhost:5173",
+        credentials: true,
         methods: ["GET", "POST", "PATCH" , "PUT", "DELETE"],
     }
 ))
