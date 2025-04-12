@@ -22,7 +22,7 @@ class Userservice {
                     "Content-Type": "multipart/form-data"
                 }
             });
-            console.log("response", response)
+            console.log("response", response.data)
             return response.data
 
         } catch (error) {
@@ -38,9 +38,10 @@ class Userservice {
                 email,
                 password
 
-            })
-            console.log("response", response.data.data);
-            return response.data.data
+            },
+        {withCredentials :true})
+            console.log("response", response.data);
+            return response.data
         } catch (error) {
             console.log("Userservice :: loginUser :: Errors", error.response?.data?.message);
             throw new Error(`Userservice :: loginUser :: Errors ${error.response?.data?.message || "something went wrong while loginUser"}`)
@@ -52,8 +53,8 @@ class Userservice {
             const response = await axios.delete(`${userBaseUrl}/deleteuser`, {
                 withCredentials: true,
             })
-            console.log("response", response)
-            return response
+            console.log("response", response.data)
+            return response.data
         } catch (error) {
             console.log("Userservice :: deleteUser :: Errors", error.response?.data?.message);
             throw new Error(`Userservice :: deleteUser :: Errors ${error.response?.data?.message || "something went wrong while deleteUser"}`)
@@ -68,8 +69,8 @@ class Userservice {
                     withCredentials: true
                 }
             )
-            console.log("response", response)
-            return response
+            console.log("response", response.data)
+            return response.data
 
         } catch (error) {
             console.log("Userservice :: jwtRefreshToken :: Errors", error.response?.data?.message);
@@ -80,8 +81,8 @@ class Userservice {
     async logoutUser() {
         try {
             const response = await axios.get(`${userBaseUrl}/logout`, { withCredentials: true })
-            console.log("response", response)
-            return response
+            console.log("response", response.data)
+            return response.data
         } catch (error) {
             console.log("Userservice :: logoutUser :: Errors", error.response?.data?.message);
             throw new Error(`Userservice :: logoutUser :: Errors ${error.response?.data?.message || "something went wrong while logoutUser"}`)
@@ -100,8 +101,8 @@ class Userservice {
             }, {
                 withCredentials: true
             })
-            console.log("response", response)
-            return response
+            console.log("response", response.data)
+            return response.data
         } catch (error) {
             console.log("Userservice :: updateUserAccountDetails :: Errors", error.response?.data?.message);
             throw new Error(`Userservice :: updateUserAccountDetails :: Errors ${error.response?.data?.message || "something went wrong while updateUserAccountDetails"}`)
@@ -118,8 +119,8 @@ class Userservice {
                         "Content-Type": "multipart/form-data"
                     }
                 })
-            console.log("response", response)
-            return response
+            console.log("response", response.data)
+            return response.data
         } catch (error) {
             console.log("Userservice :: updateUserCoverImage :: Errors", error.response?.data?.message);
             throw new Error(`Userservice :: updateUserCoverImage :: Errors ${error.response?.data?.message || "something went wrong while updateUserCoverImage"}`)
@@ -137,8 +138,8 @@ class Userservice {
                         "Content-Type": "multipart/form-data"
                     }
                 })
-            console.log("response", response)
-            return response
+            console.log("response", response.data)
+            return response.data
         } catch (error) {
             console.log("Userservice :: updateUserProfileImage :: Errors", error.response?.data?.message);
             throw new Error(`Userservice :: updateUserProfileImage :: Errors ${error.response?.data?.message || "something went wrong while updateUserProfileImage"}`)
@@ -152,8 +153,8 @@ class Userservice {
                 withCredentials: true
             })
 
-            console.log("response", response)
-            return response
+            console.log("response", response.data)
+            return response.data
 
         } catch (error) {
             console.log("Userservice :: getCurrentUser :: Errors", error.response?.data?.message);
@@ -165,8 +166,8 @@ class Userservice {
         try {
             const response = await axios.get(`${userBaseUrl}/search/${search}`
             )
-            console.log("response", response)
-            return response
+            console.log("response", response.data)
+            return response.data
         } catch (error) {
 
             console.log("Userservice :: searchUser :: Errors", error.response?.data?.message);

@@ -1,10 +1,11 @@
 
 // authSlice
 import authReducer from "./auth/authSlice"
+import { loginUser, jwtRefreshToken, logoutUser } from "./auth/authSlice"
 
 // userslice
 import userReducer from "./user/userSlice"
-import { loginUser, jwtRefreshToken, logoutUser } from "./auth/authSlice"
+import {createUser,deleteUser,getCurrentUser,search,updateUserAccountDetails,updateUserProfileImage,updateUserCoverImage} from "./user/userSlice"
 
 // postSlice
 import postReducer from "./post/postSlice"
@@ -14,5 +15,12 @@ export {
     loginUser,
     jwtRefreshToken,
     logoutUser,
-    postReducer
+    postReducer,
+    createUser,
+    deleteUser,
+    getCurrentUser,
+    search,
+    updateUserAccountDetails,
+    updateUserCoverImage,
+    updateUserProfileImage
 }
