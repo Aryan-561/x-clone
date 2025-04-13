@@ -9,6 +9,7 @@ import {createUser,deleteUser,getCurrentUser,search,updateUserAccountDetails,upd
 
 // postSlice
 import postReducer from "./post/postSlice"
+import subscriptionReducer from "./subscription/subscriptionSlice"
 export {
     authReducer,
     userReducer,
@@ -22,5 +23,6 @@ export {
     search,
     updateUserAccountDetails,
     updateUserCoverImage,
-    updateUserProfileImage
+    updateUserProfileImage,
+    subscriptionReducer
 }
