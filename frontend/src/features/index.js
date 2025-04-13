@@ -1,14 +1,15 @@
 
 // authSlice
-import authReducer from "./auth/authSlice"
-import { loginUser, jwtRefreshToken, logoutUser } from "./auth/authSlice"
+import authReducer, { loginUser, jwtRefreshToken, logoutUser } from "./auth/authSlice"
 
 // userslice
-import userReducer from "./user/userSlice"
-import {createUser,deleteUser,getCurrentUser,search,updateUserAccountDetails,updateUserProfileImage,updateUserCoverImage} from "./user/userSlice"
+import userReducer, { createUser, deleteUser, getCurrentUser, search, updateUserAccountDetails, updateUserProfileImage, updateUserCoverImage } from "./user/userSlice"
 
 // postSlice
 import postReducer from "./post/postSlice"
+
+// like slice
+import likeReducer, { toggleCommentLike, togglePostLike, getAllLikeComment, getAllLikePost } from "./like/likeSlice"
 export {
     authReducer,
     userReducer,
@@ -22,5 +23,10 @@ export {
     search,
     updateUserAccountDetails,
     updateUserCoverImage,
-    updateUserProfileImage
+    updateUserProfileImage,
+    likeReducer,
+    toggleCommentLike,
+    togglePostLike,
+    getAllLikeComment,
+    getAllLikePost
 }
