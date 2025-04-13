@@ -9,7 +9,10 @@ export class PostService {
     
     async getAllPost() {
         try {
-            const response = await axiosInstance.get('/');
+            const response = await axiosInstance.get('/', {
+                withCredentials: true,
+            });
+            console.log(response.data)
             return response.data;
         } catch (error) {
             console.log("Post Service :: getAllPost :: Errors", error.response?.data?.message);
@@ -19,7 +22,7 @@ export class PostService {
 
     async getUserPost(userId) {
         try {
-            const response = await axiosInstance.get(`/user/${userId}`);
+            const response = await axiosInstance.get(`/user/${userId}`,{withCredentials: true,});
             return response.data;
         } catch (error) {
             console.log("Post Service :: getUserPost :: Errors", error.response?.data?.message);
@@ -29,7 +32,8 @@ export class PostService {
 
     async getFollowingUserPost(userId) {
         try {
-            const response = await axiosInstance.get(`/following/${userId}`);
+            const response = await axiosInstance.get(`/following/${userId}`,{withCredentials: true,});
+            console.log(response.data)
             return response.data;
         } catch (error) {
             console.log("Post Service :: getFollowingUserPost :: Errors", error.response?.data?.message);
@@ -39,7 +43,8 @@ export class PostService {
 
     async getPostById(postId){
         try {
-            const response = await axiosInstance.get(`/${postId}`)
+            const response = await axiosInstance.get(`/${postId}`,{withCredentials: true,})
+            console.log(response.data)
             return response.data
         } catch (error) {
             console.log("Post Service :: getPostById :: Errors", error.response?.data?.message);
@@ -56,7 +61,8 @@ export class PostService {
                 headers:{
                     'Content-Type':'multipart/form-data'
                 }
-            })
+            },{withCredentials: true,})
+            console.log(response.data)
             return response.data
         } catch (error) {
             console.log("Post Service :: createPost :: Errors", error.response?.data?.message);
@@ -70,8 +76,8 @@ export class PostService {
                 headers:{
                     'content-type':'application/json; charset=UTF-8'
                 }
-            })
-
+            },{withCredentials: true,})
+            console.log(response.data)
             return response.data
         } catch (error) {
             console.log("Post Service :: updatePost :: Errors", error.response?.data?.message);
@@ -81,7 +87,8 @@ export class PostService {
 
    async deletePost(postId){
         try {
-            const response = await axiosInstance.delete(`/delete/${postId}`)
+            const response = await axiosInstance.delete(`/delete/${postId}`,{withCredentials: true,})
+            console.log(response.data)
             return response.data
         } catch (error) {
             console.log("Post Service :: deletePost :: Errors", error.response?.data?.message);

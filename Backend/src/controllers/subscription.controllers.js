@@ -83,7 +83,7 @@ const getUserFollower = asyncHandler(async(req, res)=>{
         {
             $project:{
                 _id:"$followerDetails._id",
-                username:"$followerDetails.username",
+                username:"$followerDetails.userName",
                 fullName:"$followerDetails.fullName",
                 profileImage:"$followerDetails.profileImage",
                 bio:"$followerDetails.bio"
@@ -136,7 +136,7 @@ const getUserFollowing = asyncHandler(async(req, res)=>{
         {
             $project:{
                 _id:"$followingDetails._id",
-                username:"$followingDetails.username",
+                username:"$followingDetails.userName",
                 fullName:"$followingDetails.fullName",
                 profileImage:"$followingDetails.profileImage",
                 bio:"$followingDetails.bio"

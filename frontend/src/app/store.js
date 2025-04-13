@@ -5,9 +5,11 @@ const store = configureStore({
         auth: authReducer,
         user: userReducer,
         post: postReducer,
-        like: likeReducer
-
+        like: likeReducer,
+        subscription: subscriptionReducer,
+        bookmark: bookmarkReducer,
     }
 })
+
 
 export default store

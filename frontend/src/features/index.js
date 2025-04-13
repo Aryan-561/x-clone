@@ -10,6 +10,13 @@ import postReducer from "./post/postSlice"
 
 // like slice
 import likeReducer, { toggleCommentLike, togglePostLike, getAllLikeComment, getAllLikePost } from "./like/likeSlice"
+
+// subscriptionSlice
+import subscriptionReducer from "./subscription/subscriptionSlice"
+
+// bookmarkSlice
+import bookmarkReducer from "./bookmark/bookmarkSlice"
+
 export {
     authReducer,
     userReducer,
@@ -28,5 +35,7 @@ export {
     toggleCommentLike,
     togglePostLike,
     getAllLikeComment,
-    getAllLikePost
+    getAllLikePost,
+    subscriptionReducer,
+    bookmarkReducer,
 }
