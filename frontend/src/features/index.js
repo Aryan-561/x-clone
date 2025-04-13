@@ -9,7 +9,13 @@ import {createUser,deleteUser,getCurrentUser,search,updateUserAccountDetails,upd
 
 // postSlice
 import postReducer from "./post/postSlice"
+
+// subscriptionSlice
 import subscriptionReducer from "./subscription/subscriptionSlice"
+
+// bookmarkSlice
+import bookmarkReducer from "./bookmark/bookmarkSlice"
+
 export {
     authReducer,
     userReducer,
@@ -24,5 +30,6 @@ export {
     updateUserAccountDetails,
     updateUserCoverImage,
     updateUserProfileImage,
-    subscriptionReducer
+    subscriptionReducer,
+    bookmarkReducer,
 }
