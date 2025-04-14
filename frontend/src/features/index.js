@@ -17,13 +17,16 @@ import subscriptionReducer from "./subscription/subscriptionSlice"
 // bookmarkSlice
 import bookmarkReducer from "./bookmark/bookmarkSlice"
 
+// comment
+import commentReducer,{createComment,updateComment,deleteComment,getAllPostComments,getCommentReplies,createReplyComment} from "./comment/commentSlice"
+
 export {
     authReducer,
-    userReducer,
     loginUser,
     jwtRefreshToken,
     logoutUser,
-    postReducer,
+
+    userReducer,
     createUser,
     deleteUser,
     getCurrentUser,
@@ -31,11 +34,23 @@ export {
     updateUserAccountDetails,
     updateUserCoverImage,
     updateUserProfileImage,
+
     likeReducer,
     toggleCommentLike,
     togglePostLike,
     getAllLikeComment,
     getAllLikePost,
-    subscriptionReducer,
+
+    commentReducer,
+    createComment,
+    updateComment,
+    deleteComment,
+    getAllPostComments,
+    getCommentReplies,
+    createReplyComment,
+    
+    
     bookmarkReducer,
+    postReducer,
+    subscriptionReducer,
 }

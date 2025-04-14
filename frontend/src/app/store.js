@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit"
-import { authReducer, userReducer, postReducer,likeReducer } from "../features"
+import { authReducer, userReducer, postReducer,likeReducer,subscriptionReducer,bookmarkReducer,commentReducer } from "../features"
 const store = configureStore({
     reducer: {
         auth: authReducer,
@@ -8,6 +8,7 @@ const store = configureStore({
         like: likeReducer,
         subscription: subscriptionReducer,
         bookmark: bookmarkReducer,
+        comment: commentReducer
     }
 })
 
