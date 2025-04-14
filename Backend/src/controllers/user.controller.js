@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
 
 const options = {
     httpOnly: true,
-    secure: false, 
+    secure: false,
     // samesite: "none", // just in case cookie not working properly
 };
 
@@ -45,7 +45,7 @@ const createUser = asyncHandler(async (req, res) => {
         throw new ApiErrors(400, "Please provide all required fields");
     }
 
-    //  check user email exist or not
+    // Check if user email or username already exists
     const existUser = await User.findOne({
         $or: [
             { userName },
@@ -57,54 +57,47 @@ const createUser = asyncHandler(async (req, res) => {
         throw new ApiErrors(400, `${field} already exists`);
     }
 
-    //  req.files have all files that are provide by user
-    const coverImageFile = req.files?.coverImage?.[0]?.path
-    const profileImageFile = req.files?.profileImage?.[0]?.path
+    // Check if images are provided and upload them if necessary
+    let coverImageUrl = '';
+    let profileImageUrl = '';
 
-    // console.log("cover", req.files.coverImage[0].path);
-    // console.log("profile", req.files.profileImage[0].path);
-
-    if (!coverImageFile) {
-        throw new ApiErrors(400, "Cover image is required")
-    }
-    if (!profileImageFile) {
-        throw new ApiErrors(400, "Profile image is required")
+    if (req.files?.coverImage?.[0]?.path) {
+        // Upload cover image if provided
+        const coverImageFile = req.files.coverImage[0].path;
+        const uploadCoverImageToCloudinary = await uploadCloudinary(coverImageFile);
+        coverImageUrl = uploadCoverImageToCloudinary?.secure_url || '';
     }
 
-    const [uploadCoverImageToCloudinary, uploadProfileImageToCloudinary] = await Promise.all([
-        uploadCloudinary(coverImageFile),
-        uploadCloudinary(profileImageFile)]
-    )
+    if (req.files?.profileImage?.[0]?.path) {
+        // Upload profile image if provided
+        const profileImageFile = req.files.profileImage[0].path;
+        const uploadProfileImageToCloudinary = await uploadCloudinary(profileImageFile);
+        profileImageUrl = uploadProfileImageToCloudinary?.secure_url || '';
+    }
 
-
-    //  creating new db document
+    // Creating a new user document
     const user = await User.create({
         userName,
         fullName,
         email,
-        coverImage: {
-            url: uploadCoverImageToCloudinary?.secure_url || "",
+        coverImage: coverImageUrl ? {
+            url: coverImageUrl,
             publicId: uploadCoverImageToCloudinary?.public_id || "",
-
-        },
-        profileImage: {
-            url: uploadProfileImageToCloudinary?.secure_url || "",
+        } : null,
+        profileImage: profileImageUrl ? {
+            url: profileImageUrl,
             publicId: uploadProfileImageToCloudinary?.public_id || "",
-        },
+        } : null,
         password,
         bio,
         link
-
     });
 
-    const createdUser = await User.findById(user.id).select(" -password -refreshToken")
+    const createdUser = await User.findById(user.id).select(" -password -refreshToken");
 
-
-    if (!createdUser) throw new ApiErrors(400, "User creation failed")
-    return res.status(201).json(new ApiResponse(201, "user created successfully", createdUser))
-
-
-})
+    if (!createdUser) throw new ApiErrors(400, "User creation failed");
+    return res.status(201).json(new ApiResponse(201, "User created successfully", createdUser));
+});
 
 const loginuser = asyncHandler(async (req, res) => {
     const { userName, email, password } = req.body;
@@ -242,21 +235,25 @@ const updateUserAccountDetails = asyncHandler(async (req, res) => {
 
 const updateUserCoverImage = asyncHandler(async (req, res) => {
     const coverImage = req.file?.path
-    const public_id = req.user.coverImage.publicId
-
 
     if (!coverImage) {
         throw new ApiErrors(400, "coverImage image is required");
     }
-    const uploadProfileImageToCloudinary = await uploadCloudinary(coverImage)
-    if (uploadProfileImageToCloudinary) {
-        deleteCloudinary(public_id)
+
+    const existingPublicId = req.user.coverImage?.publicId
+
+    const uploadCoverImageToCloudinary = await uploadCloudinary(coverImage)
+
+    if (uploadCoverImageToCloudinary) {
+        if (existingPublicId) {
+            await deleteCloudinary(existingPublicId)
+        }
     }
     // update user profile image
     const updatedCoverImage = await User.findByIdAndUpdate(req.user.id, {
         coverImage: {
-            url: uploadProfileImageToCloudinary?.secure_url || "",
-            publicId: uploadProfileImageToCloudinary?.public_id || "",
+            url: uploadCoverImageToCloudinary?.secure_url || "",
+            publicId: uploadCoverImageToCloudinary?.public_id || "",
         }
     },
         {
@@ -279,7 +276,10 @@ const updateUserProfileImage = asyncHandler(async (req, res) => {
 
     // delete profile image when new one uplaoded
     if (uploadProfileImageToCloudinary) {
-        deleteCloudinary(public_id)
+        if (public_id) {
+            deleteCloudinary(public_id)
+
+        }
     }
     // update user profile image
     const updatedProfileImage = await User.findByIdAndUpdate(req.user.id, {
@@ -339,7 +339,7 @@ const search = asyncHandler(async (req, res) => {
             }
         }
     ])
-    if (query.length===0) res.status(400).json(new ApiResponse(
+    if (query.length === 0) res.status(400).json(new ApiResponse(
         400, "user match not found"
     ))
 
