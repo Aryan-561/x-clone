@@ -1,6 +1,7 @@
 import React from 'react'
 import Card from './component/Card/Card'
 import { Sidebar, Container, Rightsidebar, Login } from './component'
+import Signup from './component/Signup/Signup'
 
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
         <Rightsidebar/> */}
 
         <Login />
+        <Signup/>
       </Container>
 
     </>

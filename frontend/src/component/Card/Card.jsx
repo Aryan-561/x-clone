@@ -32,7 +32,7 @@ function Card({ onClickLikeBtn }) {
     createdAt: "2025-03-27T15:31:50.160Z",
     updatedAt: "2025-03-27T15:31:50.160Z",
   };
-  
+
 
   return (
     <>
@@ -40,10 +40,10 @@ function Card({ onClickLikeBtn }) {
         <div className="flex gap-2">
 
           {/* Profile image */}
-          <Avatar/>
+          <Avatar />
           <div className="w-[80%] ">
             <div className="flex flex-row gap-1 items-center ">
-              
+
               <ProfileHeader userDetails={data?.userDetails} classname={"flex-row items-center gap-1 "} />
 
               <div className=" text-gray-400">
@@ -56,8 +56,8 @@ function Card({ onClickLikeBtn }) {
             {/* text or content */}
             <div className="">{data?.text}</div>
 
-              {/* Media  */}
-             {data?.media && (<Media media={data?.media} />)} 
+            {/* Media  */}
+            {data?.media && (<Media media={data?.media} />)}
 
             <ActionBar
               commentCount={data?.commentCount}
@@ -74,5 +74,5 @@ function Card({ onClickLikeBtn }) {
 }
 
 export default Card;
-  
+
 
