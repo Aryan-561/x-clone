@@ -1,7 +1,6 @@
 import React from 'react'
 import Card from './component/Card/Card'
-import { Sidebar, Container, Rightsidebar, Login } from './component'
-import Signup from './component/Signup/Signup'
+import { Sidebar, Container, Rightsidebar, Login,Signup } from './component'
 
 
 const App = () => {

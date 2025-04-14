@@ -6,7 +6,7 @@ import Sidebar from "./sidebar/Sidebar";
 import Rightsidebar from "./Sidebar/Rightsidebar";
 import Sidebarfooter from "./Sidebar/Sidebarfooter.jsx"
 import Login from "./Login/login.jsx";
-
+import  Signup from "./Signup/Signup.jsx"
 export {
     Button,
     Card,
@@ -15,7 +15,8 @@ export {
     Input,
     Rightsidebar,
     Sidebarfooter,
-    Login
+    Login,
+    Signup
 
 
 }
