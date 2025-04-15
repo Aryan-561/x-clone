@@ -9,7 +9,9 @@ import {
     updateUserAccountDetails,
     updateUserCoverImage,
     updateUserProfileImage,
-    search
+    search,
+    verifyMail,
+    resendVerificationEmail
 
 } from '../controllers/user.controller.js';
 import multer from "multer";
@@ -17,6 +19,7 @@ import multer from "multer";
 import upload from '../middleware/multer.middleware.js';
 import verifyJwt from '../middleware/auth.middleware.js';
 const router = Router()
+
 // remove it soon
 const parseFormData = multer().none(); // Middleware for text-only FormData
 
@@ -43,6 +46,10 @@ router.route("/update-coverimage").patch(verifyJwt, upload.single('coverImage'),
 router.route("/update-profileimage").patch(verifyJwt,upload.single('profileImage'), updateUserProfileImage)
 router.route("/deleteuser").delete(verifyJwt, deleteUser)
 router.route("/search/:queries").get( search)
+
+// routes/auth.js or controllers/auth.js
+router.get('/verify-email', verifyMail);
+router.post("/resend-verification", resendVerificationEmail);
 
 
 
