@@ -1,10 +1,12 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import Like from "../models/like.model.js";
+import {Post} from "../models/post.model.js";
+import {Comment} from "../models/comment.model.js";
 import mongoose from "mongoose";
 import ApiResponse from "../utils/ApiResponse.js";
 import ApiErrors from "../utils/ApiErrors.js";
 
-// validate id format
+// ✅ Validate ID format
 const validateId = (id) => {
     try {
         if (!id || typeof id !== "string" || !id.trim()) {
@@ -16,58 +18,54 @@ const validateId = (id) => {
     } catch (error) {
         console.error(error);
         throw new ApiErrors(400, error.message);
-
     }
+};
 
-}
-
-// toggle like for post 
+// ✅ Toggle like for post (with post existence check)
 const togglePostLike = asyncHandler(async (req, res) => {
     const { postId } = req.params;
     validateId(postId);
-    const userId = req.user._id;
-    if (!userId) {
-        throw new ApiErrors(401, "Unauthorized, please login");
-    }
-    const existLike = await Like.findOne({
-        post: postId,
-        likedBy: userId
-    });
-    if (existLike) {
-        await Like.findOneAndDelete(existLike._id);
-        return res.status(200).json(new ApiResponse(200, "Like removed successfully"));
-    }
-    const newLike = await Like.create({
-        post: postId,
-        likedBy: userId
-    });
-    return res.status(200).json(new ApiResponse(200, "Like added successfully", newLike));
-})
 
-// toggle like for comment
-const toggleCommentLike = asyncHandler(async (req, res) => {
-    const { commentId } = req.params
-    validateId(commentId);
     const userId = req.user._id;
-    if (!userId) {
-        throw new ApiErrors(401, "Unauthorized, please login");
-    }
-    const existLike = await Like.findOne({
-        comment: commentId,
-        likedBy: userId
-    });
+    if (!userId) throw new ApiErrors(401, "Unauthorized, please login");
+
+    const postExists = await Post.findById(postId);
+    if (!postExists) throw new ApiErrors(404, "Post not found");
+
+    const existLike = await Like.findOne({ post: postId, likedBy: userId });
+
     if (existLike) {
         await Like.findByIdAndDelete(existLike._id);
         return res.status(200).json(new ApiResponse(200, "Like removed successfully"));
     }
-    const newLike = await Like.create({
-        comment: commentId,
-        likedBy: userId
-    });
-    return res.status(200).json(new ApiResponse(200, "Like added successfully", newLike));
-})
 
-// get all like post by user
+    const newLike = await Like.create({ post: postId, likedBy: userId });
+    return res.status(200).json(new ApiResponse(200, "Like added successfully", newLike));
+});
+
+// ✅ Toggle like for comment (with comment existence check)
+const toggleCommentLike = asyncHandler(async (req, res) => {
+    const { commentId } = req.params;
+    validateId(commentId);
+
+    const userId = req.user._id;
+    if (!userId) throw new ApiErrors(401, "Unauthorized, please login");
+
+    const commentExists = await Comment.findById(commentId);
+    if (!commentExists) throw new ApiErrors(404, "Comment not found");
+
+    const existLike = await Like.findOne({ comment: commentId, likedBy: userId });
+
+    if (existLike) {
+        await Like.findByIdAndDelete(existLike._id);
+        return res.status(200).json(new ApiResponse(200, "Like removed successfully"));
+    }
+
+    const newLike = await Like.create({ comment: commentId, likedBy: userId });
+    return res.status(200).json(new ApiResponse(200, "Like added successfully", newLike));
+});
+
+// ✅ Get all liked posts by the user
 const getAllLikePost = asyncHandler(async (req, res) => {
     const likePost = await Like.aggregate([
         {
@@ -126,14 +124,14 @@ const getAllLikePost = asyncHandler(async (req, res) => {
                 "postDetails.views": 1,
                 "postDetails.createdAt": 1,
                 "postDetails.updatedAt": 1,
-
                 "postOwnerDetails._id": 1,
                 "postOwnerDetails.userName": 1,
                 "postOwnerDetails.profileImage": 1,
                 "postOwnerDetails.followingCount": 1,
                 "postOwnerDetails.followerCount": 1
             }
-        },{
+        },
+        {
             $sort: {
                 createdAt: -1
             }
@@ -143,7 +141,7 @@ const getAllLikePost = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, "All Liked Posts", likePost));
 });
 
-// get all like comment by user
+// ✅ Get all liked comments by the user
 const getAllLikeComment = asyncHandler(async (req, res) => {
     const likeComment = await Like.aggregate([
         {
@@ -160,9 +158,7 @@ const getAllLikeComment = asyncHandler(async (req, res) => {
                 as: "commentDetails"
             }
         },
-        {
-            $unwind: "$commentDetails"
-        },
+        { $unwind: "$commentDetails" },
         {
             $lookup: {
                 from: "users",
@@ -171,9 +167,7 @@ const getAllLikeComment = asyncHandler(async (req, res) => {
                 as: "commentOwnerDetails"
             }
         },
-        {
-            $unwind: "$commentOwnerDetails"
-        },
+        { $unwind: "$commentOwnerDetails" },
         {
             $lookup: {
                 from: "subscriptions",
@@ -192,8 +186,8 @@ const getAllLikeComment = asyncHandler(async (req, res) => {
         },
         {
             $addFields: {
-                "postOwnerDetails.followingCount": { $size: "$followingDoc" },
-                "postOwnerDetails.followerCount": { $size: "$followerDoc" }
+                "commentOwnerDetails.followingCount": { $size: "$followingDoc" },
+                "commentOwnerDetails.followerCount": { $size: "$followerDoc" }
             }
         },
         {
@@ -212,9 +206,14 @@ const getAllLikeComment = asyncHandler(async (req, res) => {
                 "commentOwnerDetails.followerCount": 1
             }
         }
+    ]);
 
-    ])
-    return res.status(200).json(new ApiResponse(200, "All Like Comments", likeComment));
-})
+    return res.status(200).json(new ApiResponse(200, "All Liked Comments", likeComment));
+});
 
-export { togglePostLike, toggleCommentLike, getAllLikePost, getAllLikeComment };
+export {
+    togglePostLike,
+    toggleCommentLike,
+    getAllLikePost,
+    getAllLikeComment
+};
