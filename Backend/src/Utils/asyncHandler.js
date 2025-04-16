@@ -11,6 +11,7 @@ const asyncHandler = (fn) => {
                 message: error.message,
                 sucess: false
             });
+            next(error);
         }
     }
 }
