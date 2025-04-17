@@ -2,6 +2,8 @@ import ApiErrors from "../utils/ApiErrors.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { Bookmark } from "../models/bookmark.model.js";
+import { Post } from "../models/post.model.js";
+import { Comment } from "../models/comment.model.js"
 import mongoose, { isValidObjectId } from "mongoose";
 
 // fn for add/remove bookmarked on posts
@@ -15,6 +17,12 @@ const toggleBookmarkedPost = asyncHandler(async(req, res)=>{
 
     if(!isValidObjectId(postId)){
         throw new ApiErrors(400, "Invalid post Id!")
+    }
+
+    const isPost = await Post.findById(postId);
+
+    if(!isPost){
+        throw new ApiErrors(404, "Post not Found!")
     }
 
     const isBookmarked = await Bookmark.findOne({post:postId,bookmarkedBy:req.user._id})
@@ -51,6 +59,12 @@ const toggleBookmarkedComment = asyncHandler(async(req, res)=>{
 
     if(!isValidObjectId(commentId)){
         throw new ApiErrors(400, "Invalid comment Id!")
+    }
+
+    const isComment = await Comment.findById(commentId);
+
+    if(!isComment){
+        throw new ApiErrors(404, "Comment not Found!")
     }
 
     const isBookmarked = await Bookmark.findOne({comment:commentId,bookmarkedBy:req.user._id})
