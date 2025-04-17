@@ -60,8 +60,9 @@ export class PostService {
             const response = await axiosInstance.post(`/create`, formData,{
                 headers:{
                     'Content-Type':'multipart/form-data'
-                }
-            },{withCredentials: true,})
+                },
+                withCredentials: true,
+            })
             console.log(response.data)
             return response.data
         } catch (error) {
@@ -75,8 +76,9 @@ export class PostService {
             const response = await axiosInstance.patch(`/update/${postId}`,{text},{
                 headers:{
                     'content-type':'application/json; charset=UTF-8'
-                }
-            },{withCredentials: true,})
+                },
+                withCredentials: true
+            })
             console.log(response.data)
             return response.data
         } catch (error) {

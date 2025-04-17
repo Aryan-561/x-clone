@@ -10,7 +10,7 @@ export class BookmarkService{
     async toggleBookmarkedPost(postId){
         try {
             
-            const response = await axiosInstance.post(`/t/post/${postId}`,{withCredentials: true,})
+            const response = await axiosInstance.post(`/t/post/${postId}`,{},{withCredentials: true,})
             
             console.log(response.data)
             return response.data
@@ -27,7 +27,7 @@ export class BookmarkService{
     async toggleBookmarkedComment(commentId){
         try {
             
-            const response = await axiosInstance.post(`/t/comment/${commentId}`,{withCredentials: true,})
+            const response = await axiosInstance.post(`/t/comment/${commentId}`,{},{withCredentials: true,})
             
             console.log(response.data)
             return response.data
