@@ -6,12 +6,11 @@ import { Sidebar, Container, Rightsidebar, Login,Signup } from './component'
 const App = () => {
   return (
     <>
-      <Container className='w-full  bg-black text-amber-50 flex min-h-screen sm:px-10'>
-        {/* <Sidebar/>
+      <Container className='w-full  bg-blue-800 text-amber-50 flex min-h-screen '>
+        <Sidebar/>
         <Card />
-        <Rightsidebar/> */}
-
-        <Login />
+        <Rightsidebar/>
+        {/* <Login /> */}
         <Signup/>
       </Container>
 

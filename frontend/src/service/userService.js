@@ -39,7 +39,7 @@ class Userservice {
                 password
 
             },
-        {withCredentials :true})
+                { withCredentials: true })
             console.log("response", response.data);
             return response.data
         } catch (error) {
@@ -174,6 +174,34 @@ class Userservice {
             throw new Error(`Userservice :: searchUser :: Errors ${error.response?.data?.message || "something went wrong while searchUser"}`)
         }
     }
+
+    async resendEmailVerification(email) {
+        try {
+            const response = await axios.post(`${userBaseUrl}/resend-verification-email`, {
+                email
+            });
+            return response.data;
+        } catch (error) {
+            console.log("Userservice :: resendEmailVerification :: Errors", error.response?.data?.message);
+            throw new Error(`Userservice :: resendEmailVerification :: Errors ${error.response?.data?.message || "Something went wrong"}`);
+        }
+    }
+
+    async Googleauthentication(credential) {
+        try {
+            const response = await axios.post(`${userBaseUrl}/google-login`, {
+                credential
+            }, {
+                withCredentials: true
+            });
+            console.log("response", response.data);
+            return response.data;
+        } catch (error) {
+            console.log("Userservice :: Googleauthentication :: Errors", error.response?.data?.message);
+            throw new Error(`Userservice :: Googleauthentication :: Errors ${error.response?.data?.message || "something went wrong while Googleauthentication"}`);
+        }
+    }
+
 }
 
 const userServices = new Userservice();

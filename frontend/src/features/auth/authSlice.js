@@ -5,6 +5,8 @@ import { userServices } from "../../service/index"
 const loginUser = createAsyncThunk("loginUser", userServices.loginUser)
 const jwtRefreshToken = createAsyncThunk("jwtRefreshToken", userServices.jwtRefreshToken)
 const logoutUser = createAsyncThunk("logoutUser", userServices.logoutUser)
+const Googleauthentication = createAsyncThunk("Googleauthentication", userServices.Googleauthentication)
+const resendEmailVerification = createAsyncThunk("resendEmailVerification", userServices.resendEmailVerification)
 
 const initialState = {
     refreshToken: null,
@@ -77,6 +79,42 @@ const authSlice = createSlice({
                 state.error = action.error.message;
                 state.message = "Logout failed";
             })
+            
+            .addCase(resendEmailVerification.pending,(state)=>{
+                state.loading = true;
+                state.error = null;
+                state.message = null;
+            })
+            .addCase(resendEmailVerification.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+                state.message = action.payload.message || "Verification email resent successfully";
+            })
+            .addCase(resendEmailVerification.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+                state.message = "Failed to resend verification email";
+            })
+
+            .addCase(Googleauthentication.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.message = null;
+            })
+            .addCase(Googleauthentication.fulfilled, (state, action) => {
+                const { accessToken, refreshToken } = action.payload;
+                state.refreshToken = refreshToken;
+                state.accessToken = accessToken;
+                state.isAuthenticated = true;
+                state.loading = false;
+                state.message = "Google login successful";
+            })
+            .addCase(Googleauthentication.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+                state.message = "Google login failed";
+            })
+
     }
 })
 
@@ -84,6 +122,9 @@ const authSlice = createSlice({
 export {
     loginUser,
     jwtRefreshToken,
-    logoutUser
+    logoutUser,
+    Googleauthentication,
+    resendEmailVerification,
+
 }
 export default authSlice.reducer

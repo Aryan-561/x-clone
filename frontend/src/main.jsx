@@ -5,6 +5,8 @@ import App from './App.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from "react-redux"
 import store from "../src/app/store.js"
+import { GoogleOAuthProvider } from '@react-oauth/google'
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -14,6 +16,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <RouterProvider router={router} />
+    </GoogleOAuthProvider>
   </Provider>
 );
