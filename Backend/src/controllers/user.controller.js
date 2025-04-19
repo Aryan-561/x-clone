@@ -6,7 +6,9 @@ import { uploadCloudinary, deleteCloudinary } from "../utils/cloudinary.js";
 import conf from "../conf/conf.js";
 import jwt from "jsonwebtoken";
 import sendMail from "../Utils/sendmail.js";
+import { OAuth2Client } from 'google-auth-library';
 
+const client = new OAuth2Client(conf.googleClientID);
 const options = {
     httpOnly: true,
     secure: false,
@@ -37,7 +39,6 @@ const generateAccessAndRefreshToken = async function (id) {
     await user.save({
         validateBeforeSave: false,
     });
-    // console.log("Access token generated", accessToken, refreshToken);
 
     return {
         accessToken,
@@ -283,6 +284,57 @@ const logoutUser = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, "User logged out successfully", {}));
 });
 
+// Google Authentication Controller
+const Googleauthentication = asyncHandler(async (req, res) => {
+    const { credential } = req.body;
+
+    if (!credential) {
+        throw new ApiErrors(400, "Google credential is missing");
+    }
+
+    // Verify the Google ID token
+    const ticket = await client.verifyIdToken({
+        idToken: credential,
+        audience: conf.googleClientID
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name, picture, sub } = payload;
+
+    // Check if user already exists
+    let user = await User.findOne({ email });
+
+    if (!user) {
+        // Generate a fallback userName using the email prefix
+        const userName = email.split('@')[0] + Math.floor(Math.random() * 1000);
+
+        user = await User.create({
+            fullName: name,
+            userName: userName,
+            email,
+            profileImage: {
+                url: picture
+            },
+            isGoogleUser: true,
+            isVerified: true,
+        });
+    }
+
+
+    // Check if email is verified
+    if (!user.isVerified) {
+        throw new ApiErrors(403, "Please verify your email before logging in.");
+    }
+
+    const {accessToken,refreshToken} = await generateAccessAndRefreshToken(user._id)
+
+    // Send response with token and user info in custom format
+    return res
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .status(200).json(new ApiResponse(200, "User logged in successfully", { refreshToken,accessToken, user }));
+});
+
 const jwtRefreshToken = asyncHandler(async (req, res) => {
     const oldRefreshToken = req.cookies?.refreshToken;
     // console.log("Refresh token", oldRefreshToken);
@@ -512,6 +564,7 @@ export {
     createUser,
     loginuser,
     logoutUser,
+    Googleauthentication,
     verifyMail,
     resendVerificationEmail,
     jwtRefreshToken,

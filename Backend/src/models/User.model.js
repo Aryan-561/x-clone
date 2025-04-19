@@ -2,61 +2,63 @@ import { Schema, model } from "mongoose";
 import jwt from "jsonwebtoken"
 import conf from "../conf/conf.js";
 import bcrypt from "bcryptjs"
-const userSchema = new Schema(
-    {
-        userName: {
-            type: String,
-            required: true,
-            trim: true,
-            unique: true,
+const userSchema = new Schema({
+    userName: {
+        type: String,
+        required: function () {
+            return !this.isGoogleUser;
         },
-        fullName: {
-            type: String,
-            required: true,
-            trim: true,
+        trim: true,
+        unique: true,
+    },
+    fullName: {
+        type: String,
+        required: function () {
+            return !this.isGoogleUser;
         },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-            match: /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/,
-            lowercase: true,
-            trim: true,
-        },
-        password: {
-            type: String,
-            required: true
-        },
-        coverImage: {
-            url: { type: String, },
-            publicId: { type: String, }
-        },
-        profileImage: {
-            url: { type: String },
-            publicId: { type: String, }
-        },
-        bio: {
-            type: String,
-        },
-        link: {
-            type: String,
-        },
-        refreshToken: {
-            type: String,
-        },
-        isVerified: {
-            type: Boolean,
-            default: false,
+        trim: true,
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        match: /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/,
+        lowercase: true,
+        trim: true,
+    },
+    password: {
+        type: String,
+        required: function () {
+            return !this.isGoogleUser;
         },
     },
-    {
-        timestamps: true,
-    }
-);
+    coverImage: {
+        url: { type: String },
+        publicId: { type: String }
+    },
+    profileImage: {
+        url: { type: String },
+        publicId: { type: String }
+    },
+    bio: String,
+    link: String,
+    refreshToken: String,
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
+    isGoogleUser: {
+        type: Boolean,
+        default: false,
+    },
+}, {
+    timestamps: true,
+});
+
 
 // hash the password before saving it to the database
 userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) return next();
+    if (!this.isModified("password") || this.isGoogleUser) return next();
     this.password = await bcrypt.hash(this.password, 10);
     next();
 });
