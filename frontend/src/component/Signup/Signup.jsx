@@ -1,54 +1,79 @@
 import React from 'react';
-import { FcGoogle } from 'react-icons/fc';
 import { useForm } from 'react-hook-form';
-import { createUser } from "../../features"
 import { useDispatch, useSelector } from 'react-redux';
+import { createUser } from "../../features";
+import { Container, Googleauthentication, X } from '../index.js';
+
 function Signup() {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const { loading, error, message } = useSelector((state) => state.user);
     const {
         handleSubmit,
         register,
         formState: { errors },
+        reset,
     } = useForm();
 
-    const signupSubmit = (data) => {
-        console.log(data)
-        dispatch(createUser({
-            username: data.username,
-            email: data.email,
-            password: data.password
-        }))
+    const signupSubmit = async (data) => {
+        try {
+            await dispatch(createUser({
+                username: data.username,
+                email: data.email,
+                password: data.password,
+            })).unwrap();
+
+            reset();
+        } catch (err) {
+            console.error("Signup failed:", err.message || err);
+            reset();
+        }
     };
-    // Password validation with more rules
+
     const passwordValidation = {
         required: "Password is required",
         minLength: { value: 8, message: "Password must be at least 8 characters" },
         maxLength: { value: 20, message: "Password must be less than 20 characters" },
-        // pattern: {
-        //     value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/,
-        //     message: "Password must contain at least one letter, one number, and one special character"
-        // }
+        pattern: {
+            value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/,
+            message: "Must include one letter, number, and special character"
+        }
     };
 
-
-
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-black  text-white px-4">
-            <div className="w-full max-w-md bg-zinc-900 p-8 shadow-white/50  rounded-2xl shadow-sm">
-                <h1 className="text-3xl font-bold font-sans mb-6">Create your account</h1>
+        <Container className="w-full border inset-0 absolute bg-gray-950/85 flex items-center justify-center text-white px-3">
+            <div className="w-full max-w-xl text-center bg-black p-8 shadow-white/50 rounded-2xl shadow-sm">
+                {/* Close Button */}
+                <div className="w-full flex justify-center mb-4">
+                    <X className="w-16 rounded-full" image="xLight.png" imageAlt="close" />
+                </div>
 
+                <h1 className="text-3xl font-semibold font-serif mb-6">Create your account</h1>
+
+                {/* Google Auth */}
+                <div className="flex items-center justify-center w-full py-3">
+                    <Googleauthentication />
+                </div>
+
+                {/* Divider */}
+                <div className="flex items-center my-6">
+                    <div className="flex-grow h-px bg-zinc-700"></div>
+                    <span className="px-4 text-zinc-400">or</span>
+                    <div className="flex-grow h-px bg-zinc-700"></div>
+                </div>
+
+                {/* Signup Form */}
                 <form onSubmit={handleSubmit(signupSubmit)} className="flex flex-col gap-4">
+
                     {/* Name */}
                     <div>
                         <input
                             type="text"
                             placeholder="Name"
+                            autoComplete="username"
                             className="w-full p-3 rounded-xl bg-zinc-800 border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             {...register('username', { required: 'Username is required' })}
                         />
-                        {errors.username && (
-                            <span className="text-red-500 text-sm">{errors.username.message}</span>
-                        )}
+                        {errors.username && <span className="text-red-500 text-sm">{errors.username.message}</span>}
                     </div>
 
                     {/* Email */}
@@ -56,6 +81,7 @@ function Signup() {
                         <input
                             type="email"
                             placeholder="Email"
+                            autoComplete="email"
                             className="w-full p-3 rounded-xl bg-zinc-800 border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             {...register('email', {
                                 required: 'Email is required',
@@ -65,55 +91,50 @@ function Signup() {
                                 },
                             })}
                         />
-                        {errors.email && (
-                            <span className="text-red-500 text-sm">{errors.email.message}</span>
-                        )}
+                        {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
                     </div>
 
                     {/* Password */}
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        className="w-full p-3 rounded-xl bg-zinc-800 border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        {...register('password', passwordValidation)}
-                    />
+                    <div>
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            autoComplete="new-password"
+                            className="w-full p-3 rounded-xl bg-zinc-800 border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            {...register('password', passwordValidation)}
+                        />
+                        {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
+                    </div>
 
-                    {
-                        errors.password && (
-                            <span className="text-red-500 text-sm">{errors.password.message}</span>
-                        )
-                    }
-
+                    {/* Submit */}
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-700 transition text-white font-semibold py-3 rounded-xl mt-2"
+                        disabled={loading}
+                        className={`w-full bg-blue-600 hover:bg-blue-700 transition text-white font-semibold py-3 rounded-xl mt-2 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                     >
-                        Sign Up
+                        {loading ? "Signing up..." : "Sign Up"}
                     </button>
                 </form>
-
-                {/* Divider */}
-                <div className="flex items-center my-6">
-                    <div className="flex-grow h-px bg-zinc-700"></div>
-                    <span className="px-4 text-zinc-400">or</span>
-                    <div className="flex-grow h-px bg-zinc-700"></div>
-                </div>
-
-                {/* Google Sign-up */}
-                <button className="w-full flex items-center justify-center gap-3 bg-white text-black py-3 rounded-xl hover:bg-gray-200 transition">
-                    <FcGoogle size={20} />
-                    Sign up with Google
-                </button>
+                {/* Error */}
+                {error && (
+                    <p className={`text-sm text-center mt-2 ${error ? "text-red-500" : "text-green-500"}`}>
+                        {error}
+                    </p>
+                )}
+                {/* Message */}
+                {message && (
+                    <p className={`text-sm text-center mt-2 ${error ? "text-red-500" : "text-green-500"}`}>
+                        {message}
+                    </p>
+                )}
 
                 {/* Login Link */}
-                <p className="text-sm text-zinc-400 text-center mt-6">
+                <p className="text-sm text-zinc-400 text-center my-6">
                     Already have an account?{' '}
-                    <a href="#" className="text-blue-500 hover:underline">
-                        Log in
-                    </a>
+                    <a href="#" className="text-blue-500 hover:underline">Log in</a>
                 </p>
             </div>
-        </div>
+        </Container>
     );
 }
 
