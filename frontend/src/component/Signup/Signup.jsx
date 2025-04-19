@@ -3,9 +3,11 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { createUser } from "../../features";
 import { Container, Googleauthentication, X } from '../index.js';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
     const dispatch = useDispatch();
+    const navigate=useNavigate()
     const { loading, error, message } = useSelector((state) => state.user);
     const {
         handleSubmit,
@@ -16,11 +18,16 @@ function Signup() {
 
     const signupSubmit = async (data) => {
         try {
-            await dispatch(createUser({
+            const resultAction = await dispatch(createUser({
                 username: data.username,
                 email: data.email,
                 password: data.password,
-            })).unwrap();
+            }));
+
+            // Check if the action was fulfilled
+            if (createUser.fulfilled.match(resultAction)) {
+                navigate("/home");
+            }
 
             reset();
         } catch (err) {
@@ -28,6 +35,7 @@ function Signup() {
             reset();
         }
     };
+
 
     const passwordValidation = {
         required: "Password is required",
@@ -40,7 +48,7 @@ function Signup() {
     };
 
     return (
-        <Container className="w-full border inset-0 absolute bg-gray-950/85 flex items-center justify-center text-white px-3">
+        <Container className="w-full  inset-0 absolute bg-gray-950/85 flex items-center justify-center text-white px-3">
             <div className="w-full max-w-xl text-center bg-black p-8 shadow-white/50 rounded-2xl shadow-sm">
                 {/* Close Button */}
                 <div className="w-full flex justify-center mb-4">

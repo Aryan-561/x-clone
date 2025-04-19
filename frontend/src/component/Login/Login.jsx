@@ -18,12 +18,12 @@ function Login() {
             const result = await dispatch(loginUser({
                 email: data.email,
                 password: data.password,
-            })).unwrap();
+            })).
 
             console.log("Login successful", result);
             reset();
             // Navigate after successful login
-            navigate("/");
+            navigate("/home");
         } catch (err) {
             console.error("Login failed:", err.message || err);
             reset();
@@ -31,7 +31,7 @@ function Login() {
     };
 
     return (
-        <Container className="w-full border inset-0 absolute bg-gray-950/85 flex items-center justify-center text-white px-3">
+        <Container className="w-full  inset-0 absolute bg-gray-950/85 flex items-center justify-center text-white px-3">
             <div className="w-full max-w-xl text-center bg-black p-8 shadow-white/50 rounded-2xl shadow-sm">
                 {/* Close Button */}
                 <div className="w-full flex justify-center mb-4">

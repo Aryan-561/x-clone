@@ -3,8 +3,9 @@ import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { Googleauthentication } from '../../features';
-
+import { useNavigate } from 'react-router-dom';
 const GoogleAuthentication = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch();
 
     const handleGoogleSuccess = async (googleResponse) => {
@@ -21,6 +22,8 @@ const GoogleAuthentication = () => {
             console.log("Decoded User Info:", decoded);
 
             dispatch(Googleauthentication(credential));
+            navigate("/home")
+            
         } catch (err) {
             console.error("Google login failed:", err);
         }
