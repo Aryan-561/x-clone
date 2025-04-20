@@ -6,7 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from "react-redux"
 import store from "../src/app/store.js"
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import { Login, Signup, Home } from './pages/index.js';
+import { Login, Signup, Home, Explore ,Profile} from './pages/index.js';
 import { LandingPage } from './component/index.js';
 
 const router = createBrowserRouter([
@@ -23,16 +23,26 @@ const router = createBrowserRouter([
     element: <Signup />
   },
   {
-    path: "/home",
-    element: <App />,
+    path: "",
+    element: <App />, 
     children: [
       {
-        index: true,
+        path: "home",
         element: <Home />
+      },
+      {
+        path: "explore",
+        element: <Explore />
+      },
+      {
+        path: "profile",
+        element: <Profile />
       }
     ]
   }
+
 ]);
+
 
 
 createRoot(document.getElementById('root')).render(
