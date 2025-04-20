@@ -92,13 +92,13 @@ const createUser = asyncHandler(async (req, res) => {
         coverImage: coverImageUrl
             ? {
                 url: coverImageUrl,
-                publicId: uploadCoverImageToCloudinary?.public_id || "",
+                publicId: coverImageUrl?.public_id || "",
             }
             : null,
         profileImage: profileImageUrl
             ? {
                 url: profileImageUrl,
-                publicId: uploadProfileImageToCloudinary?.public_id || "",
+                publicId: profileImageUrl?.public_id || "",
             }
             : null,
         password,
@@ -120,29 +120,48 @@ const createUser = asyncHandler(async (req, res) => {
     await sendMail({
         to: email,
         subject: "Verify Your Email",
-        // text: `Hi ${userName}, welcome to our platform! We're excited to have you join us.`,
-        // html: `<h1>Welcome, ${userName}!</h1><p>Thanks for registering on our app. We're excited to have you onboard.</p>`,
         html: `
-    <h2>Hello ${userName},</h2>
-    <p>We noticed you haven’t verified your email address yet. To complete your registration and start using your account, please verify your email.</p>
-    <p>Click the button below to confirm your email address:</p>
+    <div style="font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 40px 20px;">
+    <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); overflow: hidden;">
+        
+        <div style="background-color: #007bff; padding: 20px;">
+        <h2 style="color: #ffffff; margin: 0;">Welcome to X-Clone!</h2>
+        </div>
 
-    <a
-    href="${verificationUrl}"
-    style="display: inline-block; background-color: #007bff; color: #ffffff; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-weight: bold;"
-    >
-    Verify Email
-    </a>
+        <div style="padding: 30px;">
+        <p style="font-size: 16px; color: #333333;">Hi <strong>${userName}</strong>,</p>
+        
+        <p style="font-size: 15px; color: #333333;">
+        Thank you for signing up! To get started, please confirm your email address by clicking the button below:
+        </p>
 
-    <p>If the button above doesn't work, you can also copy and paste the following link into your browser:</p>
-    <p>${verificationUrl}</p>
+        <div style="text-align: center; margin: 30px 0;">
+        <a href="${verificationUrl}" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            Verify Email
+        </a>
+        </div>
 
-    <p style="margin-top: 30px;">If you didn’t create this account, you can safely ignore this email.</p>
+        <p style="font-size: 14px; color: #555555;">
+        Or copy and paste this URL into your browser:
+        </p>
+        <p style="font-size: 13px; color: #007bff; word-break: break-all;">${verificationUrl}</p>
 
-    <p>Best regards,<br>YourApp Team</p>
-`,
+        <hr style="border: none; border-top: 1px solid #eeeeee; margin: 30px 0;">
 
+        <p style="font-size: 13px; color: #999999;">
+          If you didn't sign up for this account, you can safely ignore this email.
+        </p>
+      </div>
+
+      <div style="background-color: #f0f0f0; text-align: center; padding: 15px; font-size: 13px; color: #888888;">
+        © ${new Date().getFullYear()} X-Clone. All rights reserved.
+      </div>
+
+    </div>
+  </div>
+  `
     });
+
 
     return res
         .status(201)
@@ -326,13 +345,13 @@ const Googleauthentication = asyncHandler(async (req, res) => {
         throw new ApiErrors(403, "Please verify your email before logging in.");
     }
 
-    const {accessToken,refreshToken} = await generateAccessAndRefreshToken(user._id)
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
 
     // Send response with token and user info in custom format
     return res
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
-        .status(200).json(new ApiResponse(200, "User logged in successfully", { refreshToken,accessToken, user }));
+        .status(200).json(new ApiResponse(200, "User logged in successfully", { refreshToken, accessToken, user }));
 });
 
 const jwtRefreshToken = asyncHandler(async (req, res) => {
@@ -548,11 +567,13 @@ const search = asyncHandler(async (req, res) => {
             $project: {
                 _id: 1,
                 userName: 1,
+                fullName: 1,
+                bio: 1
             },
         },
     ]);
     if (query.length === 0)
-        res.status(400).json(new ApiResponse(400, "user match not found"));
+        return res.status(400).json(new ApiResponse(400, "user match not found"));
 
     return res
         .status(200)
