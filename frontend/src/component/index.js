@@ -6,11 +6,12 @@ import Sidebar from "./sidebar/Sidebar";
 import Rightsidebar from "./Sidebar/Rightsidebar";
 import Sidebarfooter from "./Sidebar/Sidebarfooter.jsx"
 import Login from "./Login/Login.jsx";
-import  Signup from "./Signup/Signup.jsx"
+import Signup from "./Signup/Signup.jsx"
 import Googleauthentication from "./google-authentication/Googleauthentication.jsx";
 import X from "./Icon-component/X.jsx";
 import LandingPage from "./LandingPage/LandingPage.jsx";
-
+import ProfileSearch from "./AllshortProfileView/ProfileSearch.jsx"
+import Profile from "./Profile/Profile.jsx";
 export {
     Button,
     Card,
@@ -23,6 +24,7 @@ export {
     Signup,
     Googleauthentication,
     X,
-    LandingPage
-
+    LandingPage,
+    ProfileSearch,
+    Profile
 }
