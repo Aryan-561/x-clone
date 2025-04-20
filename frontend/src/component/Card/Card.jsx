@@ -36,7 +36,7 @@ function Card({ onClickLikeBtn }) {
 
   return (
     <>
-      <div className="text-white bg-black   border-2 border-gray-600 p-4 ">
+      <div className="text-white sm:w-1/2 bg-black   border-2 border-gray-600 p-4 ">
         <div className="flex gap-2">
 
           {/* Profile image */}
