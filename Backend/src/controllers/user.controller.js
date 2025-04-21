@@ -65,6 +65,8 @@ const createUser = asyncHandler(async (req, res) => {
     // Check if images are provided and upload them if necessary
     let coverImageUrl = "";
     let profileImageUrl = "";
+    let coverPublicid = ""
+    let profilePublicid = ""
 
     if (req.files?.coverImage?.[0]?.path) {
         // Upload cover image if provided
@@ -72,7 +74,10 @@ const createUser = asyncHandler(async (req, res) => {
         const uploadCoverImageToCloudinary = await uploadCloudinary(
             coverImageFile
         );
+        console.log("uploadcloudinary", uploadCoverImageToCloudinary)
         coverImageUrl = uploadCoverImageToCloudinary?.secure_url || "";
+        coverPublicid = uploadCoverImageToCloudinary?.public_id || ""
+
     }
 
     if (req.files?.profileImage?.[0]?.path) {
@@ -82,6 +87,7 @@ const createUser = asyncHandler(async (req, res) => {
             profileImageFile
         );
         profileImageUrl = uploadProfileImageToCloudinary?.secure_url || "";
+        profilePublicid = uploadProfileImageToCloudinary?.public_id || "";
     }
 
     // Creating a new user document
@@ -92,13 +98,13 @@ const createUser = asyncHandler(async (req, res) => {
         coverImage: coverImageUrl
             ? {
                 url: coverImageUrl,
-                publicId: coverImageUrl?.public_id || "",
+                publicId: coverPublicid || "",
             }
             : null,
         profileImage: profileImageUrl
             ? {
                 url: profileImageUrl,
-                publicId: profileImageUrl?.public_id || "",
+                publicId: profilePublicid || "",
             }
             : null,
         password,
@@ -318,11 +324,24 @@ const Googleauthentication = asyncHandler(async (req, res) => {
     });
 
     const payload = ticket.getPayload();
-    const { email, name, picture, sub } = payload;
+    const { email, name, picture } = payload;
 
     // Check if user already exists
     let user = await User.findOne({ email });
+    // const profileImageUrl = ""
+    // const profilePublicid = ""
+    // if (picture) {
+    //     // Upload cover image if provided
+    //     const uploadCoverImageToCloudinary = await uploadCloudinary(
+    //         picture
+    //     );
+    //     console.log("uploadcloudinary", uploadCoverImageToCloudinary)
+    //     profileImageUrl = uploadCoverImageToCloudinary?.secure_url || "";
+    //     profilePublicid = uploadCoverImageToCloudinary?.public_id || ""
 
+    // }
+    // console.log("c",profileImageUrl)
+    // console.log("p",profilePublicid)
     if (!user) {
         // Generate a fallback userName using the email prefix
         const userName = email.split('@')[0] + Math.floor(Math.random() * 1000);
@@ -331,9 +350,13 @@ const Googleauthentication = asyncHandler(async (req, res) => {
             fullName: name,
             userName: userName,
             email,
-            profileImage: {
-                url: picture
-            },
+            // profileImage: profileImageUrl
+            //     ? {
+            //         url: profileImageUrl,
+            //         publicId: profilePublicid || "",
+            //     }
+            //     : null,
+
             isGoogleUser: true,
             isVerified: true,
         });
