@@ -54,7 +54,7 @@ function Explore() {
               <h1 className='text-lg  font-semibold mb-2'>People</h1>
 
               {success &&
-                searchResults.data.map(({ userName, profileImage, bio, fullName, _id }) => (
+                searchResults?.data?.map(({ userName, profileImage, bio, fullName, _id }) => (
                   <Link to={`/${userName}`} key={_id}>
                     <ProfileSearch
                       userName={userName}

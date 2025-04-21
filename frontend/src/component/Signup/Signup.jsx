@@ -3,11 +3,11 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { createUser } from "../../features";
 import { Container, Googleauthentication, X } from '../index.js';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Signup() {
     const dispatch = useDispatch();
-    const navigate=useNavigate()
+    const navigate = useNavigate()
     const { loading, error, message } = useSelector((state) => state.user);
     const {
         handleSubmit,
@@ -79,7 +79,10 @@ function Signup() {
                             placeholder="Name"
                             autoComplete="username"
                             className="w-full p-3 rounded-xl bg-zinc-800 border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            {...register('username', { required: 'Username is required' })}
+                            {...register('username', {
+                                required: 'Username is required', validate: (value) =>
+                                    /^\S+$/.test(value) || 'Username should not contain spaces',
+                            })}
                         />
                         {errors.username && <span className="text-red-500 text-sm">{errors.username.message}</span>}
                     </div>
@@ -139,7 +142,7 @@ function Signup() {
                 {/* Login Link */}
                 <p className="text-sm text-zinc-400 text-center my-6">
                     Already have an account?{' '}
-                    <a href="#" className="text-blue-500 hover:underline">Log in</a>
+                    <Link to="/login" className="text-blue-500 hover:underline">Log in</Link>
                 </p>
             </div>
         </Container>

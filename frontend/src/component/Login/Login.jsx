@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../features';
 import { Container, Googleauthentication, X } from '../index.js';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
     // Accessing state from Redux
@@ -12,18 +12,18 @@ function Login() {
     const navigate = useNavigate();
     const { handleSubmit, register, formState: { errors }, reset } = useForm();
 
-    const loginSubmit = async (data) => {
+    const loginSubmit =  (data) => {
         try {
             // Dispatch the login action
-            const result = await dispatch(loginUser({
+            const result =  dispatch(loginUser({
                 email: data.email,
                 password: data.password,
-            })).
+            }))
 
             console.log("Login successful", result);
-            reset();
             // Navigate after successful login
             navigate("/home");
+            reset();
         } catch (err) {
             console.error("Login failed:", err.message || err);
             reset();
@@ -100,7 +100,7 @@ function Login() {
                 {/* Signup Link */}
                 <p className="text-sm text-zinc-400 text-center my-6">
                     Don't have an account?{' '}
-                    <a href="#" className="text-blue-500 hover:underline">Sign up</a>
+                    <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
                 </p>
             </div>
         </Container>
