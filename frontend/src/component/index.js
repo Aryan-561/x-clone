@@ -12,6 +12,7 @@ import X from "./Icon-component/X.jsx";
 import LandingPage from "./LandingPage/LandingPage.jsx";
 import ProfileSearch from "./AllshortProfileView/ProfileSearch.jsx"
 import Profile from "./Profile/Profile.jsx";
+import SmallLogoutCard from "./Dropdown/SmallLogoutCard.jsx";
 export {
     Button,
     Card,
@@ -26,5 +27,6 @@ export {
     X,
     LandingPage,
     ProfileSearch,
-    Profile
+    Profile,
+    SmallLogoutCard
 }
