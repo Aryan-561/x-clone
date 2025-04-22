@@ -37,7 +37,8 @@ const ActionBar = ({
   };
 
   // handler for bookmarked button
-  const onClickBookmarkBtn = () => {
+  const onClickBookmarkBtn = (e) => {
+    e.preventDefault();
     dispatch(toggleBookmarkedPost(postId))
     setBookmarkedStatus(!bookmarkedStatus);
   };
@@ -50,6 +51,7 @@ const ActionBar = ({
           <Button
             floatingText="Reply"
             className={`w-10 h-10  hover:bg-sky-500/15 rounded-full`}
+            onBtnClick={e=>e.preventDefault()}
           >
             <svg
               viewBox="0 0 24 24"
@@ -108,6 +110,7 @@ const ActionBar = ({
           <Button
             className="w-10 h-10 hover:bg-sky-600/20 rounded-full"
             floatingText="Views"
+            onBtnClick={e=>e.preventDefault()}
           >
             <svg
               viewBox="0 0 24 24"
