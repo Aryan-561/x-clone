@@ -2,7 +2,7 @@
 @import "tailwindcss";
 /* Hide the track and buttons, keep the thumb */
 .scrollbar-thumb-only::-webkit-scrollbar {
-    width: 10px;
+    width: 7px;
   }
   
   .scrollbar-thumb-only::-webkit-scrollbar-track {
