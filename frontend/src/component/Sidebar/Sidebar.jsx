@@ -85,27 +85,29 @@ function Sidebar() {
     return (
         // for test purpose
 
-        <Container className="w-1/4 min-h-screen px-1 flex flex-col items-center border-r border-r-white/20 justify-evenly">
-            <div className=' w-8 sm:w-10 text-start'>
+        <Container className="xl:col-span-2 h-screen overflow-y-scroll  sticky scrollbar-thumb-only flex justify-center  sm:justify-end xl:justify-center  top-0">
+            <div className="  py-2 flex flex-col items-center xl:items-start">
+
+            <div className=' w-10 lg:w-12 text-start py-1'>
                 <X image="xLight.png" />
             </div>
-            <ul className="flex flex-col gap-2 ">
+            <ul className="flex flex-col gap-3 items-start ">
                 {SidebarData.map((item, index) => (
-                    <Link to={item.path} key={index} className="flex items-center w-fit gap-3 py-2 px-2 sm:px-5 rounded hover:bg-white/10 hover:rounded-full cursor-pointer ">
-                        <span className="w-6 h-6">{item.icon}</span>
-                        <span className=" hidden sm:block text-xl font-medium first-letter:uppercase lowercase ">{item.title}</span>
+                    <Link to={item.path} key={index} className="flex items-center w-fit sm:gap-4 py-2 px-2 rounded hover:bg-white/10 hover:rounded-full cursor-pointer ">
+                        <span className="w-6 h-6 sm:w-7 sm:h-7">{item.icon}</span>
+                        <span className=" hidden xl:block text-xl font-medium first-letter:uppercase lowercase ">{item.title}</span>
                     </Link>
                 ))}
             </ul>
             <Button
-                className="bg-[#0c84df]  border-gray-900/80 border my-1 hover:bg-[#0c84df9e]/95 text-white w-fit font-semibold text-xl py-2 px-2 sm:px-10 flex items-center justify-center transition duration-200 ease-in-out  rounded-full sm:rounded-4xl"
+                className="bg-white  border-gray-900/80 border my-1 hover:bg-white/95 text-white w-fit font-semibold p-2 text-xl sm:py-3 sm:px-3 xl:px-10 flex items-center justify-center transition duration-200 ease-in-out  rounded-full lg:rounded-4xl"
             >
                 {/* Icon for small screens */}
-                <span className="block sm:hidden" title="Post">
+                <span className="block xl:hidden" title="Post">
                     <svg
                         viewBox="0 0 24 24"
                         aria-hidden="true"
-                        className="w-6 h-6 text-white"
+                        className="w-6 h-6 text-black "
                         fill="currentColor"
                     >
                         <g>
@@ -115,26 +117,27 @@ function Sidebar() {
                 </span>
 
                 {/* Text for medium and up */}
-                <span className="hidden sm:inline">Post</span>
+                <span className="hidden text-black font-bold  xl:inline">Post</span>
             </Button>
 
 
 
-            <div className="flex items-center justify-between gap-12 my-1 px-3 py-2 w-fit hover:bg-white/15 hover:rounded-full ">
+            <div className="flex items-center justify-between gap-12 my-1 p-2 sm:px-3 sm:py-2 w-fit hover:bg-white/15 hover:rounded-full ">
                 <div className="flex items-center gap-2">
-                    <Avatar profileImage={memoizedUserData?.profileImage?.url} classname=" w-12 h-12 object-cover" />
+                    <Avatar profileImage={memoizedUserData?.profileImage?.url} classname=" sm:w-12 sm:h-12 object-cover" />
 
-                    <div className='hidden sm:block'>
+                    <div className='hidden xl:block'>
                         <h5 className="text-sm font-semibold leading-tight">{memoizedUserData?.userName}</h5>
                         <h6 className="text-xs text-gray-500">@{memoizedUserData?.fullName}</h6>
                     </div>
                 </div>
 
-                <div className=" hidden sm:block text-gray-600  rounded-full  cursor-pointer">
+                <div className=" hidden xl:block text-gray-600  rounded-full  cursor-pointer">
                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                         <path d="M3.75 12c0-4.56 3.69-8.25 8.25-8.25s8.25 3.69 8.25 8.25-3.69 8.25-8.25 8.25S3.75 16.56 3.75 12zM12 1.75C6.34 1.75 1.75 6.34 1.75 12S6.34 22.25 12 22.25 22.25 17.66 22.25 12 17.66 1.75 12 1.75zm-4.75 11.5c.69 0 1.25-.56 1.25-1.25s-.56-1.25-1.25-1.25S6 11.31 6 12s.56 1.25 1.25 1.25zm9.5 0c.69 0 1.25-.56 1.25-1.25s-.56-1.25-1.25-1.25-1.25.56-1.25 1.25.56 1.25 1.25 1.25zM13.25 12c0 .69-.56 1.25-1.25 1.25s-1.25-.56-1.25-1.25.56-1.25 1.25-1.25 1.25.56 1.25 1.25z"></path>
                     </svg>
                 </div>
+            </div>
             </div>
         </Container>
     )

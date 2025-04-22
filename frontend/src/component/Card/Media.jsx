@@ -4,7 +4,7 @@ const Media = ({media})=>{
     
     return(
         <>
-            <div className="w-full  my-3 bg-black border-1 border-gray-700 rounded-2xl overflow-hidden">
+            <div className="w-full  my-3 bg-black outline outline-offset-1  outline-gray-600 rounded-2xl overflow-hidden">
 
                 {media?.resourseType=="image"?( 
                     <img src={media.url} className="w-full h-auto object-contain max-h-[500px]" alt="" /> 
