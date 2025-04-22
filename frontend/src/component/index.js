@@ -13,6 +13,8 @@ import LandingPage from "./LandingPage/LandingPage.jsx";
 import ProfileSearch from "./AllshortProfileView/ProfileSearch.jsx"
 import Profile from "./Profile/Profile.jsx";
 import SmallLogoutCard from "./Dropdown/SmallLogoutCard.jsx";
+import CreatePost from "./CreatePost/CreatePost.jsx";
+import EventLoading from "./Loading/EventLoading.jsx"
 export {
     Button,
     Card,
@@ -28,5 +30,7 @@ export {
     LandingPage,
     ProfileSearch,
     Profile,
-    SmallLogoutCard
+    SmallLogoutCard,
+    CreatePost,
+    EventLoading
 }
