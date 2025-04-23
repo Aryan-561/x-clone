@@ -42,7 +42,7 @@ function Home() {
 
     return (
         <>
-            <Container className=' col-span-5 w-full sm:w-[85%] lg:w-full   pb-4 border border-t-0 border-gray-600'>
+            <Container className=' col-span-5 w-full  sm:w-[85%] lg:w-full   pb-4 border border-t-0 border-gray-600'>
                 <div className="text-white flex justify-evenly items-center border-l border-b border-gray-600 bg-black/50 backdrop-blur-md sticky top-0 xl:text-lg font-semibold">
                     <button 
                         className={`p-2 border-b-4 ${feedType=="for you"?" border-sky-400":"border-b-transparent"}`}
