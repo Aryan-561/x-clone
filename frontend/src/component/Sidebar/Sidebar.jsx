@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import Container from '../Container/Container'
 import Button from '../Button/Button'
 import { Link } from "react-router-dom"
@@ -6,6 +6,8 @@ import Avatar from '../Card/Avatar.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCurrentUser } from '../../features/index.js'
 import X from '../Icon-component/X.jsx'
+import SmallLogoutCard from '../Dropdown/SmallLogoutCard.jsx'
+
 function Sidebar() {
 
     const SidebarData = [
@@ -21,12 +23,12 @@ function Sidebar() {
             path: "/explore"
 
         },
-        {
-            icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M19.993 9.042C19.48 5.017 16.054 2 11.996 2s-7.49 3.021-7.999 7.051L2.866 18H7.1c.463 2.282 2.481 4 4.9 4s4.437-1.718 4.9-4h4.236l-1.143-8.958zM12 20c-1.306 0-2.417-.835-2.829-2h5.658c-.412 1.165-1.523 2-2.829 2zm-6.866-4l.847-6.698C6.364 6.272 8.941 4 11.996 4s5.627 2.268 6.013 5.295L18.864 16H5.134z"></path></g></svg>,
-            title: "Notifications",
-            path: "/notifications"
+        // {
+        //     icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M19.993 9.042C19.48 5.017 16.054 2 11.996 2s-7.49 3.021-7.999 7.051L2.866 18H7.1c.463 2.282 2.481 4 4.9 4s4.437-1.718 4.9-4h4.236l-1.143-8.958zM12 20c-1.306 0-2.417-.835-2.829-2h5.658c-.412 1.165-1.523 2-2.829 2zm-6.866-4l.847-6.698C6.364 6.272 8.941 4 11.996 4s5.627 2.268 6.013 5.295L18.864 16H5.134z"></path></g></svg>,
+        //     title: "Notifications",
+        //     path: "/notifications"
 
-        },
+        // },
         {
             icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 2.5-2.5 2.5h-15c-1.381 0-2.5-1.119-2.5-2.5v-13zm2.5-.5c-.276 0-.5.224-.5.5v2.764l8 3.638 8-3.636V5.5c0-.276-.224-.5-.5-.5h-15zm15.5 5.463l-8 3.636-8-3.638V18.5c0 .276.224.5.5.5h15c.276 0 .5-.224.5-.5v-8.037z"></path></g></svg>,
             title: "messages",
@@ -52,17 +54,6 @@ function Sidebar() {
             path: "/communities"
         },
         {
-            icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M8.52 3.59c.8-1.1 2.04-1.84 3.48-1.84s2.68.74 3.49 1.84c1.34-.21 2.74.14 3.76 1.16s1.37 2.42 1.16 3.77c1.1.8 1.84 2.04 1.84 3.48s-.74 2.68-1.84 3.48c.21 1.34-.14 2.75-1.16 3.77s-2.42 1.37-3.76 1.16c-.8 1.1-2.05 1.84-3.49 1.84s-2.68-.74-3.48-1.84c-1.34.21-2.75-.14-3.77-1.16-1.01-1.02-1.37-2.42-1.16-3.77-1.09-.8-1.84-2.04-1.84-3.48s.75-2.68 1.84-3.48c-.21-1.35.14-2.75 1.16-3.77s2.43-1.37 3.77-1.16zm3.48.16c-.85 0-1.66.53-2.12 1.43l-.38.77-.82-.27c-.96-.32-1.91-.12-2.51.49-.6.6-.8 1.54-.49 2.51l.27.81-.77.39c-.9.46-1.43 1.27-1.43 2.12s.53 1.66 1.43 2.12l.77.39-.27.81c-.31.97-.11 1.91.49 2.51.6.61 1.55.81 2.51.49l.82-.27.38.77c.46.9 1.27 1.43 2.12 1.43s1.66-.53 2.12-1.43l.39-.77.82.27c.96.32 1.9.12 2.51-.49.6-.6.8-1.55.48-2.51l-.26-.81.76-.39c.91-.46 1.43-1.27 1.43-2.12s-.52-1.66-1.43-2.12l-.77-.39.27-.81c.32-.97.12-1.91-.48-2.51-.61-.61-1.55-.81-2.51-.49l-.82.27-.39-.77c-.46-.9-1.27-1.43-2.12-1.43zm4.74 5.68l-6.2 6.77-3.74-3.74 1.41-1.42 2.26 2.26 4.8-5.23 1.47 1.36z"></path></g></svg>,
-            title: "premium",
-            path: "/premium"
-        },
-        {
-            icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M7.323 2h11.443l-3 5h6.648L6.586 22.83 7.847 14H2.523l4.8-12zm1.354 2l-3.2 8h4.676l-.739 5.17L17.586 9h-5.352l3-5H8.677z"></path></g></svg>
-            , title: "verified Orgs",
-            path: "/verified-orgs"
-
-        },
-        {
             icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M5.651 19h12.698c-.337-1.8-1.023-3.21-1.945-4.19C15.318 13.65 13.838 13 12 13s-3.317.65-4.404 1.81c-.922.98-1.608 2.39-1.945 4.19zm.486-5.56C7.627 11.85 9.648 11 12 11s4.373.85 5.863 2.44c1.477 1.58 2.366 3.8 2.632 6.46l.11 1.1H3.395l.11-1.1c.266-2.66 1.155-4.88 2.632-6.46zM12 4c-1.105 0-2 .9-2 2s.895 2 2 2 2-.9 2-2-.895-2-2-2zM8 6c0-2.21 1.791-4 4-4s4 1.79 4 4-1.791 4-4 4-4-1.79-4-4z"></path></g></svg>
             , title: "Profile"
             , path: "profile"
@@ -81,63 +72,66 @@ function Sidebar() {
         dispatch(getCurrentUser());
     }, [dispatch]);
 
+    const [showComponent, setshowComponent] = useState(false)
+    const handleComponent = () => {
+        setshowComponent(prev => !prev)
+    }
+
     const memoizedUserData = useMemo(() => currentUser?.data, [currentUser]);
     return (
         // for test purpose
 
-        <Container className="xl:col-span-2 h-screen overflow-y-scroll  sticky scrollbar-thumb-only flex justify-center  sm:justify-end xl:justify-center  top-0">
+        <Container className="xl:col-span-2  h-screen overflow-y-scroll  sticky scrollbar-thumb-only flex justify-center  sm:justify-end xl:justify-center px-3.5 top-0 hide-scrollbar">
             <div className="  py-2 flex flex-col items-center xl:items-start">
 
-            <div className=' w-10 lg:w-12 text-start py-1'>
-                <X image="xLight.png" />
-            </div>
-            <ul className="flex flex-col gap-3 items-start ">
-                {SidebarData.map((item, index) => (
-                    <Link to={item.path} key={index} className="flex items-center w-fit sm:gap-4 py-2 px-2 rounded hover:bg-white/10 hover:rounded-full cursor-pointer ">
-                        <span className="w-6 h-6 sm:w-7 sm:h-7">{item.icon}</span>
-                        <span className=" hidden xl:block text-xl font-medium first-letter:uppercase lowercase ">{item.title}</span>
+                <div className=' w-10 lg:w-12 text-start py-1'>
+                    <Link to="home">
+                        <X image="xLight.png" />
                     </Link>
-                ))}
-            </ul>
-            <Button
-                className="bg-white  border-gray-900/80 border my-1 hover:bg-white/95 text-white w-fit font-semibold p-2 text-xl sm:py-3 sm:px-3 xl:px-10 flex items-center justify-center transition duration-200 ease-in-out  rounded-full lg:rounded-4xl"
-            >
-                {/* Icon for small screens */}
-                <span className="block xl:hidden" title="Post">
-                    <svg
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                        className="w-6 h-6 text-black "
-                        fill="currentColor"
-                    >
-                        <g>
-                            <path d="M23 3c-6.62-.1-10.38 2.421-13.05 6.03C7.29 12.61 6 17.331 6 22h2c0-1.007.07-2.012.19-3H12c4.1 0 7.48-3.082 7.94-7.054C22.79 10.147 23.17 6.359 23 3zm-7 8h-1.5v2H16c.63-.016 1.2-.08 1.72-.188C16.95 15.24 14.68 17 12 17H8.55c.57-2.512 1.57-4.851 3-6.78 2.16-2.912 5.29-4.911 9.45-5.187C20.95 8.079 19.9 11 16 11zM4 9V6H1V4h3V1h2v3h3v2H6v3H4z" />
-                        </g>
-                    </svg>
-                </span>
+                </div>
+                <ul className="flex flex-col gap-3 items-start ">
+                    {SidebarData.map((item, index) => (
+                        <Link to={item.path} key={index} className="flex items-center w-fit sm:gap-4 py-2 px-4 rounded hover:bg-white/10 hover:rounded-full cursor-pointer ">
+                            <span className="w-6 h-6 sm:w-7 sm:h-7">{item.icon}</span>
+                            <span className=" hidden xl:block text-xl font-medium first-letter:uppercase lowercase ">{item.title}</span>
+                        </Link>
+                    ))}
+                </ul>
+                <Button
+                    className="bg-white/90   my-2.5  border-blue-300/75 border hover:bg-blue-500/75 hover:transition-colors  text-white w-fit font-semibold p-2 text-xl sm:py-3 sm:px-3 xl:px-10 flex items-center justify-center transition duration-200 ease-in-out  rounded-full lg:rounded-4xl"
+                >
+                    {/* Icon for small screens */}
+                    <span className="block xl:hidden" title="Post">
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            className="w-6 h-6 text-black "
+                            fill="currentColor"
+                        >
+                            <g>
+                                <path d="M23 3c-6.62-.1-10.38 2.421-13.05 6.03C7.29 12.61 6 17.331 6 22h2c0-1.007.07-2.012.19-3H12c4.1 0 7.48-3.082 7.94-7.054C22.79 10.147 23.17 6.359 23 3zm-7 8h-1.5v2H16c.63-.016 1.2-.08 1.72-.188C16.95 15.24 14.68 17 12 17H8.55c.57-2.512 1.57-4.851 3-6.78 2.16-2.912 5.29-4.911 9.45-5.187C20.95 8.079 19.9 11 16 11zM4 9V6H1V4h3V1h2v3h3v2H6v3H4z" />
+                            </g>
+                        </svg>
+                    </span>
 
-                {/* Text for medium and up */}
-                <span className="hidden text-black font-bold  xl:inline">Post</span>
-            </Button>
+                    {/* Text for medium and up */}
+                    <span className="hidden text-black font-semibold px-6  xl:inline">Post</span>
+                </Button>
 
 
 
-            <div className="flex items-center justify-between gap-12 my-1 p-2 sm:px-3 sm:py-2 w-fit hover:bg-white/15 hover:rounded-full ">
-                <div className="flex items-center gap-2">
-                    <Avatar profileImage={memoizedUserData?.profileImage?.url} classname=" sm:w-12 sm:h-12 object-cover" />
+                <div onClick={handleComponent} className="flex items-center relative justify-between gap-12 my-1 p-2 sm:px-3 sm:py-2 w-fit hover:bg-white/15 hover:rounded-full ">
+                    <div className="flex items-center gap-2">
+                        <Avatar profileImage={memoizedUserData?.profileImage?.url} classname=" border-2  border-gray-900 w-12 h-12 object-cover" />
 
-                    <div className='hidden xl:block'>
-                        <h5 className="text-sm font-semibold leading-tight">{memoizedUserData?.userName}</h5>
-                        <h6 className="text-xs text-gray-500">@{memoizedUserData?.fullName}</h6>
+                        <div className='hidden xl:block'>
+                            <h5 className="text-sm font-semibold leading-tight">{memoizedUserData?.fullName}</h5>
+                            <h6 className="text-xs text-gray-500">@{memoizedUserData?.userName}</h6>
+                        </div>
                     </div>
-                </div>
+                    <SmallLogoutCard className={showComponent ? "block " : "hidden"} data={memoizedUserData} />
 
-                <div className=" hidden xl:block text-gray-600  rounded-full  cursor-pointer">
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                        <path d="M3.75 12c0-4.56 3.69-8.25 8.25-8.25s8.25 3.69 8.25 8.25-3.69 8.25-8.25 8.25S3.75 16.56 3.75 12zM12 1.75C6.34 1.75 1.75 6.34 1.75 12S6.34 22.25 12 22.25 22.25 17.66 22.25 12 17.66 1.75 12 1.75zm-4.75 11.5c.69 0 1.25-.56 1.25-1.25s-.56-1.25-1.25-1.25S6 11.31 6 12s.56 1.25 1.25 1.25zm9.5 0c.69 0 1.25-.56 1.25-1.25s-.56-1.25-1.25-1.25-1.25.56-1.25 1.25.56 1.25 1.25 1.25zM13.25 12c0 .69-.56 1.25-1.25 1.25s-1.25-.56-1.25-1.25.56-1.25 1.25-1.25 1.25.56 1.25 1.25z"></path>
-                    </svg>
                 </div>
-            </div>
             </div>
         </Container>
     )

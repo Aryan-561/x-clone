@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useRef} from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Button, Container, Input, ProfileSearch, Sidebarfooter } from '../index';
@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 function Rightsidebar() {
     const dispatch = useDispatch();
     const { searchResults, success } = useSelector((state) => state.user);
-
+    const inputRef = useRef();
     const { register, handleSubmit } = useForm();
     const [searchValue, setSearchValue] = useState('');
 
@@ -37,6 +37,7 @@ function Rightsidebar() {
                         setSearchValue(value);
                         handleSearch({ name: value });
                     }}
+                    ref={inputRef}
                 >
                     <div className='w-4 h-4'>
                         <svg

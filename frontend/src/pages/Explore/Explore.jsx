@@ -1,14 +1,13 @@
-import React from 'react'
+import React ,{useRef}from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { search } from '../../features'
-import { Container, Input, ProfileSearch } from '../../component'
+import { Container, Input, ProfileSearch,EventLoading } from '../../component'
 import { Link } from 'react-router-dom'
 function Explore() {
   const { error, message, loading, searchResults, success } = useSelector((state) => state.user)
-  const result = useSelector((state) => state.user)
   const dispatch = useDispatch()
-
+  const inputRef = useRef()
   // react-hook-form setup
   const { register, handleSubmit, formState: { errors } } = useForm()
 
@@ -20,11 +19,12 @@ function Explore() {
   }
 
   return (
-    <Container className='sm:w-1/2 pr-3.5 '>
+    <Container className='col-span-5 pr-3.5 '>
       <div className='  mx-2.5 w-full my-4'>
         <form onSubmit={handleSubmit(handleSearch)}>
           <Input
             placeholder="Search"
+            ref={inputRef}
             className="border  sm:w-xl w-full border-white/50 focus:bg-blue-500/10 focus:border-blue-500 focus:ring-blue-500 focus:ring-1 rounded-3xl px-4 py-2"
             // Registering the input field with validation
             {...register('name', { required: '' })}
@@ -48,13 +48,13 @@ function Explore() {
       <div className=' px-3 py-3.5 '>
         <h1 className='text-lg text-center font-semibold mb-2'>{error ? "No user Found" : " "}</h1>
         {
-          success && <div className=' border  rounded-3xl border-white/30 px-5 py-2 '>
-            {/* profile component  */}
-            <div className='max-h-80 overflow-y-auto space-y-2'>
-              <h1 className='text-lg  font-semibold mb-2'>People</h1>
-
-              {success &&
-                searchResults?.data?.map(({ userName, profileImage, bio, fullName, _id }) => (
+          loading ? (
+            <EventLoading />
+          ) : success && (
+            <div className='border rounded-3xl border-white/30 px-5 py-2'>
+              <div className='max-h-80 overflow-y-auto space-y-2'>
+                <h1 className='text-lg font-semibold mb-2'>Search Results</h1>
+                {searchResults?.data?.map(({ userName, profileImage, bio, fullName, _id }) => (
                   <Link to={`/${userName}`} key={_id}>
                     <ProfileSearch
                       userName={userName}
@@ -64,11 +64,11 @@ function Explore() {
                     />
                   </Link>
                 ))}
-
-
+              </div>
             </div>
-          </div>
+          )
         }
+
 
       </div>
       <div className='flex  flex-col justify-center items-center '>
