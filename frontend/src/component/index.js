@@ -15,6 +15,7 @@ import Profile from "./Profile/Profile.jsx";
 import SmallLogoutCard from "./Dropdown/SmallLogoutCard.jsx";
 import CreatePost from "./CreatePost/CreatePost.jsx";
 import EventLoading from "./Loading/EventLoading.jsx"
+import EditPage from "./Editcomp/EditPage.jsx";
 export {
     Button,
     Card,
@@ -32,5 +33,6 @@ export {
     Profile,
     SmallLogoutCard,
     CreatePost,
-    EventLoading
+    EventLoading,
+    EditPage
 }
