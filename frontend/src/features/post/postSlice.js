@@ -1,6 +1,26 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import postService from '../../service/postService'
+import { act } from 'react';
 
+const setLoading = (state) => {
+    state.loading = true;
+    state.status = "loading";
+    state.error = null;
+    state.message = null;
+  };
+  
+  const setError = (state, action, msg = "Something went wrong") => {
+    state.loading = false;
+    state.status = "error";
+    state.error = action.error?.message || "Unknown error";
+    state.message = msg;
+  };
+  
+  const setSuccess = (state) => {
+    state.loading = false;
+    state.status = "success";
+    state.error = null;
+  };
 
 export const getAllPost = createAsyncThunk("getAllPost",postService.getAllPost)
 
@@ -22,7 +42,8 @@ const initialState = {
     post:{},
     loading: false,
     error: null,
-    message:null
+    message:null,
+    status: "idle",
 };
 
 const postSlice = createSlice({
@@ -31,94 +52,64 @@ const postSlice = createSlice({
     extraReducers:(builder)=>{
 
         // fetch all post
-        builder.addCase(getAllPost.pending, (state, action)=>{
-            state.loading = true
-        })
-        builder.addCase(getAllPost.rejected, (state, action)=>{
-            state.loading = false
-            state.error = action.error.message
-            state.message = "Failed to Fetched All Posts!"
-        })
+        builder.addCase(getAllPost.pending, setLoading)
+        builder.addCase(getAllPost.rejected, (state, action)=>setError(state, action, "Failed to Fetched All Posts!"))
         builder.addCase(getAllPost.fulfilled, (state, action)=>{
-            state.loading = false,
+            setSuccess(state, action)
             state.allPost = action.payload.data
             state.error = null;
+            state.message = "Fetched all post."
         })
 
         // fetch following user post by id
-        builder.addCase(getFollowingUserPost.pending, (state, action)=>{
-            state.loading = true
-        })
-        builder.addCase(getFollowingUserPost.rejected, (state, action)=>{
-            state.loading = false
-            state.error = action.error.message
-            state.message = "Failed to Fetched Following User Post!"
-        })
+        builder.addCase(getFollowingUserPost.pending, setLoading)
+        builder.addCase(getFollowingUserPost.rejected,(state, action)=>setError(state, action, "Failed to Fetched Following User Post!"))
         builder.addCase(getFollowingUserPost.fulfilled, (state, action)=>{
-            state.loading = false,
+            setSuccess(state, action)
             state.followingUserPost = action.payload.data
-            state.error = null;
+            state.message = "Fetched Following user's post"
         })
 
         // fetch post by id
-        builder.addCase(getPostById.pending, (state, action)=>{
-            state.loading = true
-        })
+        builder.addCase(getPostById.pending, setLoading)
         builder.addCase(getPostById.rejected, (state, action)=>{
-            state.loading = false
-            state.error = action.error.message
-            state.message = "Failed to Fetched Post!"
+            setError(state, action,"Failed to Fetched Post!") 
         })
         builder.addCase(getPostById.fulfilled, (state, action)=>{
-            state.loading = false,
+            setSuccess(state, action)
             state.post = action.payload.data
-            state.error = null;
+            state.message = "Fetched Post."
         })
 
         // create post
-        builder.addCase(createPost.pending, (state, action)=>{
-            state.loading = true
-        })
+        builder.addCase(createPost.pending, setLoading)
         builder.addCase(createPost.rejected, (state, action)=>{
-            state.loading = false
-            state.error = action.error.message
-            state.message = "Failed to Create Post!"
+            setError(state, action,"Failed to Create Post!") 
         })
         builder.addCase(createPost.fulfilled, (state, action)=>{
-            state.loading = false,
+            setSuccess(state, action)
             state.allPost = [action.payload.data, ...state.allPost]
-            state.message = action.payload.message
-            state.error = null;
+            state.message = "Post created successfully"
         })
 
         // update post
-        builder.addCase(updatePost.pending, (state, action)=>{
-            state.loading = true
-        })
+        builder.addCase(updatePost.pending, setLoading)
         builder.addCase(updatePost.rejected, (state, action)=>{
-            state.loading = false
-            state.error = action.error.message
-            state.message = "Failed to Update Post!"
+            setError(state, action,"Failed to Update Post!") 
         })
         builder.addCase(updatePost.fulfilled, (state, action)=>{
-            state.loading = false,
+            setSuccess(state, action)
             state.message = action.payload.message
-            state.error = null;
         })
 
         // delete post
-        builder.addCase(deletePost.pending, (state, action)=>{
-            state.loading = true
-        })
+        builder.addCase(deletePost.pending, setLoading)
         builder.addCase(deletePost.rejected, (state, action)=>{
-            state.loading = false
-            state.error = action.error.message
-            state.message = "Failed to Delete Post!"
+            setError(state, action,"Failed to Delete Post!") 
         })
         builder.addCase(deletePost.fulfilled, (state, action)=>{
-            state.loading = false,
+            setSuccess(state, action)
             state.message = action.payload.message
-            state.error = null;
         })
 
 
