@@ -34,7 +34,7 @@ const toggleBookmarkedPost = asyncHandler(async(req, res)=>{
             throw new ApiErrors(400, "Failed to remove bookmraked on post!")
         }
 
-        return res.status(200).json(new ApiResponse(200, "removed bookmarked from post.",{}))
+        return res.status(200).json(new ApiResponse(200, "removed bookmarked from post.",{post:postId}))
     }
 
     const bookmarked = await Bookmark.create({
@@ -76,7 +76,7 @@ const toggleBookmarkedComment = asyncHandler(async(req, res)=>{
             throw new ApiErrors(400, "Failed to remove bookmraked on comment!")
         }
 
-        return res.status(200).json(new ApiResponse(200, "removed bookmarked from comment.",{}))
+        return res.status(200).json(new ApiResponse(200, "removed bookmarked from comment.",{comment:commentId}))
     }
 
     const bookmarked = await Bookmark.create({
