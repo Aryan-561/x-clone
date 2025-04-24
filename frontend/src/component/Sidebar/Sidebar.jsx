@@ -66,8 +66,7 @@ function Sidebar() {
     ]
     const { error, message, loading, currentUser } = useSelector((state) => state.user);
     const dispatch = useDispatch();
-    const state = useSelector((state) => state.user);
-    // console.log("satte", state)
+
     useEffect(() => {
         dispatch(getCurrentUser());
     }, [dispatch]);
@@ -81,10 +80,10 @@ function Sidebar() {
     return (
         // for test purpose
 
-        <Container className="xl:col-span-2  h-screen overflow-y-scroll  sticky scrollbar-thumb-only flex justify-center  sm:justify-end xl:justify-center px-3.5 top-0 hide-scrollbar">
+        <Container className="xl:col-span-2  h-screen   sticky flex justify-center  sm:justify-end xl:justify-center px-3.5 top-0 ">
             <div className="  py-2 flex flex-col items-center xl:items-start">
 
-                <div className=' w-10 lg:w-12 text-start py-1'>
+                <div className=' w-14 rounded-full px-1 hover:bg-white/5 lg:w-16 text-start py-1'>
                     <Link to="home">
                         <X image="xLight.png" />
                     </Link>
