@@ -39,6 +39,8 @@ const createPost = asyncHandler(async(req, res)=>{
             throw new ApiErrors(400, "Failed to create a new post!")
         }
 
+        await newPost.populate('createdBy')
+        
         return res.status(200).json(new ApiResponse(200, "Post created successfully.",newPost))
 
     }
@@ -51,6 +53,8 @@ const createPost = asyncHandler(async(req, res)=>{
     if(!newPost){
         throw new ApiErrors(400, "Failed to create a new post!")
     }
+
+    await newPost.populate('createdBy')
 
     return res.status(200).json(new ApiResponse(200, "Post created successfully.", newPost))
 
