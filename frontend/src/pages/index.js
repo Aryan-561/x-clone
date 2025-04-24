@@ -3,11 +3,12 @@ import Signup from "./Signup/Signup.jsx"
 import Home from "./Home/Home.jsx"
 import Explore from "./Explore/Explore.jsx"
 import Profile from './Profile/Profile.jsx';
-
+import Bookmark from "./Bookmark/Bookmark.jsx";
 export {
     Login,
     Signup,
     Home,
     Explore,
-    Profile
+    Profile,
+    Bookmark
 }
