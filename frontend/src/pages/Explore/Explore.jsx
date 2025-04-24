@@ -1,9 +1,11 @@
-import React ,{useRef}from 'react'
+import React ,{useEffect,useRef}from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { search } from '../../features'
 import { Container, Input, ProfileSearch,EventLoading } from '../../component'
 import { Link } from 'react-router-dom'
+import { resetSearchState } from '../../features/user/userSlice'
+
 function Explore() {
   const { error, message, loading, searchResults, success } = useSelector((state) => state.user)
   const dispatch = useDispatch()
@@ -15,8 +17,12 @@ function Explore() {
   const handleSearch = (data) => {
     // You can access the query from `data` here
     if (data.name.trim() !== "") dispatch(search(data.name))
-
   }
+  useEffect(() => {
+    return () => {
+      dispatch(resetSearchState());
+    };
+  }, []);
 
   return (
     <Container className='col-span-5 pr-3.5 '>
