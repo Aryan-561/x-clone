@@ -3,6 +3,7 @@ import Avatar from "./Avatar";
 import Media from "./Media";
 import ActionBar from "./ActionBar";
 import ProfileHeader from "./ProfileHeader";
+import {FormattingTime} from "../index";
 function Card({ data }) {
  
 
@@ -23,7 +24,7 @@ function Card({ data }) {
                 <div className="h-[3px] w-[3px] rounded-full bg-gray-400 relative top-0.5"></div>
               </div>
 
-              <div className="text-gray-400 text-sm sm:text-base">5 April, 2025</div>
+              <FormattingTime timestamp={data?.createdAt} />
             </div>
 
             {/* text or content */}

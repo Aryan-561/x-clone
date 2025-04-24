@@ -2,7 +2,7 @@ import Button from "./Button/Button";
 import Card from "./Card/Card";
 import Container from "./Container/Container";
 import Input from "./Input/Input";
-import Sidebar from "./sidebar/Sidebar";
+import Sidebar from "./Sidebar/Sidebar";
 import Rightsidebar from "./Sidebar/Rightsidebar";
 import Sidebarfooter from "./Sidebar/Sidebarfooter.jsx"
 import Login from "./Login/Login.jsx";
@@ -16,6 +16,7 @@ import SmallLogoutCard from "./Dropdown/SmallLogoutCard.jsx";
 import CreatePost from "./CreatePost/CreatePost.jsx";
 import EventLoading from "./Loading/EventLoading.jsx"
 import EditPage from "./Editcomp/EditPage.jsx";
+import FormattingTime from "./FormattingTime/FormatTime.jsx";
 export {
     Button,
     Card,
@@ -34,5 +35,6 @@ export {
     SmallLogoutCard,
     CreatePost,
     EventLoading,
-    EditPage
+    EditPage,
+    FormattingTime
 }
