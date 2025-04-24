@@ -8,38 +8,10 @@ function Bookmark (){
     const {error, message, status, bookmarkedPost, bookmarkedComment, loading } = useSelector(state=>state.bookmark)
 
     const dispatch = useDispatch()
-    //only for testing
-    const data = {
-        _id: "67e56f660c5450ddd5a2dd68",
-        text: "abc-1",
-        media: {
-          url: "https://res.cloudinary.com/dnnpmvrds/image/upload/v1743089529/tweetDb/wgnzwip71cgkljusjjtc.png",
-          publicId: "tweetDb/wgnzwip71cgkljusjjtc",
-          resourseType: "image",
-        },
-        views: 0,
-        likeCount: 0,
-        commentCount: 0,
-        isLiked: false,
-        isBookmarked: false,
-        userDetails: {
-          userId: "67e56f4b0c5450ddd5a2dd60",
-          fullName: "arnav",
-          profileImage: {
-            url: "https://res.cloudinary.com/dnnpmvrds/image/upload/v1743089502/tweetDb/avqlmw2cvezc26zadtww.png",
-            publicId: "tweetDb/avqlmw2cvezc26zadtww",
-          },
-          bio: "arnav",
-          follower: 1,
-          following: 2,
-        },
-        createdAt: "2025-03-27T15:31:50.160Z",
-        updatedAt: "2025-03-27T15:31:50.160Z",
-      };
 
       const memoizedPostList = useMemo(() => {
         if (type !== "post" || loading) return null;
-        return bookmarkedPost.length===0?<div className="w-full h-[40vh] flex justify-center items-center text-lg sm:text-xl lg:text-2xl font-semibold"><div>You doesn't bookmarked any post.</div></div>:bookmarkedPost.map((post) => (
+        return bookmarkedPost.length===0?<div className="w-full h-[40vh] flex justify-center items-center text-lg text-center sm:text-xl lg:text-2xl font-semibold"><div>You doesn't bookmarked any post.</div></div>:bookmarkedPost.map((post) => (
             <Link to={`/${post?.userDetails?.username}/post/${post?._id}`} key={post?._id}>
                 <Card data={post} />
             </Link>
@@ -48,7 +20,7 @@ function Bookmark (){
     
     const memoizedCommentList = useMemo(() => {
         if (type !== "comment" || loading) return null;
-        return bookmarkedComment.length===0?<div className="w-full h-[40vh] flex justify-center items-center text-lg sm:text-xl  lg:text-2xl font-semibold"><div>You doesn't bookmarked any commnet.</div></div>: bookmarkedComment.map((comment) => (
+        return bookmarkedComment.length===0?<div className="w-full h-[40vh] flex justify-center items-center text-lg text-center sm:text-xl  lg:text-2xl font-semibold"><div>You doesn't bookmarked any commnet.</div></div>: bookmarkedComment.map((comment) => (
             <Link to={`/${comment?.userDetails?.username}/comment/${comment?._id}`} key={comment?._id}>
                 <Card data={comment} />
             </Link>

@@ -90,13 +90,13 @@ function CreatePost({classname}) {
         >
           <div className="flex gap-4 py-4 justify-center">
             <Avatar userDetails={user?.data} />
-            <div className="w-[80%] h-auto min-h-28 max-h-64 overflow-y-scroll scrollbar-thumb-only pr-4">
+            <div className="w-[80%] h-auto min-h-16 sm:min-h-28 max-h-52 sm:max-h-64 overflow-y-scroll scrollbar-thumb-only pr-4">
               <textarea
                 ref={textAreaRef}
                 value={text}
                 maxLength={220}
                 onChange={handleTextChange}
-                className="placeholder:font-normal text-lg  sm:text-xl resize-none w-full border-none focus:outline-none overflow-hidden"
+                className="placeholder:font-normal text-sm  sm:text-lg resize-none w-full border-none focus:outline-none overflow-hidden"
                 placeholder="What's happening?"
               ></textarea>
               <div>
@@ -197,7 +197,7 @@ function CreatePost({classname}) {
               </Button>
             </div>
             <Button
-              className="bg-white p-1 px-2 sm:px-4 sm:text-lg text-black rounded-3xl font-semibold cursor-pointer  disabled:opacity-70 disabled:cursor-not-allowed"
+              className="bg-white p-1 text-xs px-2 sm:px-4 sm:text-lg text-black rounded-3xl font-semibold cursor-pointer  disabled:opacity-70 disabled:cursor-not-allowed"
               disabled={text?false:true}
               onBtnClick={handleOnSubmit}
             >

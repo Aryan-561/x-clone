@@ -43,7 +43,7 @@ function FormattingTime({timestamp=new Date(), className}){
 
     return(
         <>
-        <div className={`text-gray-400 text-sm sm:text-base ${className}`}>{time}</div>
+        <div className={`text-gray-400 text-xs sm:text-base ${className}`}>{time}</div>
         </>
     )
 }

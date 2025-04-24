@@ -45,9 +45,9 @@ const ActionBar = ({
 
   return (
     <>
-      <div className="flex justify-evenly mt-3">
+      <div className="flex justify-evenly  mt-3 text-xs sm:text-base">
         {/* comment  */}
-        <div className="">
+        <div>
           <Button
             floatingText="Reply"
             className={`w-10 h-10  hover:bg-sky-500/15 rounded-full`}
@@ -99,7 +99,7 @@ const ActionBar = ({
               </svg>
             )}
 
-            <span className="text-white absolute right-[-10%] top-[20%] group-hover:text-pink-400">
+            <span className="text-white absolute right-[5%] top-[28%] sm:right-[-10%] sm:top-[20%] group-hover:text-pink-400">
               {like ? like : ""}
             </span>
           </Button>
