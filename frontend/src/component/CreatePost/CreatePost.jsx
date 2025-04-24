@@ -89,7 +89,7 @@ function CreatePost({classname}) {
           onDragOver={(e) => e.preventDefault()}
         >
           <div className="flex gap-4 py-4 justify-center">
-            <Avatar userDetails={user} />
+            <Avatar userDetails={user?.data} />
             <div className="w-[80%] h-auto min-h-28 max-h-64 overflow-y-scroll scrollbar-thumb-only pr-4">
               <textarea
                 ref={textAreaRef}
