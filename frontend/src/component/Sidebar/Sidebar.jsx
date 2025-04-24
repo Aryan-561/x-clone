@@ -48,11 +48,11 @@ function Sidebar() {
             path: "/bookmarks"
 
         },
-        {
-            icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M7.501 19.917L7.471 21H.472l.029-1.027c.184-6.618 3.736-8.977 7-8.977.963 0 1.95.212 2.87.672-.444.478-.851 1.03-1.212 1.656-.507-.204-1.054-.329-1.658-.329-2.767 0-4.57 2.223-4.938 6.004H7.56c-.023.302-.05.599-.059.917zm15.998.056L23.528 21H9.472l.029-1.027c.184-6.618 3.736-8.977 7-8.977s6.816 2.358 7 8.977zM21.437 19c-.367-3.781-2.17-6.004-4.938-6.004s-4.57 2.223-4.938 6.004h9.875zm-4.938-9c-.799 0-1.527-.279-2.116-.73-.836-.64-1.384-1.638-1.384-2.77 0-1.93 1.567-3.5 3.5-3.5s3.5 1.57 3.5 3.5c0 1.132-.548 2.13-1.384 2.77-.589.451-1.317.73-2.116.73zm-1.5-3.5c0 .827.673 1.5 1.5 1.5s1.5-.673 1.5-1.5-.673-1.5-1.5-1.5-1.5.673-1.5 1.5zM7.5 3C9.433 3 11 4.57 11 6.5S9.433 10 7.5 10 4 8.43 4 6.5 5.567 3 7.5 3zm0 2C6.673 5 6 5.673 6 6.5S6.673 8 7.5 8 9 7.327 9 6.5 8.327 5 7.5 5z"></path></g></svg>
-            , title: "communities",
-            path: "/communities"
-        },
+        // {
+        //     icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M7.501 19.917L7.471 21H.472l.029-1.027c.184-6.618 3.736-8.977 7-8.977.963 0 1.95.212 2.87.672-.444.478-.851 1.03-1.212 1.656-.507-.204-1.054-.329-1.658-.329-2.767 0-4.57 2.223-4.938 6.004H7.56c-.023.302-.05.599-.059.917zm15.998.056L23.528 21H9.472l.029-1.027c.184-6.618 3.736-8.977 7-8.977s6.816 2.358 7 8.977zM21.437 19c-.367-3.781-2.17-6.004-4.938-6.004s-4.57 2.223-4.938 6.004h9.875zm-4.938-9c-.799 0-1.527-.279-2.116-.73-.836-.64-1.384-1.638-1.384-2.77 0-1.93 1.567-3.5 3.5-3.5s3.5 1.57 3.5 3.5c0 1.132-.548 2.13-1.384 2.77-.589.451-1.317.73-2.116.73zm-1.5-3.5c0 .827.673 1.5 1.5 1.5s1.5-.673 1.5-1.5-.673-1.5-1.5-1.5-1.5.673-1.5 1.5zM7.5 3C9.433 3 11 4.57 11 6.5S9.433 10 7.5 10 4 8.43 4 6.5 5.567 3 7.5 3zm0 2C6.673 5 6 5.673 6 6.5S6.673 8 7.5 8 9 7.327 9 6.5 8.327 5 7.5 5z"></path></g></svg>
+        //     , title: "communities",
+        //     path: "/communities"
+        // },
         {
             icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M5.651 19h12.698c-.337-1.8-1.023-3.21-1.945-4.19C15.318 13.65 13.838 13 12 13s-3.317.65-4.404 1.81c-.922.98-1.608 2.39-1.945 4.19zm.486-5.56C7.627 11.85 9.648 11 12 11s4.373.85 5.863 2.44c1.477 1.58 2.366 3.8 2.632 6.46l.11 1.1H3.395l.11-1.1c.266-2.66 1.155-4.88 2.632-6.46zM12 4c-1.105 0-2 .9-2 2s.895 2 2 2 2-.9 2-2-.895-2-2-2zM8 6c0-2.21 1.791-4 4-4s4 1.79 4 4-1.791 4-4 4-4-1.79-4-4z"></path></g></svg>
             , title: "Profile"
@@ -67,7 +67,7 @@ function Sidebar() {
     const { error, message, loading, currentUser } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const state = useSelector((state) => state.user);
-    console.log("satte", state)
+    // console.log("satte", state)
     useEffect(() => {
         dispatch(getCurrentUser());
     }, [dispatch]);
@@ -91,7 +91,7 @@ function Sidebar() {
                 </div>
                 <ul className="flex flex-col gap-3 items-start ">
                     {SidebarData.map((item, index) => (
-                        <Link to={item.path} key={index} className="flex items-center w-fit sm:gap-4 py-2 px-4 rounded hover:bg-white/10 hover:rounded-full cursor-pointer ">
+                        <Link to={item.path} key={index} className="flex items-center w-fit sm:gap-4 py-2 sm:px-4  px-2 rounded hover:bg-white/10 hover:rounded-full cursor-pointer ">
                             <span className="w-6 h-6 sm:w-7 sm:h-7">{item.icon}</span>
                             <span className=" hidden xl:block text-xl font-medium first-letter:uppercase lowercase ">{item.title}</span>
                         </Link>
@@ -120,13 +120,13 @@ function Sidebar() {
 
 
 
-                <div onClick={handleComponent} className="flex items-center relative justify-between gap-12 my-1 p-2 sm:px-3 sm:py-2 w-fit hover:bg-white/15 hover:rounded-full ">
-                    <div className="flex items-center gap-2">
+                <div onClick={handleComponent} className="flex items-center  relative justify-between gap-12 my-1 p-2 sm:px-3 sm:py-2 w-fit hover:bg-white/15 hover:rounded-full ">
+                    <div className="flex items-center gap-2 ">
                         <Avatar profileImage={memoizedUserData?.profileImage?.url} classname=" border-2  border-gray-900 w-12 h-12 object-cover" />
 
-                        <div className='hidden xl:block'>
-                            <h5 className="text-sm font-semibold leading-tight">{memoizedUserData?.fullName}</h5>
-                            <h6 className="text-xs text-gray-500">@{memoizedUserData?.userName}</h6>
+                        <div className='hidden xl:block overflow-hidden max-w-[8rem]'>
+                            <h5 className="text-sm font-semibold leading-tigh truncate">{memoizedUserData?.fullName}</h5>
+                            <h6 className="text-xs text-gray-500 truncate">@{memoizedUserData?.userName}</h6>
                         </div>
                     </div>
                     <SmallLogoutCard className={showComponent ? "block " : "hidden"} data={memoizedUserData} />
