@@ -53,6 +53,8 @@ const setLoading = (state) => {
         .addCase(toggleBookmarkedPost.fulfilled, (state, action)=>{
             setSuccess(state)
             state.message = action.payload.message
+            const postId = action.payload.data.post
+            state.bookmarkedPost = state.bookmarkedPost.filter(post=>post._id !== postId)
         })
 
         builder
@@ -61,6 +63,8 @@ const setLoading = (state) => {
         .addCase(toggleBookmarkedComment.fulfilled, (state, action)=>{
             setSuccess(state)
             state.message = action.payload.message
+            const commentId = action.payload.data.comment
+            state.bookmarkedComment = state.bookmarkedComment.filter(comment=>comment._id!==commentId)
         })
 
         builder
