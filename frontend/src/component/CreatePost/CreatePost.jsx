@@ -4,8 +4,12 @@ import Avatar from "../Card/Avatar.jsx";
 import Media from "../Card/Media.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost } from "../../features/post/postSlice.js";
+import { MdClose } from 'react-icons/md';
+import { useNavigate, useLocation } from "react-router-dom";
 
 function CreatePost({classname}) {
+  const navigate = useNavigate();
+  const location = useLocation();
   
   const [text, setText] = useState("");
   const [preview, setPreview] = useState(null);
@@ -53,13 +57,13 @@ function CreatePost({classname}) {
   };
 
 
-  const handleOnSubmit = async () => {
-    await Promise.resolve(dispatch(createPost({ text, media })))
-
+  const handleOnSubmit =  () => {
+    dispatch(createPost({ text, media }))
     setText("")
     setPreview(null)
     setMedia(null)
     setType(null)
+    location.pathname=="/compose/post"?navigate('/home'):""
   }
 
   const handleOnRemoveMedia = ()=>{
@@ -82,9 +86,9 @@ function CreatePost({classname}) {
   
   return (
     <>
-      <Container className={`${classname}`}>
+      <Container className={`border-y border-gray-600 ${classname}`}>
         <div
-          className={` border-y border-gray-600 px-1 py-2`}
+          className={` px-1 py-2`}
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
         >
@@ -111,7 +115,7 @@ function CreatePost({classname}) {
                 {preview && 
                 (<div className="relative">
                   <div className="absolute top-2 right-2">
-                    <Button classname={'text-xl bg-white/20 px-3 py-1 rounded-full cursor-pointer hover:scale-105'} onBtnClick={handleOnRemoveMedia}>X</Button>
+                    <Button classname={'text-xl bg-white/20 px-3 py-1 rounded-full cursor-pointer hover:scale-105'} onBtnClick={handleOnRemoveMedia}><MdClose/></Button>
                   </div>
                   <Media media={mediaPreview} />
                 </div>)}

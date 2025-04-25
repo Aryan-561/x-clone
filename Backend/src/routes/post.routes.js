@@ -12,7 +12,7 @@ router.route("/").get(verifyJwt, getAllPost)
 router.route("/user").get(verifyJwt, getUserPost)
 
 //route for get all following user's post
-router.route("/following/:userId").get(verifyJwt, getFollowingUserPost)
+router.route("/following").get(verifyJwt, getFollowingUserPost)
 
 // route for create post
 router.route("/create").post(verifyJwt, upload.single("media"), createPost)
