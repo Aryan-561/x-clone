@@ -3,7 +3,7 @@
 import authReducer, { loginUser, jwtRefreshToken, logoutUser, resendEmailVerification, Googleauthentication, } from "./auth/authSlice"
 
 // userslice
-import userReducer, { createUser, deleteUser, getCurrentUser, search, updateUserAccountDetails, updateUserProfileImage, updateUserCoverImage } from "./user/userSlice"
+import userReducer, { createUser, deleteUser, getCurrentUser, search, updateUserAccountDetails, updateUserProfileImage, updateUserCoverImage ,getUserPost} from "./user/userSlice"
 
 // postSlice
 import postReducer from "./post/postSlice"
@@ -36,6 +36,7 @@ export {
     updateUserAccountDetails,
     updateUserCoverImage,
     updateUserProfileImage,
+    getUserPost,
 
     likeReducer,
     toggleCommentLike,
