@@ -121,12 +121,15 @@ const getAllLikePost = asyncHandler(async (req, res) => {
                 "postDetails._id": 1,
                 "postDetails.text": 1,
                 "postDetails.media": 1,
+                "postDetails.media": 1,
                 "postDetails.views": 1,
                 "postDetails.createdAt": 1,
                 "postDetails.updatedAt": 1,
                 "postOwnerDetails._id": 1,
                 "postOwnerDetails.userName": 1,
+                "postOwnerDetails.fullName": 1,
                 "postOwnerDetails.profileImage": 1,
+                "postOwnerDetails.coverImage": 1,
                 "postOwnerDetails.followingCount": 1,
                 "postOwnerDetails.followerCount": 1
             }
@@ -201,6 +204,8 @@ const getAllLikeComment = asyncHandler(async (req, res) => {
                 "commentDetails.views": 1,
                 "commentOwnerDetails._id": 1,
                 "commentOwnerDetails.userName": 1,
+                "commentOwnerDetails.fullName": 1,
+                "commentOwnerDetails.coverImage": 1,
                 "commentOwnerDetails.profileImage": 1,
                 "commentOwnerDetails.followingCount": 1,
                 "commentOwnerDetails.followerCount": 1
