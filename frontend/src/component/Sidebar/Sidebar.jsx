@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import Container from '../Container/Container'
-import Button from '../Button/Button'
 import { Link } from "react-router-dom"
 import Avatar from '../Card/Avatar.jsx'
 import { useDispatch, useSelector } from 'react-redux'
@@ -58,11 +57,11 @@ function Sidebar() {
             , title: "Profile"
             , path: "profile"
         },
-        {
-            icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M3.75 12c0-4.56 3.69-8.25 8.25-8.25s8.25 3.69 8.25 8.25-3.69 8.25-8.25 8.25S3.75 16.56 3.75 12zM12 1.75C6.34 1.75 1.75 6.34 1.75 12S6.34 22.25 12 22.25 22.25 17.66 22.25 12 17.66 1.75 12 1.75zm-4.75 11.5c.69 0 1.25-.56 1.25-1.25s-.56-1.25-1.25-1.25S6 11.31 6 12s.56 1.25 1.25 1.25zm9.5 0c.69 0 1.25-.56 1.25-1.25s-.56-1.25-1.25-1.25-1.25.56-1.25 1.25.56 1.25 1.25 1.25zM13.25 12c0 .69-.56 1.25-1.25 1.25s-1.25-.56-1.25-1.25.56-1.25 1.25-1.25 1.25.56 1.25 1.25z"></path></g></svg>
-            , title: "More"
-            , path: "/more"
-        },
+        // {
+        //     icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M3.75 12c0-4.56 3.69-8.25 8.25-8.25s8.25 3.69 8.25 8.25-3.69 8.25-8.25 8.25S3.75 16.56 3.75 12zM12 1.75C6.34 1.75 1.75 6.34 1.75 12S6.34 22.25 12 22.25 22.25 17.66 22.25 12 17.66 1.75 12 1.75zm-4.75 11.5c.69 0 1.25-.56 1.25-1.25s-.56-1.25-1.25-1.25S6 11.31 6 12s.56 1.25 1.25 1.25zm9.5 0c.69 0 1.25-.56 1.25-1.25s-.56-1.25-1.25-1.25-1.25.56-1.25 1.25.56 1.25 1.25 1.25zM13.25 12c0 .69-.56 1.25-1.25 1.25s-1.25-.56-1.25-1.25.56-1.25 1.25-1.25 1.25.56 1.25 1.25z"></path></g></svg>
+        //     , title: "More"
+        //     , path: "/more"
+        // },
     ]
     const { error, message, loading, currentUser } = useSelector((state) => state.user);
     const dispatch = useDispatch();
@@ -96,8 +95,9 @@ function Sidebar() {
                         </Link>
                     ))}
                 </ul>
-                <Button
-                    className="bg-white/90   my-2.5  border-blue-300/75 border hover:bg-blue-500/75 hover:transition-colors  text-white w-fit font-semibold p-2 text-xl sm:py-3 sm:px-3 xl:px-10 flex items-center justify-center transition duration-200 ease-in-out  rounded-full lg:rounded-4xl"
+                <Link
+                    to={'/compose/post'}
+                    className="bg-white cursor-pointer     my-2.5  border-blue-300/75 border hover:bg-white/75 hover:transition-colors  text-white w-fit font-semibold p-2 text-xl sm:py-3 sm:px-3 xl:px-10 flex items-center justify-center transition duration-200 ease-in-out  rounded-full lg:rounded-4xl"
                 >
                     {/* Icon for small screens */}
                     <span className="block xl:hidden" title="Post">
@@ -115,7 +115,7 @@ function Sidebar() {
 
                     {/* Text for medium and up */}
                     <span className="hidden text-black font-semibold px-6  xl:inline">Post</span>
-                </Button>
+                </Link>
 
 
 
