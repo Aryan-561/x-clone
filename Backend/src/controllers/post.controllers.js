@@ -386,7 +386,8 @@ const getAllPost = asyncHandler(async(req, res)=>{
 
 // fn for get user post
 const getUserPost = asyncHandler(async(req, res)=>{
-    const {userId} = req.params
+    // const {userId} = req.params
+    const userId = req.user._id
     const {page=1, limit=10} = req.query
 
     if(!userId){
