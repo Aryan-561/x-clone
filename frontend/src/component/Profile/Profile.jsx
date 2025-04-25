@@ -1,24 +1,29 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { FaArrowLeft } from "react-icons/fa6";
-import { Container, EditPage, EventLoading, ProfileSearch, X } from "../index";
-import { getCurrentUser } from '../../features';
+import { Card, Container, EditPage, EventLoading, ProfileSearch, X } from "../index";
+import { getCurrentUser, getUserPost, getAllLikePost, getAllLikeComment } from '../../features';
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '../Card/Avatar';
 import { formatJoinDate } from '../../data/date';
 import { SlCalender } from "react-icons/sl";
 import { FaLink } from "react-icons/fa6";
-import { Link } from 'react-router-dom';
+import { data, Link } from 'react-router-dom';
 
 function Profile() {
 
-
-    const { error, message, loading, currentUser } = useSelector((state) => state.user);
+    const { error, message, loading, currentUser, userPost } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const [showEditPage, setShowEditPage] = useState(false)
-    // const state = useSelector((state) => state.user);
-    // console.log("satte", state)
+    const state = useSelector((state) => state.user);
+    // console.log("userState", state)
+    const likeState = useSelector((state) => state.like);
+    const { likedComments, likedPosts } = useSelector((state) => state.like);
+    console.log("like state", likeState)
     useEffect(() => {
         dispatch(getCurrentUser());
+        dispatch(getUserPost())
+        dispatch(getAllLikePost())
+        dispatch(getAllLikeComment())
     }, [dispatch, showEditPage]);
     const handleEdit = (e) => {
         setShowEditPage(prev => !prev)
@@ -26,7 +31,24 @@ function Profile() {
         e.preventDefault();
 
     }
+    const [activityType, setActivityType] = useState("post")
+
     const memoizedUserData = useMemo(() => currentUser?.data, [currentUser]);
+
+    const userAllPost = useMemo(() => {
+        if (activityType !== "post" || loading) return null
+        return userPost?.data?.length === 0 ? <div className="w-full h-[40vh] flex justify-center items-center text-lg sm:text-xl lg:text-2xl font-semibold"><div>Posts not Found!</div></div> : userPost?.data?.map((post) => <Card  key={post._id} data={post} />)
+    }, [activityType, loading, userPost])
+
+    const userAllLikePost = useMemo(() => {
+        if (activityType !== "likePosts" || loading) return null
+        return likedPosts?.data?.length > 0 ? likedPosts?.data?.map((post) => <Card key={post._id} postData={post} />) : null
+    }, [activityType, loading, likedPosts])
+
+    const userAllLikeComment = useMemo(() => {
+        if (activityType !== "likeComments" || loading) return null
+        return likedComments?.data?.length > 0 ? likedComments?.data?.map((post) => <Card key={post._id}  commentData={post} />) : null
+    }, [activityType, loading, likedComments])
 
     return (
         <Container className=' border-x   sm:[85%] lg:w-full border-white/10 col-span-5 w-full min-h-min relative '>
@@ -42,8 +64,7 @@ function Profile() {
             <div className=''>
                 <X className="     sm:max-h-48 sm:min-h-48 max-h-28  w-full border border-white/5 bg-gray-400" image={memoizedUserData?.coverImage?.url || "/default/deafaultCoverimage.png"} />
             </div>
-            <div className='   sm:bottom-16 bottom-12
-            relative'>
+            <div className='   sm:bottom-16 bottom-12 relative'>
                 <Avatar profileImage={memoizedUserData?.profileImage?.url} classname=' border-[3px] absolute  inset-x-6 border-black/80 h-15 sm:w-28 w-15 sm:h-28' />
             </div>
             <div className='  sm:ml-3.5 flex   flex-col gap-y-1 border-white/35  min-h-32 mt-10 px-2 py-1.5'>
@@ -59,8 +80,12 @@ function Profile() {
                     <a target="_blank" href={memoizedUserData?.link}>{(memoizedUserData?.link)}</a>
                 </div>
                 <div className='flex text-sm  text-shadow-gray-700 justify-start gap-3.5 items-center'>
-                    <Link className='hover:underline' to={`/${memoizedUserData?.userName}/follower`}>{memoizedUserData?.follower || "69"}   follower</Link>
-                    <Link className="hover:underline" to={`/${memoizedUserData?.userName}/following`}>{memoizedUserData?.following || "69"}   following</Link>
+                    <Link className='hover:underline' to={`/${memoizedUserData?.userName}/follower`}>  {userPost?.data?.length > 1
+                        ? userPost.data[0]?.userDetails?.follower ?? "69"
+                        : "69"}{" "}  follower</Link>
+                    <Link className="hover:underline" to={`/${memoizedUserData?.userName}/following`}>  {userPost?.data?.length > 1
+                        ? userPost.data[0]?.userDetails?.following ?? "69"
+                        : "69"}{" "}  following</Link>
                 </div>
             </div>
             <div className=' w-full  my-2.5 flex justify-evenly items-center'>
@@ -81,16 +106,27 @@ function Profile() {
                     <span>get verifed</span>
                 </div>
             </div>
+
             <div className='flex  justify-around  mx-2.5 my-2.5 items-center border border-white/15 rounded-md'>
-                <div className='w-full text-center hover:bg-white/5 py-0.5 rounded-sm'>Like</div>
-                <div className='w-full text-center hover:bg-white/5 py-0.5 rounded-sm'>Replies</div>
-                <div className='w-full text-center hover:bg-white/5 py-0.5 rounded-sm'>Post</div>
+
+                <div onClick={() => setActivityType("post")} className='w-full text-center hover:bg-white/5 py-0.5 rounded-sm'>Post</div>
+                <div className='w-full text-center hover:bg-white/5 py-0.5 rounded-sm' onClick={() => setActivityType("likePosts")}>Like</div>
+                <div onClick={() => setActivityType("likeComments")} className='w-full text-center hover:bg-white/5 py-0.5 rounded-sm' >Replies</div>
+
             </div>
-            <div className='px-1.5'>
-                <ProfileSearch />
-                <ProfileSearch />
-                <ProfileSearch />
+
+            <div className='px-1.5 bg-amber-100 text-black'>
+                {
+                    loading ? (<EventLoading />) : <>
+                        {activityType === "post" && userAllPost}
+                        {activityType === "likePosts" && userAllLikePost}
+                        {activityType === "likeComments" && userAllLikeComment}</>
+                }
+                {
+                    // console.log("here we go:", userAllPost )
+                }
             </div>
+
             <div className='flex  flex-col justify-center items-center my-1.5 '>
                 <span>
                     {error && <p className="text-red-700 text-sm">{error}</p>}
