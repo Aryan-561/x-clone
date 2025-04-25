@@ -8,7 +8,7 @@ import store from "../src/app/store.js"
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Login, Signup, Home, Explore ,Profile, Bookmark} from './pages/index.js';
 import { LandingPage } from './component/index.js';
-
+import ComposePost from './pages/ComposePost/ComposePost.jsx'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -22,6 +22,7 @@ const router = createBrowserRouter([
     path: "/signup",
     element: <Signup />
   },
+  
   {
     path: "",
     element: <App />, 
@@ -41,7 +42,16 @@ const router = createBrowserRouter([
       {
         path: "bookmarks",
         element:<Bookmark/>
-      }
+      },
+      {
+        path: "/compose/post",
+        element: (
+              <>
+                <Home/>
+                <ComposePost/>
+              </>
+                )
+      },
     ]
   }
 
