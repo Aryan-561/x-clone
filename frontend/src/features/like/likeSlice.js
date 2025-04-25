@@ -7,10 +7,10 @@ const getAllLikePost = createAsyncThunk("like/getAllLikePost", likeServices.getA
 const getAllLikeComment = createAsyncThunk("like/getAllLikeComment", likeServices.getAllLikeComment);
 
 const initialState = {
-    likedPosts: {},
-    likedComments: {},
+    likedPosts: [],
+    likedComments: [],
     loading: false,
-    message: "like",
+    message: null,
     status: null,
     error: null,
 };
@@ -74,7 +74,7 @@ const likeSlice = createSlice({
                 state.status = false;
             })
             .addCase(getAllLikePost.fulfilled, (state, action) => {
-                state.likedPosts = action.payload.data;
+                state.likedPosts = action.payload;
                 state.loading = false;
                 state.error = null;
                 state.status = true;
@@ -95,7 +95,7 @@ const likeSlice = createSlice({
                 state.status = false;
             })
             .addCase(getAllLikeComment.fulfilled, (state, action) => {
-                state.likedComments = action.payload.data;
+                state.likedComments = action.payload;
                 state.loading = false;
                 state.error = null;
                 state.status = true;

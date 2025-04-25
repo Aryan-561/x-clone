@@ -9,15 +9,17 @@ const search = createAsyncThunk("search", userServices.search)
 const updateUserAccountDetails = createAsyncThunk("updateUserAccountDetails", userServices.updateUserAccountDetails)
 const updateUserCoverImage = createAsyncThunk("updateUserCoverImage", userServices.updateUserCoverImage)
 const updateUserProfileImage = createAsyncThunk("updateUserProfileImage", userServices.updateUserProfileImage)
+const getUserPost = createAsyncThunk("getUserPost", userServices.getUserPost)
 
 
 const initialState = {
     searchResults: [],
+    userPost: [],
     currentUser: null,
     error: null,
     loading: false,
     success: false,
-    message: null, //add to each extra reducer
+    message: null,
 }
 
 const userSlice = createSlice({
@@ -30,7 +32,9 @@ const userSlice = createSlice({
             state.error = null;
             state.message = '';
         },
+        resetUserState: () => initialState
     },
+
     extraReducers: (builder) => {
         builder
             .addCase(createUser.pending, (state) => {
@@ -112,6 +116,28 @@ const userSlice = createSlice({
             })
             .addCase(search.fulfilled, (state, action) => {
                 state.searchResults = action.payload;
+                state.error = null;
+                state.loading = false;
+                state.success = true;
+                state.message = "Search completed successfully";
+            })
+
+            .addCase(getUserPost.pending, (state) => {
+                state.userPost = [];
+                state.error = null;
+                state.loading = true;
+                state.success = false;
+                state.message = null;
+            })
+            .addCase(getUserPost.rejected, (state, action) => {
+                state.userPost = [];
+                state.error = action.error.message;
+                state.loading = false;
+                state.success = false;
+                state.message = "Search failed";
+            })
+            .addCase(getUserPost.fulfilled, (state, action) => {
+                state.userPost = action.payload;
                 state.error = null;
                 state.loading = false;
                 state.success = true;
@@ -200,9 +226,8 @@ export {
     updateUserAccountDetails,
     updateUserCoverImage,
     updateUserProfileImage,
+    getUserPost
 
 }
-export const {
-    resetSearchState
-} = userSlice.actions;
+export const { resetSearchState, resetUserState } = userSlice.actions;
 export default userSlice.reducer

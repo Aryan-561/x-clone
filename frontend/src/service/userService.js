@@ -1,5 +1,5 @@
 
-import { userBaseUrl } from "../constants";
+import { userBaseUrl,postBaseUrl } from "../constants";
 import axios from "axios";
 class Userservice {
     async createUser({ profileImage, coverImage, username, fullname, email, password, bio, link }) {
@@ -187,6 +187,18 @@ class Userservice {
         }
     }
 
+    async getUserPost() {
+        try {
+            const response = await axios.get(`${postBaseUrl}/user`, {
+                withCredentials: true
+            });
+            console.log("response", response.data);
+            return response.data;
+        } catch (error) {
+            console.log("Userservice :: getUserPost :: Errors", error.response?.data?.message);
+            throw new Error(`Userservice :: getUserPost :: Errors ${error.response?.data?.message || "something went wrong while getUserPost"}`);
+        }
+    }
     async Googleauthentication(credential) {
         try {
             const response = await axios.post(`${userBaseUrl}/google-login`, {
@@ -201,6 +213,8 @@ class Userservice {
             throw new Error(`Userservice :: Googleauthentication :: Errors ${error.response?.data?.message || "something went wrong while Googleauthentication"}`);
         }
     }
+
+
 
 }
 
