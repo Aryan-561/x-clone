@@ -587,14 +587,42 @@ const search = asyncHandler(async (req, res) => {
             },
         },
         {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "follower",
+                as: "followingDoc"
+            }
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "following",
+                as: "followerDoc"
+            }
+        },
+        
+        {
+            $addFields: {
+                follower:{ $size:"$followerDoc"},
+                following:{ $size:"$followingDoc"}
+            }
+        },
+        {
             $project: {
                 _id: 1,
                 userName: 1,
                 fullName: 1,
-                bio: 1
+                follower: 1,
+                following: 1,
+                bio: 1,
+                profileImage: 1,
+                link: 1,
             },
         },
     ]);
+    // console.log("query", query)
     if (query.length === 0)
         return res.status(400).json(new ApiResponse(400, "user match not found"));
 
