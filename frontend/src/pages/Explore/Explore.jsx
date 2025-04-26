@@ -1,17 +1,19 @@
-import React ,{useEffect,useRef}from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { search } from '../../features'
-import { Container, Input, ProfileSearch,EventLoading } from '../../component'
+import { Container, Input, ProfileSearch, EventLoading } from '../../component'
 import { Link } from 'react-router-dom'
-import { resetSearchState } from '../../features/user/userSlice'
+import { resetSearchState, resetUserState } from '../../features/user/userSlice'
 
 function Explore() {
   const { error, message, loading, searchResults, success } = useSelector((state) => state.user)
+  const stateUser = useSelector((state) => state.user)
+  console.log("state", stateUser)
   const dispatch = useDispatch()
   const inputRef = useRef()
   // react-hook-form setup
-  const { register, handleSubmit, formState: { errors } } = useForm()
+  const { register, handleSubmit } = useForm()
 
   // Search function
   const handleSearch = (data) => {
@@ -21,12 +23,13 @@ function Explore() {
   useEffect(() => {
     return () => {
       dispatch(resetSearchState());
+      dispatch(resetUserState())
     };
   }, []);
 
   return (
-    <Container className='col-span-5 pr-3.5 '>
-      <div className='  mx-2.5 w-full my-4'>
+    <Container className='col-span-5 pr-3.5 border-l border-white/20  '>
+      <div className='  mx-2.5 w-full my-4 '>
         <form onSubmit={handleSubmit(handleSearch)}>
           <Input
             placeholder="Search"
@@ -51,39 +54,36 @@ function Explore() {
         </form>
       </div>
 
-      <div className=' px-3 py-3.5 '>
+      <div className=' px-3 py-3.5   hide-scrollbar'>
         <h1 className='text-lg text-center font-semibold mb-2'>{error ? "No user Found" : " "}</h1>
-        {
-          loading ? (
-            <EventLoading />
-          ) : success && (
-            <div className='border rounded-3xl border-white/30 px-5 py-2'>
-              <div className='max-h-80 overflow-y-auto space-y-2'>
-                <h1 className='text-lg font-semibold mb-2'>Search Results</h1>
-                {searchResults?.data?.map(({ userName, profileImage, bio, fullName, _id }) => (
-                  <Link to={`/${userName}`} key={_id}>
-                    <ProfileSearch
-                      userName={userName}
-                      profileImage={profileImage}
-                      bio={bio}
-                      fullName={fullName}
-                    />
-                  </Link>
-                ))}
-              </div>
+        {loading ? (<EventLoading />) : success && (
+          <div className='  rounded-3xl border-white/30 px-5 py-2  hide-scrollbar'>
+            <div className='min-h-min  overflow-y-auto hide-scrollbar space-y-2'>
+              {success && searchResults?.data?.length > 0 && <h1 className='text-lg font-semibold mb-2'>Search Results :</h1>}
+              {success && searchResults?.data?.length > 0 && searchResults?.data?.map(({ userName, profileImage, bio, fullName, _id }) => (
+                <Link to={`/${userName}`} key={_id}>
+                  <ProfileSearch
+                    userName={userName}
+                    profileImage={profileImage}
+                    bio={bio}
+                    fullName={fullName}
+                  />
+                </Link>
+              ))}
             </div>
-          )
+          </div>
+        )
         }
 
 
       </div>
       <div className='flex  flex-col justify-center items-center '>
         <span>
-          {error && <p className="text-red-700 text-sm">{error}</p>}
+          {error && searchResults?.data && <p className="text-red-700 text-sm">{error}</p>}
         </span>
 
         <span>
-          {message && <p className={`${error ? "text-red-500 text-xs border rounded-2xl px-2 mt-2" : "text-green-500 text-sm"}`}>{message}</p>}
+          {message && searchResults?.data && <p className={`${error ? "text-red-500 text-xs border rounded-2xl px-2 mt-2" : "text-green-500 text-sm"}`}>{message}</p>}
         </span>
       </div>
     </Container>
