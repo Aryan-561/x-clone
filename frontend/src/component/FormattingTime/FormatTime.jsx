@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 function FormattingTime({timestamp=new Date(), className}){
-    console.log("CreatedAt",timestamp)
+    // console.log("CreatedAt",timestamp)
     const [time, setTime] = useState("")
 
     
