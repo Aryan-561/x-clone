@@ -17,6 +17,7 @@ import CreatePost from "./CreatePost/CreatePost.jsx";
 import EventLoading from "./Loading/EventLoading.jsx"
 import EditPage from "./Editcomp/EditPage.jsx";
 import FormattingTime from "./FormattingTime/FormatTime.jsx";
+import PostDetails from "./Card/PostDetails.jsx";
 export {
     Button,
     Card,
@@ -36,5 +37,6 @@ export {
     CreatePost,
     EventLoading,
     EditPage,
-    FormattingTime
+    FormattingTime, 
+    PostDetails
 }
