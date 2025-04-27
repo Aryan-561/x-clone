@@ -8,12 +8,13 @@ import { toggleSubscription } from "../../features/subscription/subscriptionSlic
 import Media from "./Media";
 import ActionBar from "./ActionBar";
 
+
 function PostDetails() {
   const navigate = useNavigate();
   const { error, message, loading, post } = useSelector((state) => state.post);
 
-  const {comments} = useSelector(state=>state.comment)
-  console.log(comments)
+  const {comments} = useSelector(state => state.comment)
+  console.log(comments);
   const [isFollowed, setIsFollowed] = useState(
     post?.userDetails?.isFollowed || true
   );
@@ -70,41 +71,43 @@ function PostDetails() {
                 </div>
                 <div>
 
-                <div className="text-sm sm:text-lg py-2">{post?.text}</div>
-                <div>{post?.media && <Media media={post?.media} />}</div>
+                  <div className="text-sm sm:text-lg py-2">{post?.text}</div>
+                  <div>{post?.media && <Media media={post?.media} />}</div>
                 </div>
-                
+
                 <div className="font-mono flex gap-2">
-                    {post?.createdAt  && <FormattingTime timestamp={post?.createdAt} isFullDetails={true} />}
-                    <div className=" text-gray-400">
-                        <div className="h-[3px] w-[3px] rounded-full bg-gray-400 relative top-1.5 sm:top-3"></div>
-                    </div>
-                    <div className="text-gray-400 text-xs sm:text-base">
-                    {post?.views||0} Views
-                    </div> 
+                  {post?.createdAt && <FormattingTime timestamp={post?.createdAt} isFullDetails={true} />}
+                  <div className=" text-gray-400">
+                    <div className="h-[3px] w-[3px] rounded-full bg-gray-400 relative top-1.5 sm:top-3"></div>
+                  </div>
+                  <div className="text-gray-400 text-xs sm:text-base">
+                    {post?.views || 0} Views
+                  </div>
                 </div>
 
                 <ActionBar
-              commentCount={post?.commentCount}
-              likeCount={post?.likeCount}
-              isLiked={post?.isLiked}
-              isBookmarked={post?.isBookmarked}
-              views={post?.views}
-              postId={post?._id}
-              className={'border-y border-gray-600 py-2'}
+                  commentCount={post?.commentCount}
+                  likeCount={post?.likeCount}
+                  isLiked={post?.isLiked}
+                  isBookmarked={post?.isBookmarked}
+                  views={post?.views}
+                  postId={post?._id}
+                  className={'border-y border-gray-600 py-2'}
                 />
 
               </div>
               <div>
                 <CreatePost isPost={false} />
               </div>
-              {comments.map((comment, index)=>(
-                <Card data={comment}  key={index} forPost={false} />
-            ))}
+              {comments.map((comment, index) => (
+                <Link to={`/${comment.userDetails.username}/post/${post._id}/comment/${comment._id}`} key={index}>
+                  <Card data={comment} forPost={false} />
+                </Link>
+              ))}
+              
             </div>
           </>
         )}
-        
       </Container>
     </>
   );

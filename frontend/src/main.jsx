@@ -6,8 +6,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from "react-redux"
 import store from "../src/app/store.js"
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import { Login, Signup, Home, Explore ,Profile, Bookmark,Post} from './pages/index.js';
-import {EditPage, LandingPage } from './component/index.js';
+import { Login, Signup, Home, Explore, Profile, Bookmark, Post, CommentReplies } from './pages/index.js';
+import { EditPage, LandingPage } from './component/index.js';
 import ComposePost from './pages/ComposePost/ComposePost.jsx'
 const router = createBrowserRouter([
   {
@@ -50,14 +50,18 @@ const router = createBrowserRouter([
         path: "/compose/post",
         element: (
           <>
-            <Home/>
-            <ComposePost/>
+            <Home />
+            <ComposePost />
           </>
         )
       },
       {
-        path:"/:username/post/:postId",
-        element:<Post/>
+        path: "/:username/post/:postId",
+        element: <Post />
+      },
+      {
+        path: "/:username/post/:postId/comment/:commentId",
+        element: <CommentReplies />
       },
     ]
   }
