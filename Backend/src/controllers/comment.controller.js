@@ -416,8 +416,8 @@ const getCommentReplies = asyncHandler(async (req, res) => {
         {
             $lookup: {
                 from: "likes",
-                localField: "likes",
-                foreignField: "_id",
+                localField: "_id",
+                foreignField: "comment",
                 as: "like"
             }
         },
