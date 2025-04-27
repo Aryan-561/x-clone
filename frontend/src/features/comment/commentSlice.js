@@ -61,7 +61,7 @@ const commentSlice = createSlice({
                 state.message = null;
             })
             .addCase(createComment.fulfilled, (state, action) => {
-                state.comments.unshift(action.payload);
+                state.comments.unshift(action.payload.data);
                 state.loading = false;
                 state.message = "Comment created successfully";
             })
@@ -113,7 +113,7 @@ const commentSlice = createSlice({
                 state.error = null;
             })
             .addCase(getAllPostComments.fulfilled, (state, action) => {
-                state.comments = action.payload;
+                state.comments = action.payload.data;
                 state.loading = false;
             })
             .addCase(getAllPostComments.rejected, (state, action) => {
