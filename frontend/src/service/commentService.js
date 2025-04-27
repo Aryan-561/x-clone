@@ -47,6 +47,7 @@ class CommentService {
     }
 
     async getComment(commentId) {
+        console.log("helo",commentId)
         try {
             const response = await axios.get(`${commentBaseUrl}/${commentId}`, {
                 withCredentials: true

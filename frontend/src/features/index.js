@@ -18,7 +18,7 @@ import subscriptionReducer from "./subscription/subscriptionSlice"
 import bookmarkReducer from "./bookmark/bookmarkSlice"
 
 // comment
-import commentReducer, { createComment, updateComment, deleteComment, getAllPostComments, getCommentReplies, createReplyComment } from "./comment/commentSlice"
+import commentReducer, { createComment, updateComment, deleteComment, getAllPostComments, getCommentReplies, createReplyComment,getComment } from "./comment/commentSlice"
 
 export {
     authReducer,
@@ -51,6 +51,7 @@ export {
     getAllPostComments,
     getCommentReplies,
     createReplyComment,
+    getComment,
 
 
     bookmarkReducer,

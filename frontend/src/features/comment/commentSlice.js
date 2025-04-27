@@ -31,9 +31,12 @@ const createReplyComment = createAsyncThunk(
     commentServices.createReplyComment
 );
 
+const getComment = createAsyncThunk("comment/getComment", commentServices.getComment);
+
 const initialState = {
     comments: [],
-    replies: {},
+    replies: [],
+    commentByid: null,
     loading: false,
     error: null,
     message: null,
@@ -45,7 +48,8 @@ const commentSlice = createSlice({
     reducers: {
         resetCommentState: (state) => {
             state.comments = [];
-            state.replies = {};
+            state.replies = [];
+            state.commentByid = null;
             state.loading = false;
             state.error = null;
             state.message = null;
@@ -53,7 +57,6 @@ const commentSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-
             // Create Comment
             .addCase(createComment.pending, (state) => {
                 state.loading = true;
@@ -127,11 +130,24 @@ const commentSlice = createSlice({
                 state.error = null;
             })
             .addCase(getCommentReplies.fulfilled, (state, action) => {
-                const { commentId, replies } = action.payload;
-                state.replies[commentId] = replies;
+                state.replies = action.payload;
                 state.loading = false;
             })
             .addCase(getCommentReplies.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+
+            // get comment by id
+            .addCase(getComment.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getComment.fulfilled, (state, action) => {
+                state.commentByid = action.payload;
+                state.loading = false;
+            })
+            .addCase(getComment.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
             })
@@ -172,6 +188,7 @@ export {
     getAllPostComments,
     getCommentReplies,
     createReplyComment,
+    getComment
 };
 
 export default commentSlice.reducer;
