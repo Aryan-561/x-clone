@@ -39,12 +39,12 @@ function Profile() {
 
     const userAllLikePost = useMemo(() => {
         if (activityType !== "likePosts" || loading) return null
-        return likedPosts?.data?.length > 0 ? likedPosts?.data?.map((post) => <Card key={post._id} postData={post} />) : null
+        return likedPosts?.data?.length > 0 ? likedPosts?.data?.map((post) => <Card key={post._id} data={post} />) : null
     }, [activityType, loading, likedPosts])
 
     const userAllLikeComment = useMemo(() => {
         if (activityType !== "likeComments" || loading) return null
-        return likedComments?.data?.length > 0 ? likedComments?.data?.map((post) => <Card key={post._id}  commentData={post} />) : null
+        return likedComments?.data?.length > 0 ? likedComments?.data?.map((post) => <Card key={post._id}  data={post} forPost={false} />) : null
     }, [activityType, loading, likedComments])
 
     return (

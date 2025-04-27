@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { createPost } from "../../features/post/postSlice.js";
 import { MdClose } from 'react-icons/md';
 import { useNavigate, useLocation } from "react-router-dom";
+import { createComment } from "../../features/index.js";
 
-function CreatePost({classname}) {
+function CreatePost({classname, isPost=true}) {
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -21,7 +22,7 @@ function CreatePost({classname}) {
 
   const user = useSelector(state=>state.user.currentUser)
   const dispatch = useDispatch();
-
+  const {post} = useSelector(state=>state.post)
 
 
   const mediaPreview = {
@@ -58,12 +59,19 @@ function CreatePost({classname}) {
 
 
   const handleOnSubmit =  () => {
-    dispatch(createPost({ text, media }))
-    setText("")
-    setPreview(null)
-    setMedia(null)
-    setType(null)
-    location.pathname=="/compose/post"?navigate('/home'):""
+    if(isPost){
+      dispatch(createPost({ text, media }))
+      setText("")
+      setPreview(null)
+      setMedia(null)
+      setType(null)
+      location.pathname=="/compose/post"?navigate('/home'):""
+    }
+    else{
+      const postId = post?._id
+      dispatch(createComment({postId, text}))
+      setText("")
+    }
   }
 
   const handleOnRemoveMedia = ()=>{
@@ -94,14 +102,14 @@ function CreatePost({classname}) {
         >
           <div className="flex gap-4 py-4 justify-center">
             <Avatar userDetails={user?.data} />
-            <div className="w-[80%] h-auto min-h-16 sm:min-h-28 max-h-52 sm:max-h-64 overflow-y-scroll scrollbar-thumb-only pr-4">
+            <div className={`w-[80%] h-auto  overflow-y-scroll scrollbar-thumb-only pr-4 ${isPost?"min-h-20 sm:min-h-36 max-h-52 sm:max-h-72":"min-h-16 max-h-40 sm:max-h-48 "}`}>
               <textarea
                 ref={textAreaRef}
                 value={text}
                 maxLength={220}
                 onChange={handleTextChange}
-                className="placeholder:font-normal text-sm  sm:text-lg resize-none w-full border-none focus:outline-none overflow-hidden"
-                placeholder="What's happening?"
+                className="placeholder:font-normal text-sm  sm:text-xl resize-none w-full border-none focus:outline-none overflow-hidden"
+                placeholder={`${isPost?"What's happening?":"Post your reply"}`}
               ></textarea>
               <div>
                 <input
@@ -122,8 +130,8 @@ function CreatePost({classname}) {
               </div>
             </div>
           </div>
-          <div className="flex justify-between mx-2 px-2 sm:px-4  items-center border-t-1 border-gray-500 pt-2">
-            <div className="flex gap-1 sm:gap-3">
+          <div className={`flex  mx-2 px-2 sm:px-4  items-center border-t-1 border-gray-500 pt-2 ${isPost?"justify-between":"justify-end-safe"}`}>
+            <div className={`flex gap-1 sm:gap-3 ${isPost?"block":"hidden"}`}>
               <Button
                 floatingText="Media"
                 classname="cursor-pointer"
@@ -205,7 +213,7 @@ function CreatePost({classname}) {
               disabled={text?false:true}
               onBtnClick={handleOnSubmit}
             >
-              Post
+              {isPost?"Post":"Reply"}
             </Button>
           </div>
         </div>
