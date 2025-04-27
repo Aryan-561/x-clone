@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-function FormattingTime({timestamp=new Date(), className}){
-    console.log("CreatedAt",timestamp)
+function FormattingTime({timestamp=new Date(), className, isFullDetails=false}){
     const [time, setTime] = useState("")
-
+    const [fullTimeDetails, setFullTimeDetails] = useState("")
     
     const formattingTime = (timestamp)=>{
         const then = new Date(timestamp)
@@ -21,6 +20,8 @@ function FormattingTime({timestamp=new Date(), className}){
         
         const [formattedDate, formattedTime] = formattedString.split(', ');
         
+        setFullTimeDetails(`${formattedTime}, ${formattedDate}`)
+
         const diffInSeconds = Math.floor((now-then)/1000)
         if(diffInSeconds<60){
             setTime("just now")
@@ -43,7 +44,7 @@ function FormattingTime({timestamp=new Date(), className}){
 
     return(
         <>
-        <div className={`text-gray-400 text-xs sm:text-base ${className}`}>{time}</div>
+        <div className={`text-gray-400 text-xs sm:text-base ${className}`}>{isFullDetails?fullTimeDetails:time}</div>
         </>
     )
 }
