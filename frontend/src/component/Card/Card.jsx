@@ -6,8 +6,8 @@ import ProfileHeader from "./ProfileHeader";
 
 function Card({ data, postData, commentData }) {
 
-  // console.log("data",data)
-  console.log(" postdata", postData)
+  console.log("data", commentData?.commentDetails?._id)
+  // console.log("postdata",postData)
 
 
   return (
@@ -20,7 +20,7 @@ function Card({ data, postData, commentData }) {
           <div className="w-[80%]">
             <div className="flex flex-row ">
 
-              <ProfileHeader commentOwnerDetails={commentData?.commentOwnerDetails} postOwnerDetails={postData?.postOwnerDetails} userDetails={data?.userDetails || data?.createdBy} classname={""} timestamp={data?.createdAt} />
+              <ProfileHeader commentOwnerDetails={commentData?.commentOwnerDetails} postOwnerDetails={postData?.postOwnerDetails} userDetails={data?.userDetails || data?.createdBy} classname={""} timestamp={postData?.postDetails?.createdAt || data?.createdAt || commentData?.commentDetails?.createdAt} />
 
 
             </div>
@@ -34,12 +34,13 @@ function Card({ data, postData, commentData }) {
             )}
 
             <ActionBar
-              commentCount={data?.commentCount}
-              likeCount={data?.likeCount}
-              isLiked={data?.isLiked}
-              isBookmarked={data?.isBookmarked}
-              views={data?.views}
-              postId={data?._id}
+              commentCount={data?.commentCount || postData?.postDetails?.commentCount || commentData?.commentDetails?.commentCount}
+              likeCount={data?.likeCount || postData?.postDetails?.likeCount || commentData?.commentDetails?.likeCount}
+              isLiked={data?.isLiked || postData?.postDetails?.isLiked || commentData?.commentDetails?.isLiked}
+              isBookmarked={data?.isBookmarked || postData?.postDetails?.isBookmarked || commentData?.commentDetails?.isBookmarked}
+              views={data?.views || postData?.postDetails?.views || commentData?.commentDetails?.views}
+              postId={data?._id || postData?.postDetails?._id }
+              commentId={commentData?.commentDetails?._id}
             />
           </div>
         </div>

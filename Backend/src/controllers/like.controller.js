@@ -1,7 +1,7 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import Like from "../models/like.model.js";
-import {Post} from "../models/post.model.js";
-import {Comment} from "../models/comment.model.js";
+import { Post } from "../models/post.model.js";
+import { Comment } from "../models/comment.model.js";
 import mongoose from "mongoose";
 import ApiResponse from "../utils/ApiResponse.js";
 import ApiErrors from "../utils/ApiErrors.js";
@@ -65,7 +65,7 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, "Like added successfully", newLike));
 });
 
-// ✅ Get all liked posts by the user
+// Get all liked posts by the user
 const getAllLikePost = asyncHandler(async (req, res) => {
     const likePost = await Like.aggregate([
         {
@@ -115,14 +115,65 @@ const getAllLikePost = asyncHandler(async (req, res) => {
             }
         },
         {
+            $lookup: {
+                from: "bookmarks",
+                foreignField: "post",
+                localField: "post",
+                as: "bookmarkDoc"
+            }
+        },
+        {
+            $lookup: {
+                from: "likes",
+                localField: "post",
+                foreignField: "post",
+                as: "likeDoc"
+            }
+        },
+
+        {
+            $lookup: {
+                from: "comments",
+                localField: "post",
+                foreignField: "post",
+                as: "commentDoc"
+            }
+        },
+        {
+            $addFields: {
+                "postDetails.commentCount": { $size: "$commentDoc" },
+                "postDetails.likeCount": { $size: "$likeDoc" },
+                "postDetails.isLiked": {
+                    $cond: {
+                        if: { $in: [req.user._id, "$likeDoc.likedBy"] },
+                        then: true,
+                        else: false
+                    }
+                },
+                "postDetails.isBookmarked": {
+                    $cond: {
+                        if: { $in: [req.user._id, "$bookmarkDoc.bookmarkedBy"] },
+                        then: true,
+                        else: false
+                    }
+                }
+
+            }
+        },
+        {
             $project: {
                 createdAt: 1,
                 updatedAt: 1,
+
                 "postDetails._id": 1,
                 "postDetails.text": 1,
                 "postDetails.media": 1,
                 "postDetails.media": 1,
                 "postDetails.views": 1,
+                "postDetails.commentCount": 1,
+                "postDetails.isLiked": 1,
+                "postDetails.isBookmarked": 1,
+                "postDetails.likeCount": 1,
                 "postDetails.createdAt": 1,
                 "postDetails.updatedAt": 1,
                 "postOwnerDetails._id": 1,
@@ -144,7 +195,7 @@ const getAllLikePost = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, "All Liked Posts", likePost));
 });
 
-// ✅ Get all liked comments by the user
+//  Get all liked comments by the user
 const getAllLikeComment = asyncHandler(async (req, res) => {
     const likeComment = await Like.aggregate([
         {
@@ -194,6 +245,52 @@ const getAllLikeComment = asyncHandler(async (req, res) => {
             }
         },
         {
+            $lookup: {
+                from: "bookmarks",
+                foreignField: "post",
+                localField: "post",
+                as: "bookmarkDoc"
+            }
+        },
+        {
+            $lookup: {
+                from: "likes",
+                localField: "post",
+                foreignField: "post",
+                as: "likeDoc"
+            }
+        },
+
+        {
+            $lookup: {
+                from: "comments",
+                localField: "post",
+                foreignField: "post",
+                as: "commentDoc"
+            }
+        },
+        {
+            $addFields: {
+                "commentDetails.commentCount": { $size: "$commentDoc" },
+                "commentDetails.likeCount": { $size: "$likeDoc" },
+                "commentDetails.isLiked": {
+                    $cond: {
+                        if: { $in: [req.user._id, "$likeDoc.likedBy"] },
+                        then: true,
+                        else: false
+                    }
+                },
+                "commentDetails.isBookmarked": {
+                    $cond: {
+                        if: { $in: [req.user._id, "$bookmarkDoc.bookmarkedBy"] },
+                        then: true,
+                        else: false
+                    }
+                }
+
+            }
+        },
+        {
             $project: {
                 _id: 1,
                 createdAt: 1,
@@ -202,6 +299,12 @@ const getAllLikeComment = asyncHandler(async (req, res) => {
                 "commentDetails.text": 1,
                 "commentDetails.media": 1,
                 "commentDetails.views": 1,
+                "commentDetails.commentCount": 1,
+                "commentDetails.isLiked": 1,
+                "commentDetails.isBookmarked": 1,
+                "commentDetails.likeCount": 1,
+                "commentDetails.likes": 1,
+                "commentDetails.createdAt": 1,
                 "commentOwnerDetails._id": 1,
                 "commentOwnerDetails.userName": 1,
                 "commentOwnerDetails.fullName": 1,

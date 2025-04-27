@@ -7,7 +7,7 @@ import Avatar from '../Card/Avatar';
 import { formatJoinDate } from '../../data/date';
 import { SlCalender } from "react-icons/sl";
 import { FaLink } from "react-icons/fa6";
-import { data, Link } from 'react-router-dom';
+import {  Link } from 'react-router-dom';
 
 function Profile() {
 
@@ -51,7 +51,7 @@ function Profile() {
     }, [activityType, loading, likedComments])
 
     return (
-        <Container className=' border-x   sm:[85%] lg:w-full border-white/10 col-span-5 w-full min-h-min relative '>
+        <Container className=' border-x   sm:w-[85%] lg:w-full border-white/10 col-span-5 w-full min-h-min relative '>
             <div className=' flex  justify-start items-center mb-1.5   relative bg-transparent '>
                 <div className=' text-xl text-center h-1/12 mx-7'>
                     <FaArrowLeft />
@@ -107,7 +107,7 @@ function Profile() {
                 </div>
             </div>
 
-            <div className='flex  justify-around  mx-2.5 my-2.5 items-center border border-white/15 rounded-md'>
+            <div className='flex  justify-around  mx-2.5 my-2.5 items-center border border-white/5 rounded-md'>
 
                 <div onClick={() => setActivityType("post")} className='w-full text-center hover:bg-white/5 py-0.5 rounded-sm'>Post</div>
                 <div className='w-full text-center hover:bg-white/5 py-0.5 rounded-sm' onClick={() => setActivityType("likePosts")}>Like</div>
@@ -115,7 +115,7 @@ function Profile() {
 
             </div>
 
-            <div className='px-1.5 bg-amber-100 text-black'>
+            <div className='px-1.5  text-black'>
                 {
                     loading ? (<EventLoading />) : <>
                         {activityType === "post" && userAllPost}

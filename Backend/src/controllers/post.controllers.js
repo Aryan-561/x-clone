@@ -408,7 +408,7 @@ const getUserPost = asyncHandler(async(req, res)=>{
         {
             $lookup:{
                 from:"users",
-                localField:"createdBy",
+                localField:"createdBy", 
                 foreignField:"_id",
                 as:"user",
                 pipeline:[

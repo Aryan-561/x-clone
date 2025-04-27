@@ -52,6 +52,15 @@ const router = createBrowserRouter([
               </>
                 )
       },
+      {
+        path: "/compose/edit",
+        element: (
+              <>
+                <Home/>
+                <ComposePost/>
+              </>
+                )
+      },
     ]
   }
 

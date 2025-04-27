@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import Button from "../Button/Button";
 import { useDispatch } from "react-redux";
-import { togglePostLike } from "../../features";
-import { toggleBookmarkedPost } from "../../features/bookmark/bookmarkSlice";
+import { toggleCommentLike, togglePostLike } from "../../features";
+import { toggleBookmarkedPost, toggleBookmarkedComment } from "../../features/bookmark/bookmarkSlice";
 const ActionBar = ({
   commentCount = 0,
+  commentId = null,
   likeCount = 0,
-  isLiked=false,
-  isBookmarked=false,
+  isLiked = false,
+  isBookmarked = false,
   views = 0,
   postId = null,
 }) => {
@@ -24,7 +25,11 @@ const ActionBar = ({
   // handler for like button
   const onClickLikeBtn = (e) => {
     e.preventDefault();
-    dispatch(togglePostLike(postId))
+    if (commentId) {
+      dispatch(toggleCommentLike(commentId));
+    } else if (postId) {
+      dispatch(togglePostLike(postId));
+    }
     setLikeStatus((prevStatus) => {
       if (!prevStatus) {
         setLike(like + 1);
@@ -39,7 +44,13 @@ const ActionBar = ({
   // handler for bookmarked button
   const onClickBookmarkBtn = (e) => {
     e.preventDefault();
-    dispatch(toggleBookmarkedPost(postId))
+    if (commentId) {
+      dispatch(toggleBookmarkedComment(commentId))
+
+    } else if (postId) {
+      dispatch(toggleBookmarkedPost(postId))
+
+    }
     setBookmarkedStatus(!bookmarkedStatus);
   };
 
@@ -51,7 +62,7 @@ const ActionBar = ({
           <Button
             floatingText="Reply"
             className={`w-10 h-10  hover:bg-sky-500/15 rounded-full`}
-            onBtnClick={e=>e.preventDefault()}
+            onBtnClick={e => e.preventDefault()}
           >
             <svg
               viewBox="0 0 24 24"
@@ -110,7 +121,7 @@ const ActionBar = ({
           <Button
             className="w-10 h-10 hover:bg-sky-600/20 rounded-full"
             floatingText="Views"
-            onBtnClick={e=>e.preventDefault()}
+            onBtnClick={e => e.preventDefault()}
           >
             <svg
               viewBox="0 0 24 24"
@@ -134,17 +145,17 @@ const ActionBar = ({
             floatingText="Bookmark"
             onBtnClick={onClickBookmarkBtn}
           >
-            {bookmarkedStatus?(
+            {bookmarkedStatus ? (
               <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              className="fill-sky-500 w-5 sm:w-6 lg:w-7 active:scale-80 r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1xvli5t r-1hdv0qi">
-              <g>
-                <path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5z"></path>
-              </g>
-            </svg>
-            
-            ):(<svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="fill-sky-500 w-5 sm:w-6 lg:w-7 active:scale-80 r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1xvli5t r-1hdv0qi">
+                <g>
+                  <path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5z"></path>
+                </g>
+              </svg>
+
+            ) : (<svg
               viewBox="0 0 24 24"
               aria-hidden="true"
               className="fill-gray-500 group-hover:fill-sky-500 active:scale-80 transition-all dealy-400 w-5 sm:w-6 lg:w-7 r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1xvli5t r-1hdv0qi"
