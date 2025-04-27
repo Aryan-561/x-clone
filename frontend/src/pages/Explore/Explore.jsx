@@ -34,7 +34,7 @@ function Explore() {
           <Input
             placeholder="what are you looking for ??"
             ref={inputRef}
-            className="border  sm:w-xl w-full border-white/50 focus:bg-blue-500/10 focus:border-blue-500 focus:ring-blue-500 focus:ring-1 rounded-3xl px-4 py-2"
+            className="border pl-10 sm:w-xl w-full border-white/50 focus:bg-blue-500/10 focus:border-blue-500 focus:ring-blue-500 focus:ring-1 rounded-3xl px-4 py-2"
             // Registering the input field with validation
             {...register('name', { required: '' })}
           >
