@@ -12,7 +12,7 @@ function Input({ children, className = "", label, type = "text", ...props }, ref
             <div className="relative w-full">
                 <input
                     id={id}
-                    className={`pl-10 pr-3 py-2 border border-gray-300 focus:ring-blue-500 focus:ring-1 focus:ring-opacity-50 focus:outline-none ${className}`}
+                    className={` pr-3 py-2 border border-gray-300 focus:ring-blue-500 focus:ring-1 focus:ring-opacity-50 focus:outline-none ${className}`}
                     type={type}
                     ref={ref}
                     {...props}

@@ -6,8 +6,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from "react-redux"
 import store from "../src/app/store.js"
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import { Login, Signup, Home, Explore ,Profile, Bookmark} from './pages/index.js';
-import { LandingPage } from './component/index.js';
+import { Login, Signup, Home, Explore, Profile, Bookmark } from './pages/index.js';
+import { EditPage, LandingPage } from './component/index.js';
 import ComposePost from './pages/ComposePost/ComposePost.jsx'
 const router = createBrowserRouter([
   {
@@ -22,10 +22,9 @@ const router = createBrowserRouter([
     path: "/signup",
     element: <Signup />
   },
-  
   {
     path: "",
-    element: <App />, 
+    element: <App />,
     children: [
       {
         path: "home",
@@ -41,25 +40,11 @@ const router = createBrowserRouter([
       },
       {
         path: "bookmarks",
-        element:<Bookmark/>
+        element: <Bookmark />
       },
       {
-        path: "/compose/post",
-        element: (
-              <>
-                <Home/>
-                <ComposePost/>
-              </>
-                )
-      },
-      {
-        path: "/compose/edit",
-        element: (
-              <>
-                <Home/>
-                <ComposePost/>
-              </>
-                )
+        path: "profile/compose/edit",
+        element: <EditPage />
       },
     ]
   }
