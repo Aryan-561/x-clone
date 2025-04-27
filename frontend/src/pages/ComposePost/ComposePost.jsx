@@ -29,7 +29,7 @@ function ComposePost() {
     >
       <div
         ref={modalRef}
-        className="w-[90%] sm:w-[60%] lg:w-[40%] xl:w-[30%] rounded-2xl overflow-hidden text-white bg-black relative p-2"
+        className="w-[90%] sm:w-[60%] lg:w-[50%] rounded-2xl overflow-hidden text-white bg-black relative p-2"
       >
         <div className="flex items-center justify-center absolute left-3 top-2">
           <button
