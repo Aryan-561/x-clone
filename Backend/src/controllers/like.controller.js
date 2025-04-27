@@ -162,27 +162,24 @@ const getAllLikePost = asyncHandler(async (req, res) => {
         },
         {
             $project: {
-                createdAt: 1,
-                updatedAt: 1,
-
-                "postDetails._id": 1,
-                "postDetails.text": 1,
-                "postDetails.media": 1,
-                "postDetails.media": 1,
-                "postDetails.views": 1,
-                "postDetails.commentCount": 1,
-                "postDetails.isLiked": 1,
-                "postDetails.isBookmarked": 1,
-                "postDetails.likeCount": 1,
-                "postDetails.createdAt": 1,
-                "postDetails.updatedAt": 1,
-                "postOwnerDetails._id": 1,
-                "postOwnerDetails.userName": 1,
-                "postOwnerDetails.fullName": 1,
-                "postOwnerDetails.profileImage": 1,
-                "postOwnerDetails.coverImage": 1,
-                "postOwnerDetails.followingCount": 1,
-                "postOwnerDetails.followerCount": 1
+                _id: "$postDetails._id",
+                text: "$postDetails.text",
+                media: "$postDetails.media",
+                views: "$postDetails.views",
+                commentCount: "$postDetails.commentCount",
+                isLiked: "$postDetails.isLiked",
+                isBookmarked: "$postDetails.isBookmarked",
+                likeCount: "$postDetails.likeCount",
+                createdAt: "$postDetails.createdAt",
+                updatedAt: "$postDetails.updatedAt",
+                userDetails: {
+                    userId: "$postOwnerDetails._id",
+                    username: "$postOwnerDetails.userName",
+                    fullName: "$postOwnerDetails.fullName",
+                    profileImage: "$postOwnerDetails.profileImage",
+                    followingCount: "$postOwnerDetails.followingCount",
+                    followerCount: "$postOwnerDetails.followerCount"
+                }
             }
         },
         {
@@ -246,32 +243,22 @@ const getAllLikeComment = asyncHandler(async (req, res) => {
         },
         {
             $lookup: {
+                from: "likes",
+                localField: "commentDetails._id",
+                foreignField: "comment",
+                as: "likeDoc"
+            }
+        },
+        {
+            $lookup: {
                 from: "bookmarks",
-                foreignField: "post",
-                localField: "post",
+                localField: "commentDetails._id",
+                foreignField: "comment",
                 as: "bookmarkDoc"
             }
         },
         {
-            $lookup: {
-                from: "likes",
-                localField: "post",
-                foreignField: "post",
-                as: "likeDoc"
-            }
-        },
-
-        {
-            $lookup: {
-                from: "comments",
-                localField: "post",
-                foreignField: "post",
-                as: "commentDoc"
-            }
-        },
-        {
             $addFields: {
-                "commentDetails.commentCount": { $size: "$commentDoc" },
                 "commentDetails.likeCount": { $size: "$likeDoc" },
                 "commentDetails.isLiked": {
                     $cond: {
@@ -287,37 +274,35 @@ const getAllLikeComment = asyncHandler(async (req, res) => {
                         else: false
                     }
                 }
-
             }
         },
         {
             $project: {
-                _id: 1,
-                createdAt: 1,
-                updatedAt: 1,
-                "commentDetails._id": 1,
-                "commentDetails.text": 1,
-                "commentDetails.media": 1,
-                "commentDetails.views": 1,
-                "commentDetails.commentCount": 1,
-                "commentDetails.isLiked": 1,
-                "commentDetails.isBookmarked": 1,
-                "commentDetails.likeCount": 1,
-                "commentDetails.likes": 1,
-                "commentDetails.createdAt": 1,
-                "commentOwnerDetails._id": 1,
-                "commentOwnerDetails.userName": 1,
-                "commentOwnerDetails.fullName": 1,
-                "commentOwnerDetails.coverImage": 1,
-                "commentOwnerDetails.profileImage": 1,
-                "commentOwnerDetails.followingCount": 1,
-                "commentOwnerDetails.followerCount": 1
+                userId: "$commentDetails._id",
+                text: "$commentDetails.text",
+                views: "$commentDetails.views",
+                likeCount: "$commentDetails.likeCount",
+                commentCount: { $literal: 0 },
+                isLiked: "$commentDetails.isLiked",
+                isBookmarked: "$commentDetails.isBookmarked",
+                createdAt: "$commentDetails.createdAt",
+                updatedAt: "$commentDetails.updatedAt",
+                userDetails: {
+                    _id: "$commentOwnerDetails._id",
+                    userName: "$commentOwnerDetails.userName",
+                    fullName: "$commentOwnerDetails.fullName",
+                    profileImage: "$commentOwnerDetails.profileImage",
+                    coverImage: "$commentOwnerDetails.coverImage",
+                    followingCount: "$commentOwnerDetails.followingCount",
+                    followerCount: "$commentOwnerDetails.followerCount"
+                }
             }
-        }
+        },
     ]);
 
     return res.status(200).json(new ApiResponse(200, "All Liked Comments", likeComment));
 });
+
 
 export {
     togglePostLike,
