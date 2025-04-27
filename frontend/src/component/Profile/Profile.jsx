@@ -1,37 +1,34 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { FaArrowLeft } from "react-icons/fa6";
-import { Card, Container, EditPage, EventLoading, ProfileSearch, X } from "../index";
+import { Card, Container, EventLoading, X } from "../index";
 import { getCurrentUser, getUserPost, getAllLikePost, getAllLikeComment } from '../../features';
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '../Card/Avatar';
 import { formatJoinDate } from '../../data/date';
 import { SlCalender } from "react-icons/sl";
 import { FaLink } from "react-icons/fa6";
-import {  Link } from 'react-router-dom';
+import {  Link, useNavigate } from 'react-router-dom';
 
 function Profile() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [activityType, setActivityType] = useState("post")
 
     const { error, message, loading, currentUser, userPost } = useSelector((state) => state.user);
-    const dispatch = useDispatch();
-    const [showEditPage, setShowEditPage] = useState(false)
-    const state = useSelector((state) => state.user);
+    // const state = useSelector((state) => state.user);
     // console.log("userState", state)
-    const likeState = useSelector((state) => state.like);
+
     const { likedComments, likedPosts } = useSelector((state) => state.like);
-    console.log("like state", likeState)
+    // const likeState = useSelector((state) => state.like);
+    // console.log("like state", likeState)
+
     useEffect(() => {
         dispatch(getCurrentUser());
         dispatch(getUserPost())
         dispatch(getAllLikePost())
         dispatch(getAllLikeComment())
-    }, [dispatch, showEditPage]);
-    const handleEdit = (e) => {
-        setShowEditPage(prev => !prev)
-        e.stopPropagation()
-        e.preventDefault();
-
-    }
-    const [activityType, setActivityType] = useState("post")
+    }, [dispatch]);
+    
 
     const memoizedUserData = useMemo(() => currentUser?.data, [currentUser]);
 
@@ -53,7 +50,7 @@ function Profile() {
     return (
         <Container className=' border-x   sm:w-[85%] lg:w-full border-white/10 col-span-5 w-full min-h-min relative '>
             <div className=' flex  justify-start items-center mb-1.5   relative bg-transparent '>
-                <div className=' text-xl text-center h-1/12 mx-7'>
+                <div onClick={() => navigate(-1)}  className=' text-xl border  p-1  hover:bg-white/15 rounded-full text-center h-1/12 mx-7'>
                     <FaArrowLeft />
                 </div>
                 <div className='mt-2.5 sm:w-2xl'>
@@ -89,15 +86,10 @@ function Profile() {
                 </div>
             </div>
             <div className=' w-full  my-2.5 flex justify-evenly items-center'>
-                <div onClick={handleEdit} className=' relative'>
+                <Link to="compose/edit" className=' relative'>
                     <span className=' border border-white/20 hover:bg-blue-500/75 hover:shadow-2xs   cursor-pointer transition rounded-2xl py-1 px-3.5'>Edit profile</span>
 
-                    {showEditPage && (
-                        <div onClick={(e) => e.stopPropagation()} className="absolute z-50 top-full mt-2">
-                            <EditPage setShowEditPage={setShowEditPage} />
-                        </div>
-                    )}
-                </div>
+                </Link>
                 <div className='text-center '>
                     {loading && <EventLoading />}
                 </div>
@@ -109,9 +101,10 @@ function Profile() {
 
             <div className='flex  justify-around  mx-2.5 my-2.5 items-center border border-white/5 rounded-md'>
 
-                <div onClick={() => setActivityType("post")} className='w-full text-center hover:bg-white/5 py-0.5 rounded-sm'>Post</div>
-                <div className='w-full text-center hover:bg-white/5 py-0.5 rounded-sm' onClick={() => setActivityType("likePosts")}>Like</div>
-                <div onClick={() => setActivityType("likeComments")} className='w-full text-center hover:bg-white/5 py-0.5 rounded-sm' >Replies</div>
+                <div onClick={() => {setActivityType("post") 
+                }} className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm ${activityType==="post"?"bg-white/15":""}`}>Post</div>
+                <div className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm ${activityType ==="likePosts"?"bg-white/15":""}`} onClick={() => setActivityType("likePosts")}>Likes</div>
+                <div onClick={() => setActivityType("likeComments")} className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm whitespace-nowrap ${activityType ==="likeComments"?"bg-white/15":""}`} >comments</div>
 
             </div>
 
@@ -122,9 +115,7 @@ function Profile() {
                         {activityType === "likePosts" && userAllLikePost}
                         {activityType === "likeComments" && userAllLikeComment}</>
                 }
-                {
-                    // console.log("here we go:", userAllPost )
-                }
+                
             </div>
 
             <div className='flex  flex-col justify-center items-center my-1.5 '>
