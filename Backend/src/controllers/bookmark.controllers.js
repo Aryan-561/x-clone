@@ -170,7 +170,7 @@ const getAllbookmarkedPost = asyncHandler(async(req, res)=>{
                     
                     {
                         $lookup:{
-                            from:"comment",
+                            from:"comments",
                             localField:"_id",
                             foreignField:"post",
                             as:"commentDoc"
@@ -353,7 +353,7 @@ const getAllbookmarkedComment = asyncHandler(async(req, res)=>{
                     
                     {
                         $lookup:{
-                            from:"comment",
+                            from:"comments",
                             localField:"_id",
                             foreignField:"comment",
                             as:"commentDoc"
