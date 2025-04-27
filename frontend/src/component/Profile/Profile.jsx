@@ -50,7 +50,7 @@ function Profile() {
     return (
         <Container className=' border-x   sm:w-[85%] lg:w-full border-white/10 col-span-5 w-full min-h-min relative '>
             <div className=' flex  justify-start items-center mb-1.5   relative bg-transparent '>
-                <div onClick={() => navigate(-1)}  className=' text-xl border  p-1  hover:bg-white/15 rounded-full text-center h-1/12 mx-7'>
+                <div onClick={() => navigate(-1)}  className=' text-xl   p-1  hover:bg-white/15 rounded-full text-center h-1/12 mx-7'>
                     <FaArrowLeft />
                 </div>
                 <div className='mt-2.5 sm:w-2xl'>
@@ -62,7 +62,7 @@ function Profile() {
                 <X className="     sm:max-h-48 sm:min-h-48 max-h-28  w-full border border-white/5 bg-gray-400" image={memoizedUserData?.coverImage?.url || "/default/deafaultCoverimage.png"} />
             </div>
             <div className='   sm:bottom-16 bottom-12 relative'>
-                <Avatar profileImage={memoizedUserData?.profileImage?.url} classname=' border-[3px] absolute  inset-x-6 border-black/80 h-15 sm:w-28 w-15 sm:h-28' />
+                <Avatar profileImage={memoizedUserData?.profileImage?.url} classname=' border-[3px] absolute  inset-x-6 border-black/80 h-15 sm:w-20 w-15 sm:h-20' />
             </div>
             <div className='  sm:ml-3.5 flex   flex-col gap-y-1 border-white/35  min-h-32 mt-10 px-2 py-1.5'>
                 <h1 className='font-semibold font-serif text-white text-2xl leading-tight truncate'>{memoizedUserData?.fullName || "Full Name"}</h1>

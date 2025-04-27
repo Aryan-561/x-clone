@@ -55,7 +55,7 @@ function Rightsidebar() {
             </form>
 
             {searchValue && success && (
-                <div className='bg-black rounded-2xl mx-0.5 top-14  absolute px-3 py-3.5'>
+                <div className='bg-black rounded-2xl mx-0.5 top-14  right-1 absolute px-3 py-3.5'>
                     <div className='rounded-3xl border border-gray-200/15 shadow-xs shadow-white/45 hide-scrollbar px-5 py-2 max-h-80 overflow-y-auto space-y-2'>
                         {searchResults?.data?.map(({ userName, profileImage, bio, fullName, _id }) => (
                             <Link to={`/${userName}`} key={_id}>
