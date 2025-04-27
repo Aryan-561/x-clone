@@ -30,7 +30,7 @@ function Rightsidebar() {
             >
                 <Input
                     placeholder="Search"
-                    className="w-full rounded-3xl relative px-4 py-2 border border-white/30 focus:bg-blue-500/10 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="w-full pl-10 rounded-3xl relative px-4 py-2 border border-white/30 focus:bg-blue-500/10 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                     {...register('name')}
                     onChange={(e) => {
                         const value = e.target.value;
