@@ -29,6 +29,11 @@ const createComment = asyncHandler(async (req, res) => {
 
     if (!comment) throw new ApiErrors(400, "Failed to create a new comment!");
 
+    await comment.populate({
+        path: "commentBy",
+        select: "-password -coverImage -refreshToken -isGoogleUser",
+      });
+
     res.status(201).json(new ApiResponse(201, "Comment created successfully.", comment));
 });
 
@@ -265,8 +270,8 @@ const getAllPostComments = asyncHandler(async (req, res) => {
         {
             $lookup: {
                 from: "likes",
-                localField: "likes",
-                foreignField: "_id",
+                localField: "_id",
+                foreignField: "comment",
                 as: "like"
             }
         },

@@ -39,7 +39,10 @@ const createPost = asyncHandler(async(req, res)=>{
             throw new ApiErrors(400, "Failed to create a new post!")
         }
 
-        await newPost.populate('createdBy')
+        await newPost.populate({
+            path: "createdBy",
+            select: "-password -coverImage -refreshToken -isGoogleUser",
+          });
         
         return res.status(200).json(new ApiResponse(200, "Post created successfully.",newPost))
 
@@ -54,7 +57,10 @@ const createPost = asyncHandler(async(req, res)=>{
         throw new ApiErrors(400, "Failed to create a new post!")
     }
 
-    await newPost.populate('createdBy')
+    await newPost.populate({
+        path: "createdBy",
+        select: "-password -coverImage -refreshToken -isGoogleUser",
+      });
 
     return res.status(200).json(new ApiResponse(200, "Post created successfully.", newPost))
 
