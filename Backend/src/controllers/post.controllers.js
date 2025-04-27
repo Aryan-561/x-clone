@@ -173,7 +173,7 @@ const getPostById =  asyncHandler(async(req, res)=>{
         
         {
             $lookup:{
-                from:"comment",
+                from:"comments",
                 localField:"_id",
                 foreignField:"post",
                 as:"commentDoc"
@@ -307,7 +307,7 @@ const getAllPost = asyncHandler(async(req, res)=>{
         
         {
             $lookup:{
-                from:"comment",
+                from:"comments",
                 localField:"_id",
                 foreignField:"post",
                 as:"commentDoc"
@@ -466,7 +466,7 @@ const getUserPost = asyncHandler(async(req, res)=>{
         
         {
             $lookup:{
-                from:"comment",
+                from:"comments",
                 localField:"_id",
                 foreignField:"post",
                 as:"commentDoc"
@@ -635,7 +635,7 @@ const getFollowingUserPost = asyncHandler(async(req, res)=>{
                     
                     {
                         $lookup:{
-                            from:"comment",
+                            from:"comments",
                             localField:"_id",
                             foreignField:"post",
                             as:"commentDoc"
