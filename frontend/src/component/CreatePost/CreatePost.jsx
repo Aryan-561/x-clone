@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { createPost } from "../../features/post/postSlice.js";
 import { MdClose } from 'react-icons/md';
 import { useNavigate, useLocation } from "react-router-dom";
-import { createComment } from "../../features/index.js";
+import { createComment, createReplyComment } from "../../features/index.js";
 
-function CreatePost({classname, isPost=true}) {
+function CreatePost({classname, isPost=true, forReply=false}) {
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -23,7 +23,7 @@ function CreatePost({classname, isPost=true}) {
   const user = useSelector(state=>state.user.currentUser)
   const dispatch = useDispatch();
   const {post} = useSelector(state=>state.post)
-
+  const {commentByid} = useSelector(state=>state.comment)
 
   const mediaPreview = {
     url: preview,
@@ -68,11 +68,17 @@ function CreatePost({classname, isPost=true}) {
       location.pathname=="/compose/post"?navigate('/home'):""
     }
     else{
+      if(forReply){
+        const commentId = commentByid._id
+        dispatch(createReplyComment({commentId, text}))
+      }
+      else{
       const postId = post?._id
       dispatch(createComment({postId, text}))
-      setText("")
     }
+    setText("")
   }
+}
 
   const handleOnRemoveMedia = ()=>{
     setPreview(null)
