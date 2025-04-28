@@ -130,7 +130,7 @@ const commentSlice = createSlice({
                 state.error = null;
             })
             .addCase(getCommentReplies.fulfilled, (state, action) => {
-                state.replies = action.payload;
+                state.replies = action.payload.data;
                 state.loading = false;
             })
             .addCase(getCommentReplies.rejected, (state, action) => {
@@ -144,7 +144,7 @@ const commentSlice = createSlice({
                 state.error = null;
             })
             .addCase(getComment.fulfilled, (state, action) => {
-                state.commentByid = action.payload;
+                state.commentByid = action.payload.data;
                 state.loading = false;
             })
             .addCase(getComment.rejected, (state, action) => {
@@ -159,14 +159,8 @@ const commentSlice = createSlice({
                 state.message = null;
             })
             .addCase(createReplyComment.fulfilled, (state, action) => {
-                const reply = action.payload;
-                const parentId = reply.parentId || reply.commentId;
-
-                if (state.replies[parentId]) {
-                    state.replies[parentId].push(reply);
-                } else {
-                    state.replies[parentId] = [reply];
-                }
+                
+                state.replies = [action.payload.data , ...state.replies]
 
                 state.loading = false;
                 state.message = "Reply created successfully";

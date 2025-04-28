@@ -213,7 +213,7 @@ const getComment = asyncHandler(async (req, res) => {
 
     if (!comment) throw new ApiErrors(404, "Comment not found");
 
-    res.status(200).json(new ApiResponse(200, "Comment fetched successfully.", comment));
+    res.status(200).json(new ApiResponse(200, "Comment fetched successfully.", comment[0]));
 });
 
 const getAllPostComments = asyncHandler(async (req, res) => {
@@ -534,7 +534,12 @@ const createReplyComment = asyncHandler(async (req, res) => {
         { new: true }
     ).populate("replies", "text commentBy ");
 
-    res.status(201).json(new ApiResponse(201, "Reply created successfully.", updatedParentComment));
+    await childComment.populate({
+        path: "commentBy",
+        select: "-password -coverImage -refreshToken -isGoogleUser",
+      });
+
+    res.status(201).json(new ApiResponse(201, "Reply created successfully.", childComment));
 });
 
 // incremnt of views count
