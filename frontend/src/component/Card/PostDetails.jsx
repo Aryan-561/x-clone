@@ -91,7 +91,7 @@ function PostDetails() {
                   isLiked={post?.isLiked}
                   isBookmarked={post?.isBookmarked}
                   views={post?.views}
-                  postId={post?._id}
+                  id={post?._id}
                   className={'border-y border-gray-600 py-2'}
                 />
 
@@ -100,7 +100,7 @@ function PostDetails() {
                 <CreatePost isPost={false} />
               </div>
               {comments.map((comment, index) => (
-                <Link to={`/${comment.userDetails.username}/post/${post._id}/comment/${comment._id}`} key={index}>
+                <Link to={`/${comment?.userDetails?.username}/comment/${comment?._id}`} key={index}>
                   <Card data={comment} forPost={false} />
                 </Link>
               ))}
