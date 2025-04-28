@@ -18,6 +18,8 @@ import EventLoading from "./Loading/EventLoading.jsx"
 import EditPage from "./Editcomp/EditPage.jsx";
 import FormattingTime from "./FormattingTime/FormatTime.jsx";
 import PostDetails from "./Card/PostDetails.jsx";
+import ActionBar from "./Card/ActionBar.jsx";
+import Avatar from "./Card/Avatar.jsx";
 export {
     Button,
     Card,
@@ -38,5 +40,7 @@ export {
     EventLoading,
     EditPage,
     FormattingTime, 
-    PostDetails
+    PostDetails,
+    ActionBar,
+    Avatar
 }
