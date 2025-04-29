@@ -5,8 +5,8 @@ import Explore from "./Explore/Explore.jsx"
 import Profile from './Profile/Profile.jsx';
 import Bookmark from "./Bookmark/Bookmark.jsx";
 import Post from "./Post/Post.jsx";
-import CommentReplies from "../component/Commnetreplies/CommentReplies.jsx";
 
+import Comment from "./Comment/Comment.jsx";
 export {
     Login,
     Signup,
@@ -15,5 +15,6 @@ export {
     Profile,
     Bookmark,
     Post,
-    CommentReplies
+    Comment,
+ 
 }
