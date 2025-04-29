@@ -30,9 +30,9 @@ export class PostService {
         }
     }
 
-    async getFollowingUserPost() {
+    async getFollowingUserPost(userId) {
         try {
-            const response = await axiosInstance.get(`/following`,{withCredentials: true,});
+            const response = await axiosInstance.get(`/following/${userId}`,{withCredentials: true,});
             console.log(response.data)
             return response.data;
         } catch (error) {

@@ -553,7 +553,7 @@ const getUserPost = asyncHandler(async(req, res)=>{
 // fn for get following user post
 const getFollowingUserPost = asyncHandler(async(req, res)=>{
 
-    const userId = req.user._id
+    const {userId} = req.params
     const {page=1, limit=20} = req.query
     
     if(!userId){
