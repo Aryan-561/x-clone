@@ -10,15 +10,17 @@ import {
 import { Container, Input, Button, X } from '../index';
 import { RxCross2 } from "react-icons/rx";
 import { FaSave } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Avatar from '../Card/Avatar';
 import { MdDriveFolderUpload } from "react-icons/md";
+import { resetUserState } from '../../features/user/userSlice';
 
 function EditPage() {
     const { currentUser } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    const location = useLocation();
+    
     const {
         register,
         handleSubmit,
@@ -32,7 +34,7 @@ function EditPage() {
 
     useEffect(() => {
         dispatch(getCurrentUser());
-    }, [dispatch]);
+    }, [dispatch, memoizedUserData?.userName]);
 
     useEffect(() => {
         if (memoizedUserData) {
@@ -63,17 +65,18 @@ function EditPage() {
             link: data.link
         }));
 
-        dispatch(getCurrentUser());
-        navigate("/profile");
+        ( function onDispatch() {
+            navigate(`/${currentUser?.data?.userName}`);
+        })()
     };
-
+    
     return (
 
         <Container className="border-x   sm:w-[85%] lg:w-full border-white/10 col-span-5 w-full min-h-full relative">
             <div className=" bg-black text-white  max-w-full p-4 rounded-xl  border-white/10 shadow-xl">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex items-center justify-between mb-4">
-                        <Button className="p-1 rounded-full hover:bg-red-500" onBtnClick={() => navigate("/profile")}>
+                        <Button className="p-1 rounded-full hover:bg-red-500" onBtnClick={() => navigate(-1)}>
                             <RxCross2 />
                         </Button>
                         <h2 className="text-lg font-semibold">Edit Profile</h2>

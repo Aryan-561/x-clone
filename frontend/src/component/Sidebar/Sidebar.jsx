@@ -6,8 +6,24 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getCurrentUser } from '../../features/index.js'
 import X from '../Icon-component/X.jsx'
 import SmallLogoutCard from '../Dropdown/SmallLogoutCard.jsx'
+import { useLocation } from 'react-router-dom'
 
 function Sidebar() {
+
+
+    const { error, message, loading, currentUser } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+    const location = useLocation()
+    useEffect(() => {
+        dispatch(getCurrentUser());
+    }, [dispatch]);
+
+    const [showComponent, setshowComponent] = useState(false)
+    const handleComponent = () => {
+        setshowComponent(prev => !prev)
+    }
+
+    const memoizedUserData = useMemo(() => currentUser?.data, [currentUser]);
 
     const SidebarData = [
         {
@@ -55,7 +71,7 @@ function Sidebar() {
         {
             icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M5.651 19h12.698c-.337-1.8-1.023-3.21-1.945-4.19C15.318 13.65 13.838 13 12 13s-3.317.65-4.404 1.81c-.922.98-1.608 2.39-1.945 4.19zm.486-5.56C7.627 11.85 9.648 11 12 11s4.373.85 5.863 2.44c1.477 1.58 2.366 3.8 2.632 6.46l.11 1.1H3.395l.11-1.1c.266-2.66 1.155-4.88 2.632-6.46zM12 4c-1.105 0-2 .9-2 2s.895 2 2 2 2-.9 2-2-.895-2-2-2zM8 6c0-2.21 1.791-4 4-4s4 1.79 4 4-1.791 4-4 4-4-1.79-4-4z"></path></g></svg>
             , title: "Profile"
-            , path: "profile"
+            , path: memoizedUserData?.userName ? `/${memoizedUserData?.userName}` : "/login"
         },
         // {
         //     icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M3.75 12c0-4.56 3.69-8.25 8.25-8.25s8.25 3.69 8.25 8.25-3.69 8.25-8.25 8.25S3.75 16.56 3.75 12zM12 1.75C6.34 1.75 1.75 6.34 1.75 12S6.34 22.25 12 22.25 22.25 17.66 22.25 12 17.66 1.75 12 1.75zm-4.75 11.5c.69 0 1.25-.56 1.25-1.25s-.56-1.25-1.25-1.25S6 11.31 6 12s.56 1.25 1.25 1.25zm9.5 0c.69 0 1.25-.56 1.25-1.25s-.56-1.25-1.25-1.25-1.25.56-1.25 1.25.56 1.25 1.25 1.25zM13.25 12c0 .69-.56 1.25-1.25 1.25s-1.25-.56-1.25-1.25.56-1.25 1.25-1.25 1.25.56 1.25 1.25z"></path></g></svg>
@@ -63,19 +79,7 @@ function Sidebar() {
         //     , path: "/more"
         // },
     ]
-    const { error, message, loading, currentUser } = useSelector((state) => state.user);
-    const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(getCurrentUser());
-    }, [dispatch]);
-
-    const [showComponent, setshowComponent] = useState(false)
-    const handleComponent = () => {
-        setshowComponent(prev => !prev)
-    }
-
-    const memoizedUserData = useMemo(() => currentUser?.data, [currentUser]);
     return (
         // for test purpose
 
@@ -88,12 +92,22 @@ function Sidebar() {
                     </Link>
                 </div>
                 <ul className="flex flex-col gap-3 items-start ">
-                    {SidebarData.map((item, index) => (
-                        <Link to={item.path} key={index} className="flex items-center w-fit sm:gap-4 py-2 sm:px-4  px-2 rounded hover:bg-white/10 hover:rounded-full cursor-pointer ">
-                            <span className="w-6 h-6 sm:w-7 sm:h-7">{item.icon}</span>
-                            <span className=" hidden xl:block text-xl font-medium first-letter:uppercase lowercase ">{item.title}</span>
-                        </Link>
-                    ))}
+                    {SidebarData.map((item, index) => {
+                        const isActive = location.pathname === item.path;
+
+                        return (
+                            <Link
+                                to={item.path}
+                                key={item.title}
+                                className={`flex items-center w-fit sm:gap-4 py-2 sm:px-4 px-2 rounded hover:bg-white/10 hover:rounded-full cursor-pointer 
+                ${isActive ? 'bg-white/5 rounded-full' : ''}`}
+                            >
+                                <span className="w-6 h-6 sm:w-7 sm:h-7">{item.icon}</span>
+                                <span className="hidden xl:block text-xl font-medium first-letter:uppercase lowercase">{item.title}</span>
+                            </Link>
+                        );
+                    })}
+
                 </ul>
                 <Link
                     to={'/compose/post'}
@@ -119,7 +133,7 @@ function Sidebar() {
 
 
 
-                <div onClick={handleComponent} className="flex items-center  relative justify-between gap-12 my-1 p-2 sm:px-3 sm:py-2 w-fit hover:bg-white/15 hover:rounded-full ">
+                <div onClick={handleComponent} className="flex items-center  relative justify-between gap-12 my-1 p-2 sm:px-3 sm:py-2 w-fit hover:bg-white/15 hover:rounded-full   sm:min-w-[15rem]">
                     <div className="flex items-center gap-2 ">
                         <Avatar profileImage={memoizedUserData?.profileImage?.url} classname=" border-2  border-gray-900 w-12 h-12 object-cover" />
 
