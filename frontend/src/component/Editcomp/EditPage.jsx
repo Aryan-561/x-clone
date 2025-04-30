@@ -47,26 +47,26 @@ function EditPage() {
         }
     }, [memoizedUserData]);
 
-    const onSubmit = (data) => {
+    const onSubmit = async(data) => {
         const profileImage = inputRefProfile.current?.files[0];
         const coverImage = inputRefCover.current?.files[0];
 
         if (profileImage) {
-            dispatch(updateUserProfileImage(profileImage));
+            await Promise.resolve(dispatch(updateUserProfileImage(profileImage)))
         }
         if (coverImage) {
-            dispatch(updateUserCoverImage(coverImage));
+            await Promise.resolve(dispatch(updateUserCoverImage(coverImage)));
         }
 
-        dispatch(updateUserAccountDetails({
+        await Promise.resolve(dispatch(updateUserAccountDetails({
             username: data.userName,
             fullname: data.fullName,
             bio: data.bio,
             link: data.link
-        }));
+        })));
 
         ( function onDispatch() {
-            navigate(`/${currentUser?.data?.userName}`);
+            navigate(`/${data?.userName}`);
         })()
     };
     
