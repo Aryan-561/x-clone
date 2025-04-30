@@ -80,7 +80,8 @@ function CreatePost({classname, isPost=true, forReply=false}) {
   }
 }
 
-  const handleOnRemoveMedia = ()=>{
+  const handleOnRemoveMedia = (e)=>{
+    e.preventDefault()
     setPreview(null)
     setMedia(null)
     setType(null)
@@ -129,7 +130,7 @@ function CreatePost({classname, isPost=true, forReply=false}) {
                 {preview && 
                 (<div className="relative">
                   <div className="absolute top-2 right-2">
-                    <Button classname={'text-xl bg-white/20 px-3 py-1 rounded-full cursor-pointer hover:scale-105'} onBtnClick={handleOnRemoveMedia}><MdClose/></Button>
+                    <Button onBtnClick={handleOnRemoveMedia}><MdClose className="bg-white/20  cursor-pointer p-1 rounded-full z-1 hover:scale-105 w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8" size={24} /></Button>
                   </div>
                   <Media media={mediaPreview} />
                 </div>)}
