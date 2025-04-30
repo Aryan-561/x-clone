@@ -10,12 +10,14 @@ const updateUserAccountDetails = createAsyncThunk("updateUserAccountDetails", us
 const updateUserCoverImage = createAsyncThunk("updateUserCoverImage", userServices.updateUserCoverImage)
 const updateUserProfileImage = createAsyncThunk("updateUserProfileImage", userServices.updateUserProfileImage)
 const getUserPost = createAsyncThunk("getUserPost", userServices.getUserPost)
-const getUserDetails = createAsyncThunk("getUserDetails",userServices.getUserDetails)
+const getUserDetails = createAsyncThunk("getUserDetails", userServices.getUserDetails)
+const getRandomUser = createAsyncThunk("getRandomUser", userServices.getRandomUser)
 
 const initialState = {
     searchResults: [],
     userPost: [],
-    getUser:null,
+    randomUser: [],
+    getUser: null,
     currentUser: null,
     error: null,
     loading: false,
@@ -32,6 +34,7 @@ const userSlice = createSlice({
             state.success = false;
             state.error = null;
             state.message = '';
+
         },
         resetUserState: () => initialState
     },
@@ -99,6 +102,27 @@ const userSlice = createSlice({
                 state.loading = false;
                 state.success = true;
                 state.message = "Current user fetched successfully";
+            })
+
+            .addCase(getRandomUser.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+                state.success = false;
+                state.message = null;
+            })
+            .addCase(getRandomUser.rejected, (state, action) => {
+                state.currentUser = null;
+                state.error = action.error.message;
+                state.loading = false;
+                state.success = false;
+                state.message = "Failed to fetch RandomUser user";
+            })
+            .addCase(getRandomUser.fulfilled, (state, action) => {
+                state.randomUser = action.payload;
+                state.error = null;
+                state.loading = false;
+                state.success = true;
+                state.message = "random user fetched successfully";
             })
 
             // get user
@@ -250,7 +274,8 @@ export {
     updateUserCoverImage,
     updateUserProfileImage,
     getUserPost,
-    getUserDetails
+    getUserDetails,
+    getRandomUser
 
 }
 export const { resetSearchState, resetUserState } = userSlice.actions;

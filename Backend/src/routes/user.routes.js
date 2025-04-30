@@ -13,7 +13,8 @@ import {
     verifyMail,
     resendVerificationEmail,
     Googleauthentication,
-    getUserDetails
+    getUserDetails,
+    getRandomUsers
 
 } from '../controllers/user.controller.js';
 import multer from "multer";
@@ -45,10 +46,11 @@ router.route("/re-refreshtoken").post(verifyJwt, jwtRefreshToken)
 //  for updating user details
 router.route("/update-account-details").post(parseFormData, verifyJwt, updateUserAccountDetails)
 router.route("/update-coverimage").patch(verifyJwt, upload.single('coverImage'), updateUserCoverImage)
-router.route("/update-profileimage").patch(verifyJwt,upload.single('profileImage'), updateUserProfileImage)
+router.route("/update-profileimage").patch(verifyJwt, upload.single('profileImage'), updateUserProfileImage)
 router.route("/deleteuser").delete(verifyJwt, deleteUser)
-router.route("/search/:queries").get( search)
-router.route("/username/:queries").get( getUserDetails)
+router.route("/search/:queries").get(search)
+router.route("/username/:queries").get(getUserDetails)
+router.route("/randomuser").get(getRandomUsers)
 
 // routes/auth.js or controllers/auth.js
 router.get('/verify-email', verifyMail);
