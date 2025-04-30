@@ -4,6 +4,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { Post } from "../models/post.model.js";
 import mongoose from "mongoose";
+import User from "../models/user.model.js";
 
 // Validate ID format
 const validateId = (id) => {
@@ -32,7 +33,7 @@ const createComment = asyncHandler(async (req, res) => {
     await comment.populate({
         path: "commentBy",
         select: "-password -coverImage -refreshToken -isGoogleUser",
-      });
+    });
 
     res.status(201).json(new ApiResponse(201, "Comment created successfully.", comment));
 });
@@ -215,6 +216,136 @@ const getComment = asyncHandler(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, "Comment fetched successfully.", comment[0]));
 });
+
+const getAllUserComment = asyncHandler(async (req, res) => {
+    const { username } = req.params
+    const { page = 1, limit = 10 } = req.query;
+    console.log(username)
+    const user = await User.findOne({ userName: username })
+    if (!user) throw new ApiErrors(404, "no user exist with this details")
+    const userId = user?._id;
+
+    const find = await Comment.aggregate([
+        {
+            $match: {
+                commentBy: new mongoose.Types.ObjectId(userId)
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "commentBy",
+                foreignField: "_id",
+                as: "user",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "subscriptions",
+                            localField: "_id",
+                            foreignField: "follower",
+                            as: "followingDoc"
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "subscriptions",
+                            localField: "_id",
+                            foreignField: "following",
+                            as: "followerDoc"
+                        },
+                    }
+                ]
+            }
+        },
+        {
+            $unwind: "$user"
+        },
+        {
+            $addFields: {
+
+                userDetails: {
+                    userId: "$user._id",
+                    username: "$user.userName",
+                    fullName: "$user.fullName",
+                    profileImage: "$user.profileImage",
+                    bio: "$user.bio",
+                    follower: { $size: "$user.followerDoc" },
+                    following: { $size: "$user.followingDoc" },
+                    isFollowed: {
+                        $cond: {
+                            if: { $in: [req.user._id, "$user.followerDoc.follower"] },
+                            then: true,
+                            else: false
+                        }
+                    }
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: "likes",
+                localField: "_id",
+                foreignField: "comment",
+                as: "likedDoc"
+            }
+        },
+        {
+            $lookup: {
+                from: "comments",
+                localField: "_id",
+                foreignField: "parentComment",
+                as: "replyDoc"
+            }
+        },
+        {
+            $lookup: {
+                from: "bookmarks",
+                localField: "_id",
+                foreignField: "comment",
+                as: "bookmarkedDoc"
+            }
+        },
+        {
+            $addFields: {
+                likeCount: { $size: "$likedDoc" },
+                replyCount: { $size: "$replyDoc" },
+                isBookmarked: {
+                    $cond: {
+                        if: { $in: [req.user._id, "$bookmarkedDoc.bookmarkedBy"] },
+                        then: true,
+                        else: false
+                    }
+                },
+                isLiked: {
+                    $cond: {
+                        if: { $in: [req.user._id, "$likedDoc.likedBy"] },
+                        then: true,
+                        else: false
+                    }
+                },
+
+            }
+        },
+        {
+            $project: {
+                text: 1,
+                post: 1,
+                parentComment: 1,
+                likeCount: 1,
+                replyCount: 1,
+                isLiked: 1,
+                isBookmarked: 1,
+                userDetails: 1,
+                createdAt: 1,
+                updatedAt: 1
+            }
+        },
+
+    ])
+
+    res.status(200).json(new ApiResponse(200, "user all comments", find))
+
+})
 
 const getAllPostComments = asyncHandler(async (req, res) => {
     const { postId } = req.params;
@@ -537,7 +668,7 @@ const createReplyComment = asyncHandler(async (req, res) => {
     await childComment.populate({
         path: "commentBy",
         select: "-password -coverImage -refreshToken -isGoogleUser",
-      });
+    });
 
     res.status(201).json(new ApiResponse(201, "Reply created successfully.", childComment));
 });
@@ -551,5 +682,6 @@ export {
     getAllPostComments,
     getComment,
     createReplyComment,
-    getCommentReplies
+    getCommentReplies,
+    getAllUserComment
 }

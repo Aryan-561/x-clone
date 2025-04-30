@@ -278,7 +278,7 @@ const getAllLikeComment = asyncHandler(async (req, res) => {
         },
         {
             $project: {
-                userId: "$commentDetails._id",
+                _id: "$commentDetails._id",
                 text: "$commentDetails.text",
                 views: "$commentDetails.views",
                 likeCount: "$commentDetails.likeCount",
