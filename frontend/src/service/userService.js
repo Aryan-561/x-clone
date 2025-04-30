@@ -205,7 +205,7 @@ class Userservice {
 
     async getUserPost( username) {
         try {
-            const response = await axios.get(`${postBaseUrl}/${username}`, {
+            const response = await axios.get(`${postBaseUrl}/user/${username}`, {
                 withCredentials: true
             });
             console.log("response", response.data);
