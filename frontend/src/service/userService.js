@@ -230,6 +230,18 @@ class Userservice {
             throw new Error(`Userservice :: Googleauthentication :: Errors ${error.response?.data?.message || "something went wrong while Googleauthentication"}`);
         }
     }
+    async getRandomUser() {
+        try {
+            const response = await axios.get(`${userBaseUrl}/randomuser`, {
+                withCredentials: true
+            });
+            console.log("response", response.data);
+            return response.data;
+        } catch (error) {
+            console.log("Userservice :: getRandomUser :: Errors", error.response?.data?.message);
+            throw new Error(`Userservice :: getRandomUser :: Errors ${error.response?.data?.message || "something went wrong while getRandomUser"}`);
+        }
+    }
 
 
 

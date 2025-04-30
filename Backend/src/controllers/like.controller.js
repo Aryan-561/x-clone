@@ -277,12 +277,25 @@ const getAllLikeComment = asyncHandler(async (req, res) => {
             }
         },
         {
+            $lookup: {
+                from: "comments",
+                localField: "commentDetails._id",
+                foreignField: "parentComment",
+                as: "replyDoc"
+            }
+        },
+        {
+            $addFields: {
+                "commentDetails.commentCount": { $size: "$replyDoc" }
+            }
+        },
+        {
             $project: {
                 _id: "$commentDetails._id",
                 text: "$commentDetails.text",
                 views: "$commentDetails.views",
                 likeCount: "$commentDetails.likeCount",
-                commentCount: { $literal: 0 },
+                commentCount: "$commentDetails.commentCount", // reply count
                 isLiked: "$commentDetails.isLiked",
                 isBookmarked: "$commentDetails.isBookmarked",
                 createdAt: "$commentDetails.createdAt",
@@ -298,10 +311,16 @@ const getAllLikeComment = asyncHandler(async (req, res) => {
                 }
             }
         },
+        {
+            $sort: {
+                createdAt: -1
+            }
+        }
     ]);
 
     return res.status(200).json(new ApiResponse(200, "All Liked Comments", likeComment));
 });
+
 
 
 export {

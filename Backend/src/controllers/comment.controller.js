@@ -220,7 +220,7 @@ const getComment = asyncHandler(async (req, res) => {
 const getAllUserComment = asyncHandler(async (req, res) => {
     const { username } = req.params
     const { page = 1, limit = 10 } = req.query;
-    console.log(username)
+
     const user = await User.findOne({ userName: username })
     if (!user) throw new ApiErrors(404, "no user exist with this details")
     const userId = user?._id;
@@ -307,8 +307,9 @@ const getAllUserComment = asyncHandler(async (req, res) => {
         },
         {
             $addFields: {
+                parentComment: { $size: "$likedDoc" },
                 likeCount: { $size: "$likedDoc" },
-                replyCount: { $size: "$replyDoc" },
+                commentCount: { $size: "$replyDoc" },
                 isBookmarked: {
                     $cond: {
                         if: { $in: [req.user._id, "$bookmarkedDoc.bookmarkedBy"] },
@@ -330,9 +331,8 @@ const getAllUserComment = asyncHandler(async (req, res) => {
             $project: {
                 text: 1,
                 post: 1,
-                parentComment: 1,
+                commentCount: 1,
                 likeCount: 1,
-                replyCount: 1,
                 isLiked: 1,
                 isBookmarked: 1,
                 userDetails: 1,
@@ -340,7 +340,11 @@ const getAllUserComment = asyncHandler(async (req, res) => {
                 updatedAt: 1
             }
         },
-
+        {
+            $sort: {
+                createdAt: -1
+            }
+        }
     ])
 
     res.status(200).json(new ApiResponse(200, "user all comments", find))

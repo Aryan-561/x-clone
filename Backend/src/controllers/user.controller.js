@@ -602,11 +602,11 @@ const search = asyncHandler(async (req, res) => {
                 as: "followerDoc"
             }
         },
-        
+
         {
             $addFields: {
-                follower:{ $size:"$followerDoc"},
-                following:{ $size:"$followingDoc"}
+                follower: { $size: "$followerDoc" },
+                following: { $size: "$followingDoc" }
             }
         },
         {
@@ -634,105 +634,30 @@ const search = asyncHandler(async (req, res) => {
 // make api endpoint for user profile followr, following etc...
 const getUserDetails = asyncHandler(async (req, res) => {
     const { queries } = req.params
-    // const find = await User.aggregate([
-    //     {
-    //         $match: {
-    //             $or: [
-    //                 { username: queries },
-    //                 { userName: queries }
-    //             ]
-    //         }
-    //     },
-    //     {
-    //         $lookup: {
-    //             from: "subscriptions",
-    //             localField: "_id",
-    //             foreignField: "follower",
-    //             as: "followingDoc"
-    //         }
-    //     },
-    //     {
-    //         $lookup: {
-    //             from: "users",
-    //             localField: "followingDoc.following",
-    //             foreignField: "_id",
-    //             as: "followingUsers"
-    //         }
-    //     },
-
-    //     {
-    //         $lookup: {
-    //             from: "subscriptions",
-    //             localField: "_id",
-    //             foreignField: "following",
-    //             as: "followerDoc"
-    //         }
-    //     },
-    //     {
-    //         $lookup: {
-    //             from: "users",
-    //             localField: "followerDoc.follower",
-    //             foreignField: "_id",
-    //             as: "followerUsers"
-    //         }
-    //     },
-
-    //     {
-    //         $addFields: {
-    //             follower: { $size: "$followerDoc" },
-    //             following: { $size: "$followingDoc" },
-    //         }
-    //     },
-
-    //     {
-    //         $project: {
-    //             userDetails: {
-    //                 _id: "$_id",
-    //                 userName: "$userName",
-    //                 fullName: "$fullName",
-    //                 follower: { $size: "$followerUsers" },
-    //                 following: { $size: "$followingUsers" },
-    //                 bio: "$bio",
-    //                 profileImage: "$profileImage",
-    //                 coverImage: "$coverImage",
-    //                 link: "$link"
-    //             },
-    //             // followerUsers: {
-    //             //     $map: {
-    //             //         input: "$followerUsers",
-    //             //         as: "f",
-    //             //         in: {
-    //             //             _id: "$$f._id",
-    //             //             userName: "$$f.userName",
-    //             //             profileImage: "$$f.profileImage"
-    //             //         }
-    //             //     }
-    //             // },
-    //             // followingUsers: {
-    //             //     $map: {
-    //             //         input: "$followingUsers",
-    //             //         as: "f",
-    //             //         in: {
-    //             //             _id: "$$f._id",
-    //             //             userName: "$$f.userName",
-    //             //             profileImage: "$$f.profileImage"
-    //             //         }
-    //             //     }
-    //             // }
-    //         }
-    //     }
-
-
-    // ])
 
     const find = await User.findOne({
         $or: [{ username: queries }, { userName: queries }]
-    });   
+    });
     if (!find) throw new ApiErrors(404, "User not found");
 
-    res.status(200).json(new ApiResponse("200", "user successfully fetch",find))
+    res.status(200).json(new ApiResponse("200", "user successfully fetch", find))
 
 })
+
+// for random user sugestion
+const getRandomUsers = asyncHandler(async (req, res) => {
+    const users = await User.aggregate([
+        { $sample: { size: 2 } }
+    ]);
+
+    if (!users || users.length === 0) {
+        throw new ApiErrors(200, "No users found");
+    }
+
+    res.status(200).json(new ApiResponse(200, "Random users fetched", users));
+});
+
+
 export {
     createUser,
     loginuser,
@@ -747,5 +672,6 @@ export {
     updateUserAccountDetails,
     deleteUser,
     search,
-    getUserDetails
+    getUserDetails,
+    getRandomUsers
 };
