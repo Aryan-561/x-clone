@@ -32,10 +32,12 @@ const createReplyComment = createAsyncThunk(
 );
 
 const getComment = createAsyncThunk("comment/getComment", commentServices.getComment);
+const getAllUserComment = createAsyncThunk("comment/getAllUserComment", commentServices.getAllUserComment);
 
 const initialState = {
     comments: [],
     replies: [],
+    userComment: [],
     commentByid: null,
     loading: false,
     error: null,
@@ -79,6 +81,7 @@ const commentSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
+
             .addCase(updateComment.fulfilled, (state, action) => {
                 const updated = action.payload;
                 state.comments = state.comments.map((c) =>
@@ -124,6 +127,20 @@ const commentSlice = createSlice({
                 state.error = action.error.message;
             })
 
+            // get all user commnents
+            .addCase(getAllUserComment.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getAllUserComment.fulfilled, (state, action) => {
+                state.userComment = action.payload;
+                state.loading = false;
+            })
+            .addCase(getAllUserComment.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+
             // Get Replies
             .addCase(getCommentReplies.pending, (state) => {
                 state.loading = true;
@@ -159,8 +176,8 @@ const commentSlice = createSlice({
                 state.message = null;
             })
             .addCase(createReplyComment.fulfilled, (state, action) => {
-                
-                state.replies = [action.payload.data , ...state.replies]
+
+                state.replies = [action.payload.data, ...state.replies]
 
                 state.loading = false;
                 state.message = "Reply created successfully";
@@ -182,7 +199,8 @@ export {
     getAllPostComments,
     getCommentReplies,
     createReplyComment,
-    getComment
+    getComment,
+    getAllUserComment
 };
 
 export default commentSlice.reducer;

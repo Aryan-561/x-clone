@@ -3,7 +3,7 @@
 import authReducer, { loginUser, jwtRefreshToken, logoutUser, resendEmailVerification, Googleauthentication, } from "./auth/authSlice"
 
 // userslice
-import userReducer, { createUser, deleteUser, getCurrentUser, search, updateUserAccountDetails, updateUserProfileImage, updateUserCoverImage ,getUserPost} from "./user/userSlice"
+import userReducer, { createUser, deleteUser, getCurrentUser, search, updateUserAccountDetails, updateUserProfileImage, updateUserCoverImage ,getUserPost,getUserDetails} from "./user/userSlice"
 
 // postSlice
 import postReducer from "./post/postSlice"
@@ -18,7 +18,7 @@ import subscriptionReducer from "./subscription/subscriptionSlice"
 import bookmarkReducer from "./bookmark/bookmarkSlice"
 
 // comment
-import commentReducer, { createComment, updateComment, deleteComment, getAllPostComments, getCommentReplies, createReplyComment,getComment } from "./comment/commentSlice"
+import commentReducer, { createComment, updateComment, deleteComment, getAllPostComments, getCommentReplies, createReplyComment,getComment,getAllUserComment } from "./comment/commentSlice"
 
 export {
     authReducer,
@@ -37,6 +37,7 @@ export {
     updateUserCoverImage,
     updateUserProfileImage,
     getUserPost,
+    getUserDetails,
 
     likeReducer,
     toggleCommentLike,
@@ -52,6 +53,7 @@ export {
     getCommentReplies,
     createReplyComment,
     getComment,
+    getAllUserComment,
 
 
     bookmarkReducer,

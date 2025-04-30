@@ -10,11 +10,12 @@ const updateUserAccountDetails = createAsyncThunk("updateUserAccountDetails", us
 const updateUserCoverImage = createAsyncThunk("updateUserCoverImage", userServices.updateUserCoverImage)
 const updateUserProfileImage = createAsyncThunk("updateUserProfileImage", userServices.updateUserProfileImage)
 const getUserPost = createAsyncThunk("getUserPost", userServices.getUserPost)
-
+const getUserDetails = createAsyncThunk("getUserDetails",userServices.getUserDetails)
 
 const initialState = {
     searchResults: [],
     userPost: [],
+    getUser:null,
     currentUser: null,
     error: null,
     loading: false,
@@ -94,6 +95,28 @@ const userSlice = createSlice({
             })
             .addCase(getCurrentUser.fulfilled, (state, action) => {
                 state.currentUser = action.payload;
+                state.error = null;
+                state.loading = false;
+                state.success = true;
+                state.message = "Current user fetched successfully";
+            })
+
+            // get user
+            .addCase(getUserDetails.pending, (state) => {
+                state.error = null;
+                state.loading = true;
+                state.success = false;
+                state.message = null;
+            })
+            .addCase(getUserDetails.rejected, (state, action) => {
+                state.currentUser = null;
+                state.error = action.error.message;
+                state.loading = false;
+                state.success = false;
+                state.message = "Failed to fetch current user";
+            })
+            .addCase(getUserDetails.fulfilled, (state, action) => {
+                state.getUser = action.payload;
                 state.error = null;
                 state.loading = false;
                 state.success = true;
@@ -226,7 +249,8 @@ export {
     updateUserAccountDetails,
     updateUserCoverImage,
     updateUserProfileImage,
-    getUserPost
+    getUserPost,
+    getUserDetails
 
 }
 export const { resetSearchState, resetUserState } = userSlice.actions;
