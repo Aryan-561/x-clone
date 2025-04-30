@@ -9,7 +9,7 @@ const router =  Router()
 router.route("/").get(verifyJwt, getAllPost)
 
 //route for get all user's post
-router.route("/user").get(verifyJwt, getUserPost)
+router.route("/:username").get(verifyJwt, getUserPost)
 
 //route for get all following user's post
 router.route("/following").get(verifyJwt, getFollowingUserPost)

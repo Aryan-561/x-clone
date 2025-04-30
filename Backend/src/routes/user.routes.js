@@ -12,7 +12,8 @@ import {
     search,
     verifyMail,
     resendVerificationEmail,
-    Googleauthentication
+    Googleauthentication,
+    getUserDetails
 
 } from '../controllers/user.controller.js';
 import multer from "multer";
@@ -47,6 +48,7 @@ router.route("/update-coverimage").patch(verifyJwt, upload.single('coverImage'),
 router.route("/update-profileimage").patch(verifyJwt,upload.single('profileImage'), updateUserProfileImage)
 router.route("/deleteuser").delete(verifyJwt, deleteUser)
 router.route("/search/:queries").get( search)
+router.route("/username/:queries").get( getUserDetails)
 
 // routes/auth.js or controllers/auth.js
 router.get('/verify-email', verifyMail);
