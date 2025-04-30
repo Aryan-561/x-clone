@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -7,7 +7,7 @@ import {
     updateUserCoverImage,
     updateUserProfileImage
 } from '../../features';
-import { Container, Input, Button, X } from '../index';
+import { Container, Input, Button, X, EventLoading } from '../index';
 import { RxCross2 } from "react-icons/rx";
 import { FaSave } from "react-icons/fa";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -15,12 +15,15 @@ import Avatar from '../Card/Avatar';
 import { MdDriveFolderUpload } from "react-icons/md";
 import { resetUserState } from '../../features/user/userSlice';
 
+// ...rest imports
+
 function EditPage() {
     const { currentUser } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const location = useLocation();
-    
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const {
         register,
         handleSubmit,
@@ -47,31 +50,41 @@ function EditPage() {
         }
     }, [memoizedUserData]);
 
-    const onSubmit = async(data) => {
-        const profileImage = inputRefProfile.current?.files[0];
-        const coverImage = inputRefCover.current?.files[0];
+    const onSubmit = async (data) => {
+        setIsSubmitting(true);
 
-        if (profileImage) {
-            await Promise.resolve(dispatch(updateUserProfileImage(profileImage)))
-        }
-        if (coverImage) {
-            await Promise.resolve(dispatch(updateUserCoverImage(coverImage)));
-        }
+        try {
+            const profileImage = inputRefProfile.current?.files[0];
+            const coverImage = inputRefCover.current?.files[0];
 
-        await Promise.resolve(dispatch(updateUserAccountDetails({
-            username: data.userName,
-            fullname: data.fullName,
-            bio: data.bio,
-            link: data.link
-        })));
+            if (profileImage) {
+                await Promise.resolve(dispatch(updateUserProfileImage(profileImage)));
+            }
 
-        ( function onDispatch() {
+            if (coverImage) {
+                await Promise.resolve(dispatch(updateUserCoverImage(coverImage)));
+            }
+
+            await Promise.resolve(dispatch(updateUserAccountDetails({
+                username: data.userName,
+                fullname: data.fullName,
+                bio: data.bio,
+                link: data.link
+            })));
+
             navigate(`/${data?.userName}`);
-        })()
+        } catch (err) {
+            console.error("Update error:", err);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
-    
-    return (
 
+    if (isSubmitting) return <div className=' border-x   sm:w-[85%] lg:w-full border-white/10 col-span-5 w-full min-h-full relative bg-transparent text-7xl flex justify-center items-center h-full'>
+        <EventLoading />
+    </div>
+
+    return (
         <Container className="border-x   sm:w-[85%] lg:w-full border-white/10 col-span-5 w-full min-h-full relative">
             <div className=" bg-black text-white  max-w-full p-4 rounded-xl  border-white/10 shadow-xl">
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -182,9 +195,7 @@ function EditPage() {
                     </div>
                 </form>
             </div>
-        </Container>
-
-    );
+        </Container>);
 }
 
 export default EditPage;

@@ -1,14 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Button, Container, Input, ProfileSearch, Sidebarfooter } from '../index';
 import { HiDotsHorizontal } from "react-icons/hi";
-import { search } from '../../features';
+import { getRandomUser, search } from '../../features';
 import { useSelector, useDispatch } from 'react-redux';
 
 function Rightsidebar() {
     const dispatch = useDispatch();
-    const { searchResults, success } = useSelector((state) => state.user);
+    const { searchResults, success, randomUser } = useSelector((state) => state.user);
     const inputRef = useRef();
     const { register, handleSubmit } = useForm();
     const [searchValue, setSearchValue] = useState('');
@@ -20,12 +20,14 @@ function Rightsidebar() {
             dispatch(search(trimmed));
         }
     };
-
+    useEffect(() => {
+        dispatch(getRandomUser())
+    }, [dispatch])
     return (
         <Container className='hidden col-span-2 xl:col-span-3 h-screen px-4 py-1.5 lg:flex sticky top-0 flex-col border-l border-l-white/20 mr-4 items-center'>
             <form
                 onSubmit={handleSubmit(handleSearch)}
-                onBlur={() => setTimeout(() => setSearchValue(''), 200)}
+                onBlur={()=>{}}
                 className="w-full"
             >
                 <Input
@@ -58,7 +60,8 @@ function Rightsidebar() {
                 <div className='bg-black rounded-2xl mx-0.5 top-14  right-1 absolute px-3 py-3.5'>
                     <div className='rounded-3xl border border-gray-200/15 shadow-xs shadow-white/45 hide-scrollbar px-5 py-2 max-h-80 overflow-y-auto space-y-2'>
                         {searchResults?.data?.map(({ userName, profileImage, bio, fullName, _id }) => (
-                            <Link to={`/${userName}`} key={_id}>
+                            <Link onClick={() => setTimeout(() => setSearchValue(''), 200)}
+                                to={`/${userName}`} key={_id}>
                                 <ProfileSearch
                                     userName={userName}
                                     profileImage={profileImage.url}
@@ -86,8 +89,16 @@ function Rightsidebar() {
 
             <div className='w-full border-white/15 border min-h-fit p-2.5 rounded-xl my-2.5 flex flex-col gap-3'>
                 <h1 className='font-bold text-xl'>Who to follow</h1>
-                <ProfileSearch />
-                <ProfileSearch />
+                {
+                    randomUser?.data?.map(({ userName, profileImage, bio, fullName, _id }) =>
+                        <Link to={`/${userName}`} key={_id}>
+                            <ProfileSearch
+                                userName={userName}
+                                profileImage={profileImage.url}
+                                bio={bio}
+                                fullName={fullName} />
+                        </Link>)
+                }
             </div>
 
             <Sidebarfooter />

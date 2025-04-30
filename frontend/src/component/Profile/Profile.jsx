@@ -22,15 +22,15 @@ function Profile() {
 
     const memoizedUserDetails = useMemo(() => getUser?.data, [getUser]);
     const isViewingOwnProfile = username === memoizedUserData?.userName;
-    useEffect(() => {
-        dispatch(getCurrentUser());
-    }, [dispatch, isViewingOwnProfile]);
-
 
     useEffect(() => {
-        dispatch(getCurrentUser());
+    dispatch(getCurrentUser());
+
+    if (username) {
         dispatch(getUserDetails(username));
-    }, [dispatch, username]);
+    }
+}, [dispatch, username, isViewingOwnProfile]);
+
 
     useEffect(() => {
         if (!username) return;
@@ -55,23 +55,34 @@ function Profile() {
 
     const userAllPost = useMemo(() => {
         if (activityType !== "post" || loading) return null;
-        return userPost?.data?.length === 0 ? <div className="w-full h-[40vh] flex justify-center items-center text-lg sm:text-xl lg:text-2xl font-semibold"><div>Posts not Found!</div></div> : userPost?.data?.map((post) => <Card key={post._id} data={post} />);
+        return userPost?.data?.length === 0 ? <div className="w-full h-[40vh] flex justify-center items-center text-lg sm:text-xl lg:text-2xl font-semibold"><div>Posts not Found!</div></div> : userPost?.data?.map((post,index) =>
+            <Link to={`/${memoizedUserDetails?.userName}/post/${post?._id}`} key={index}>
+                <Card key={post._id} data={post} />
+            </Link>);
     }, [activityType, loading, userPost]);
 
     const userAllComment = useMemo(() => {
         if (activityType !== "replies" || loading) return null;
-        return userComment?.data?.length === 0 ? <div className="w-full h-[40vh] flex justify-center items-center text-lg sm:text-xl lg:text-2xl font-semibold"><div>Replies not Found!</div></div> : userComment?.data?.map((comment) => <Card forPost={false} key={comment._id} data={comment} />);
+        return userComment?.data?.length === 0 ? <div className="w-full h-[40vh] flex justify-center items-center text-lg sm:text-xl lg:text-2xl font-semibold"><div>Replies not Found!</div></div> : userComment?.data?.map((comment,index) =>
+            <Link to={`/${memoizedUserDetails?.userName}/comment/${comment?._id}`} key={index}>
+                <Card forPost={false} key={comment._id} data={comment} />
+            </Link>);
     }, [activityType, loading, userComment]);
 
     const userAllLikePost = useMemo(() => {
         if (activityType !== "likePosts" || loading) return null;
-        return likedPosts?.data?.length > 0 ? likedPosts?.data?.map((post) => <Card key={post._id} data={post} />) : null;
+        return likedPosts?.data?.length > 0 ? likedPosts?.data?.map((post,index) =>
+            <Link to={`/${memoizedUserDetails?.userName}/post/${post?._id}`} key={index}>
+                <Card key={post._id} data={post} />
+            </Link>) : null;
     }, [activityType, loading, likedPosts]);
 
     const userAllLikeComment = useMemo(() => {
         if (activityType !== "likeComments" || loading) return null;
-        return likedComments?.data?.length > 0 ? likedComments?.data?.map((comment) => <Card forPost={false}  key={comment._id} data={comment}
-            />) : null;
+        return likedComments?.data?.length > 0 ? likedComments?.data?.map((comment,index) =>
+            <Link to={`/${memoizedUserDetails?.userName}/comment/${comment?._id}`} key={index}>
+                <Card forPost={false} key={comment._id} data={comment} />
+            </Link>) : null;
     }, [activityType, loading, likedComments]);
 
     return (

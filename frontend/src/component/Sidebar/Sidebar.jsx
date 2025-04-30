@@ -133,13 +133,13 @@ function Sidebar() {
 
 
 
-                <div onClick={handleComponent} className="flex items-center  relative justify-between gap-12 my-1 p-2 sm:px-3 sm:py-2 w-fit hover:bg-white/15 hover:rounded-full   sm:min-w-[15rem]">
+                <div onClick={handleComponent} className="flex items-center  relative justify-between gap-12 my-1 p-2 sm:px-3 sm:py-2 w-fit hover:bg-white/15 hover:rounded-full ">
                     <div className="flex items-center gap-2 ">
                         <Avatar profileImage={memoizedUserData?.profileImage?.url} classname=" border-2  border-gray-900 w-12 h-12 object-cover" />
 
                         <div className='hidden xl:block overflow-hidden max-w-[8rem]'>
-                            <h5 className="text-sm font-semibold leading-tigh truncate">{memoizedUserData?.fullName}</h5>
-                            <h6 className="text-xs text-gray-500 truncate">@{memoizedUserData?.userName}</h6>
+                            <h5 className="text-sm font-semibold leading-tigh truncate">{memoizedUserData?.fullName||"fullname"}</h5>
+                            <h6 className="text-xs text-gray-500 truncate">@{memoizedUserData?.userName||"username"}</h6>
                         </div>
                     </div>
                     <SmallLogoutCard className={showComponent ? "block " : "hidden"} data={memoizedUserData} />
