@@ -22,7 +22,7 @@ function Bookmark (){
         if (type !== "comment" || loading) return null;
         return bookmarkedComment.length===0?<div className="w-full h-[40vh] flex justify-center items-center text-lg text-center sm:text-xl  lg:text-2xl font-semibold"><div>You doesn't bookmarked any commnet.</div></div>: bookmarkedComment.map((comment) => (
             <Link to={`/${comment?.userDetails?.username}/comment/${comment?._id}`} key={comment?._id}>
-                <Card data={comment} />
+                <Card data={comment} forPost={false} />
             </Link>
         ));
     }, [type, loading, bookmarkedComment]);
@@ -41,11 +41,11 @@ function Bookmark (){
                 <div className=" p-2 pl-4 font-black  text-xl">Bookmarks</div>
                 <div className="text-white flex justify-evenly items-center  border-b border-gray-600 bg-black/50 backdrop-blur-md sticky top-0 xl:text-lg font-semibold">
                     <button 
-                        className={`p-2 border-b-4 ${type=="post"?" border-sky-400":"border-b-transparent"}`}
-                        onClick={()=>{dispatch(setType("post"))}}
+                        className={`p-2 border-b-4 cursor-pointer ${type=="post"?" border-sky-400":"border-b-transparent"}`}
+                        onClick={()=>{setType("post")}}
                     >Post</button>
                     <button 
-                        className={`p-2 border-b-4 ${type=="comment"?" border-sky-400":"border-b-transparent"}`}
+                        className={`p-2 border-b-4 cursor-pointer ${type=="comment"?" border-sky-400":"border-b-transparent"}`}
                         onClick={()=>{setType("comment")}}
                     >Comment</button>
                 </div>
