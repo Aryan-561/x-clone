@@ -47,7 +47,6 @@ class CommentService {
     }
 
     async getComment(commentId) {
-        console.log("helo",commentId)
         try {
             const response = await axios.get(`${commentBaseUrl}/${commentId}`, {
                 withCredentials: true
@@ -86,6 +85,18 @@ class CommentService {
         }
     }
 
+    async getAllUserComment(username) {
+        try {
+            const response = await axios.get(`${commentBaseUrl}/c/${username}`, {
+                withCredentials: true
+            });
+            console.log("CommentService :: getAllUserComment :: response", response.data);
+            return response.data;
+        } catch (error) {
+            console.log("CommentService :: getAllUserComment :: Error", error.response?.data?.message);
+            throw new Error(`CommentService :: getAllUserComment :: ${error.response?.data?.message || "Something went wrong in getAllUserComment"}`);
+        }
+    }
     async createReplyComment({ commentId, text }) {
         try {
             const response = await axios.post(`${commentBaseUrl}/reply/${commentId}`, {

@@ -108,6 +108,7 @@ class Userservice {
             throw new Error(`Userservice :: updateUserAccountDetails :: Errors ${error.response?.data?.message || "something went wrong while updateUserAccountDetails"}`)
         }
     }
+
     async updateUserCoverImage(coverImage) {
         try {
             const formData = new FormData()
@@ -127,6 +128,7 @@ class Userservice {
 
         }
     }
+
     async updateUserProfileImage(profileImage) {
         try {
             const formData = new FormData()
@@ -162,6 +164,7 @@ class Userservice {
         }
 
     }
+
     async search(search) {
         try {
             const response = await axios.get(`${userBaseUrl}/search/${search}`
@@ -172,6 +175,19 @@ class Userservice {
 
             console.log("Userservice :: searchUser :: Errors", error.response?.data?.message);
             throw new Error(`Userservice :: searchUser :: Errors ${error.response?.data?.message || "something went wrong while searchUser"}`)
+        }
+    }
+
+    async getUserDetails(username) {
+        try {
+            const response = await axios.get(`${userBaseUrl}/username/${username}`
+            )
+            console.log("response", response.data)
+            return response.data
+        } catch (error) {
+
+            console.log("Userservice :: getUserDetails :: Errors", error.response?.data?.message);
+            throw new Error(`Userservice :: getUserDetails :: Errors ${error.response?.data?.message || "something went wrong while getUserDetails"}`)
         }
     }
 
@@ -187,9 +203,9 @@ class Userservice {
         }
     }
 
-    async getUserPost() {
+    async getUserPost( username) {
         try {
-            const response = await axios.get(`${postBaseUrl}/user`, {
+            const response = await axios.get(`${postBaseUrl}/${username}`, {
                 withCredentials: true
             });
             console.log("response", response.data);
@@ -199,6 +215,7 @@ class Userservice {
             throw new Error(`Userservice :: getUserPost :: Errors ${error.response?.data?.message || "something went wrong while getUserPost"}`);
         }
     }
+
     async Googleauthentication(credential) {
         try {
             const response = await axios.post(`${userBaseUrl}/google-login`, {
