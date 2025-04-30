@@ -35,7 +35,7 @@ const router = createBrowserRouter([
         element: <Explore />
       },
       {
-        path: "profile",
+        path: "/:username",
         element: <Profile />
       },
       {
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
         element: <Bookmark />
       },
       {
-        path: "profile/compose/edit",
+        path: "/compose/edit",
         element: <EditPage />
       },
       {
