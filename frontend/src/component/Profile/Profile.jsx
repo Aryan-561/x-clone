@@ -24,12 +24,12 @@ function Profile() {
     const isViewingOwnProfile = username === memoizedUserData?.userName;
 
     useEffect(() => {
-    dispatch(getCurrentUser());
+        dispatch(getCurrentUser());
 
-    if (username) {
-        dispatch(getUserDetails(username));
-    }
-}, [dispatch, username, isViewingOwnProfile]);
+        if (username) {
+            dispatch(getUserDetails(username));
+        }
+    }, [dispatch, username, isViewingOwnProfile]);
 
 
     useEffect(() => {
@@ -55,34 +55,46 @@ function Profile() {
 
     const userAllPost = useMemo(() => {
         if (activityType !== "post" || loading) return null;
-        return userPost?.data?.length === 0 ? <div className="w-full h-[40vh] flex justify-center items-center text-lg sm:text-xl lg:text-2xl font-semibold"><div>Posts not Found!</div></div> : userPost?.data?.map((post,index) =>
-            <Link to={`/${memoizedUserDetails?.userName}/post/${post?._id}`} key={index}>
-                <Card key={post._id} data={post} />
-            </Link>);
+        return !userPost?.data?.length || userPost?.data?.length === 0 ?
+            <div className="w-full h-[40vh] text-white flex justify-center items-center text-lg sm:text-xl lg:text-2xl font-semibold">
+                <div> No Posts Yet!</div>
+            </div> : userPost?.data?.map((post, index) =>
+                <Link to={`/${memoizedUserDetails?.userName}/post/${post?._id}`} key={index}>
+                    <Card key={post._id} data={post} />
+                </Link>);
     }, [activityType, loading, userPost]);
 
     const userAllComment = useMemo(() => {
         if (activityType !== "replies" || loading) return null;
-        return userComment?.data?.length === 0 ? <div className="w-full h-[40vh] flex justify-center items-center text-lg sm:text-xl lg:text-2xl font-semibold"><div>Replies not Found!</div></div> : userComment?.data?.map((comment,index) =>
-            <Link to={`/${memoizedUserDetails?.userName}/comment/${comment?._id}`} key={index}>
-                <Card forPost={false} key={comment._id} data={comment} />
-            </Link>);
+        return !userComment?.data?.length || userComment?.data?.length === 0 ?
+            <div className="w-full h-[40vh] flex justify-center items-center text-lg sm:text-xl lg:text-2xl text-white font-semibold">
+                <div> No Replies yet !</div>
+            </div> : userComment?.data?.map((comment, index) =>
+                <Link to={`/${memoizedUserDetails?.userName}/comment/${comment?._id}`} key={index}>
+                    <Card forPost={false} key={comment._id} data={comment} />
+                </Link>);
     }, [activityType, loading, userComment]);
 
     const userAllLikePost = useMemo(() => {
         if (activityType !== "likePosts" || loading) return null;
-        return likedPosts?.data?.length > 0 ? likedPosts?.data?.map((post,index) =>
-            <Link to={`/${memoizedUserDetails?.userName}/post/${post?._id}`} key={index}>
-                <Card key={post._id} data={post} />
-            </Link>) : null;
+        return !likedPosts?.data?.length || likedPosts?.data?.length > 0 ?
+            <div className="w-full h-[40vh] text-white flex justify-center items-center text-lg sm:text-xl lg:text-2xl font-semibold">
+                <div>No like post by user yet!</div>
+            </div> : likedPosts?.data?.map((post, index) =>
+                <Link to={`/${memoizedUserDetails?.userName}/post/${post?._id}`} key={index}>
+                    <Card key={post._id} data={post} />
+                </Link>)
     }, [activityType, loading, likedPosts]);
 
     const userAllLikeComment = useMemo(() => {
         if (activityType !== "likeComments" || loading) return null;
-        return likedComments?.data?.length > 0 ? likedComments?.data?.map((comment,index) =>
-            <Link to={`/${memoizedUserDetails?.userName}/comment/${comment?._id}`} key={index}>
-                <Card forPost={false} key={comment._id} data={comment} />
-            </Link>) : null;
+        return !likedComments?.data?.length || likedComments?.data?.length === 0 ?
+            <div className="w-full h-[40vh] text-white flex justify-center items-center text-lg sm:text-xl lg:text-2xl font-semibold">
+                <div>No like comment by user yet!</div>
+            </div> : likedComments?.data?.map((comment, index) =>
+                <Link to={`/${memoizedUserDetails?.userName}/comment/${comment?._id}`} key={index}>
+                    <Card forPost={false} key={comment._id} data={comment} />
+                </Link>)
     }, [activityType, loading, likedComments]);
 
     return (
@@ -152,7 +164,7 @@ function Profile() {
                 <div onClick={() => setActivityType("replies")} className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm ${activityType === "replies" ? "bg-white/15" : ""}`}>Replies</div>
                 {isViewingOwnProfile && <>
                     <div className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm ${activityType === "likePosts" ? "bg-white/15" : ""}`} onClick={() => setActivityType("likePosts")}>Likes</div>
-                    <div onClick={() => setActivityType("likeComments")} className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm whitespace-nowrap ${activityType === "likeComments" ? "bg-white/15" : ""}`} >Comments</div>
+                    <div onClick={() => setActivityType("likeComments")} className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm px-1.5 whitespace-nowrap ${activityType === "likeComments" ? "bg-white/15" : ""}`} >Comments</div>
                 </>}
             </div>
 
@@ -165,11 +177,7 @@ function Profile() {
                     {isViewingOwnProfile && activityType === "likeComments" && userAllLikeComment}</>}
             </div>
 
-            {/* Error/Message Display */}
-            <div className='flex flex-col justify-center items-center my-1.5'>
-                <span>{error && <p className="text-red-700 text-sm">{error}</p>}</span>
-                <span>{message && <p className={`${error ? "text-red-500 text-xs border rounded-2xl px-2 mt-2" : "text-green-500 text-xs border rounded-2xl px-2 mt-2"}`}>{message}</p>}</span>
-            </div>
+            
         </Container>
     );
 }

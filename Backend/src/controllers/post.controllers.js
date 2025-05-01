@@ -543,7 +543,7 @@ const getUserPost = asyncHandler(async (req, res) => {
     }
 
     if (allPosts.length === 0) {
-        return res.status(404).json(new ApiResponse(404, "Posts not found", []))
+        return res.status(200).json(new ApiResponse(200, "no post available", []))
     }
 
     return res.status(200).json(new ApiResponse(200, "Posts fetched successfully", allPosts))
