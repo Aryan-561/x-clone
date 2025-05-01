@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { Button, Container, Input, ProfileSearch, Sidebarfooter } from '../index';
-import { HiDotsHorizontal } from "react-icons/hi";
+import { Container, Input, ProfileSearch, Sidebarfooter } from '../index';
 import { getRandomUser, search } from '../../features';
 import { useSelector, useDispatch } from 'react-redux';
-
+import { FaGithub } from "react-icons/fa6";
 function Rightsidebar() {
     const dispatch = useDispatch();
     const { searchResults, success, randomUser } = useSelector((state) => state.user);
@@ -27,7 +26,7 @@ function Rightsidebar() {
         <Container className='hidden col-span-2 xl:col-span-3 h-screen px-4 py-1.5 lg:flex sticky top-0 flex-col border-l border-l-white/20 mr-4 items-center'>
             <form
                 onSubmit={handleSubmit(handleSearch)}
-                onBlur={()=>{}}
+                onBlur={() => { }}
                 className="w-full"
             >
                 <Input
@@ -74,16 +73,46 @@ function Rightsidebar() {
                 </div>
             )}
 
-            <div className='w-full border-black/50 border min-h-fit p-2.5 rounded-xl my-2.5 flex flex-col gap-3'>
+            <div className='w-full border  min-h-fit p-2.5 border-white/10 rounded-xl my-2.5 flex flex-col gap-3'>
                 <h1 className='font-bold text-xl'>What’s happening</h1>
-                <div className='flex justify-between items-center hover:bg-gray-200/20 p-1 rounded-sm'>
+                <div className='flex justify-between   items-center p-1 rounded-sm'>
                     <div>
-                        <h1 className='text-sm'>Trending in India</h1>
-                        <h6 className='text-sm'>#AIDeepfake</h6>
+                        <h1 className='text-xl border px-2.5 rounded-md my-2.5 border-white/10 text-blue-700'>Trending in India</h1>
+                        <h6 className='text-sm'> Powered by Coffee and Copied Code</h6>
+                        <a
+                            href="https://github.com/HimanshuTamoli24/x-clone"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-blue-400 flex mt-2.5  gap-x-1.5 items-center hover:text-blue-500"
+                        >
+                            Source Code (No Elon Here) <FaGithub />
+                        </a>
                     </div>
-                    <div className='p-1.5 text-xl hover:bg-blue-400/55 rounded-full'>
-                        <HiDotsHorizontal />
+                </div>
+                <div className='flex justify-start  flex-col p-1 rounded-sm'>
+                    <h5 className="font-semibold text-xl mb-2">
+                        Built With Love (and Bugs)
+                    </h5>
+
+                    <div className="space-y-1">
+                        <a
+                            href="https://github.com/aryan-github"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-blue-400 flex items-center gap-x-1.5 hover:text-blue-500"
+                        >
+                            Aryan – Your New Favorite Coders (Probably) <FaGithub />
+                        </a>
+                        <a
+                            href="https://github.com/HimanshuTamoli24/x-clone"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-blue-400 flex items-center gap-x-1.5 hover:text-blue-500"
+                        >
+                            Himanshu – Professional Ctrl+C / Ctrl+V Expert <FaGithub />
+                        </a>
                     </div>
+
                 </div>
             </div>
 
