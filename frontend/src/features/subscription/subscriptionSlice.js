@@ -87,6 +87,20 @@ const subscriptionSlice = createSlice({
         state.message = "Fetched Following";
       });
   },
+  reducers:{
+    toggleFollowBtn:(state, action)=>{
+      if(action.payload.connectionType == "follower"){
+        state.follower = state.follower.map(user=>
+          user._id == action.payload.id?{...user, isFollowed:!user.isFollowed}:user
+        )
+      }
+      else{
+        state.following = state.following.map(user=>
+          user._id == action.payload.id?{...user, isFollowed:!user.isFollowed}:user
+        )
+      }
+    }
+  }
 });
-
+export const {toggleFollowBtn} = subscriptionSlice.actions;
 export default subscriptionSlice.reducer;
