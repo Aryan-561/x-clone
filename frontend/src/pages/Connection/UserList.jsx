@@ -55,15 +55,15 @@ function UserList({connectionType}) {
           <div className="flex space-x-1 sm:space-x-4 py-1 sm:py-2  px-4">
 
           <button
-            className="hover:bg-white/10 p-2 rounded-full cursor-pointer"
+            className="hover:bg-white/10 p-2 px-4 text-lg rounded-full cursor-pointer"
             onClick={(e) => navigate(-1)}
             >
             <FaArrowLeft />
           </button>
           <div>
 
-          <div className="text-lg sm:text-xl font-bold ">{getUser?.data?.fullName}</div>
-          <div className="text-gray-400  text-xs/5  sm:text-xs/4 p-0 m-0">@{getUser?.data?.userName}</div>
+          <div className="text-base sm:text-xl font-bold ">{getUser?.data?.fullName}</div>
+          <div className="text-gray-400  text-xs/3  sm:text-xs/4 p-0 m-0">@{getUser?.data?.userName}</div>
           </div>
         </div>
         <div className="text-white grid grid-cols-2  border-b border-gray-600 bg-transparent xl:text-lg font-semibold">
@@ -73,7 +73,7 @@ function UserList({connectionType}) {
               navigate(`/${username}/follower`)
             }}
             >
-            <div className={`py-2 border-b-4 ${
+            <div className={`py-2 text-sm sm:text-base border-b-4 ${
               connectionType == "follower"
               ? " border-sky-400"
               : "border-b-transparent"
@@ -87,7 +87,7 @@ function UserList({connectionType}) {
               navigate(`/${username}/following`)
             }}
             >
-            <div className={`py-2 border-b-4${
+            <div className={`py-2 text-sm sm:text-base border-b-4${
               connectionType == "following"
               ? " border-sky-400"
               : "border-b-transparent"
@@ -106,17 +106,17 @@ function UserList({connectionType}) {
                 <div className="flex flex-col  px-2 w-[90%]  justify-between">
                   <div className="flex w-full  justify-between  gap-2">
                     <div className="flex flex-col">
-                      <div className="font-bold text-xs/5   sm:text-lg/5 p-0 m-0">
+                      <div className="font-bold text-sm/3   sm:text-lg/5 p-0 m-0">
                         {user?.fullName}
                       </div>
-                      <div className="text-gray-400 text-xs/5  sm:text-base/5 p-0 m-0">
+                      <div className="text-gray-400 text-xs  sm:text-base/5 p-0 m-0">
                         @{user?.username}
                       </div>
                     </div>
                     <div>
                         {user && (
                             <Button
-                            className={` group  py-1 px-4   font-semibold cursor-pointer    ${user?.isFollowed?"hover:border-red-500 hover:bg-red-500/10 hover:text-red-500 text-white border-white w-28 border":"bg-white text-black hover:bg-white/85"}  ${currentUserId == user._id?"hidden":"block"}`}
+                            className={` group  py-1 px-2  sm:px-4   font-semibold cursor-pointer    ${user?.isFollowed?"hover:border-red-500 hover:bg-red-500/10 hover:text-red-500 text-white border-white text-xs w-20 sm:w-28 sm:text-base border":"bg-white text-black hover:bg-white/85 text-xs sm:text-base"}  ${currentUserId == user._id?"hidden":"block"}`}
                               onBtnClick={(e)=>(handleFollowBtn(e,user?._id))}
                             >
                               {user?.isFollowed?
@@ -128,7 +128,7 @@ function UserList({connectionType}) {
                         )}
                   </div>
                   </div>
-                    <div>
+                    <div className="text-xs sm:text-base pt-1">
                         {user?.bio}
                     </div>
                 </div>
