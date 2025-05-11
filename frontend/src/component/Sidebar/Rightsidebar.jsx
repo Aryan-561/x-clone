@@ -96,7 +96,7 @@ function Rightsidebar() {
 
                     <div className="space-y-1">
                         <a
-                            href="https://github.com/aryan-github"
+                            href="https://github.com/Aryan-561"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-xs text-blue-400 flex items-center gap-x-1.5 hover:text-blue-500"
