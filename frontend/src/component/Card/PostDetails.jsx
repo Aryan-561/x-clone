@@ -13,8 +13,8 @@ function PostDetails() {
   const navigate = useNavigate();
   const { error, message, loading, post } = useSelector((state) => state.post);
 
-  const {comments} = useSelector(state => state.comment)
-  console.log(comments);
+  const commentState = useSelector(state => state.comment)
+
   const [isFollowed, setIsFollowed] = useState(
     post?.userDetails?.isFollowed || true
   );
@@ -24,7 +24,6 @@ function PostDetails() {
   
 
   const dispatch = useDispatch();
-  console.log(post);
 
   const handleFollowBtn = () => {
     dispatch(toggleSubscription(post?.userDetails?.userId));
@@ -99,8 +98,9 @@ function PostDetails() {
               <div>
                 <CreatePost isPost={false} />
               </div>
-              {comments.map((comment, index) => (
-                <Link to={`/${comment?.userDetails?.username}/comment/${comment?._id}`} key={index}>
+              {commentState?.loading && <EventLoading />}
+              {commentState?.comments?.map((comment, index) => (
+                <Link to={`/${comment?.userDetails?.username}/comment/${comment?._id}`} key={comment?._id}>
                   <Card data={comment} forPost={false} />
                 </Link>
               ))}

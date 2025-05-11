@@ -3,10 +3,12 @@ import ApiResponse from "../utils/ApiResponse.js"
 import { Post } from "../models/post.model.js"
 // import User from "../models/User.model.js"
 import asyncHandler from "../utils/asyncHandler.js"
-import { uploadCloudinary } from "../utils/cloudinary.js"
+import { deleteCloudinary, uploadCloudinary } from "../utils/cloudinary.js"
 import mongoose, { isValidObjectId } from "mongoose"
 import { Subscription } from "../models/subscription.model.js"
 import User from "../models/user.model.js"
+import Like from "../models/like.model.js"
+
 // fn for create post
 const createPost = asyncHandler(async (req, res) => {
     const { text } = req.body
@@ -753,13 +755,38 @@ const deletePost = asyncHandler(async (req, res) => {
         throw new ApiErrors(400, "Invalid ID!");
     }
 
-    const post = await Post.findOneAndDelete({ _id: postId, createdBy: req.user._id });
+    const post = await Post.findById(postId);
 
     if (!post) {
         throw new ApiErrors(404, "Post not found or unauthorized!");
     }
 
-    return res.status(200).json(new ApiResponse(200, "Post deleted successfully.", {}));
+    const session = await mongoose.startSession()
+    session.startTransaction()
+
+    
+    try {
+        if(!(post.createdBy.equals(req?.user?._id))){
+            throw new ApiErrors(401, "Unauthorized request!")
+        }
+    
+        await Like.deleteMany({post:post._id}).session(session)
+        
+        if(post.media){
+            await deleteCloudinary(post.media.publicId, post.media.resourseType)
+        }
+    
+        await Post.deleteOne({ _id: postId, createdBy: req.user._id }).session(session);
+    
+        await session.commitTransaction()
+        
+        return res.status(200).json(new ApiResponse(200, "Post deleted successfully.", {}));
+    } catch (error) {
+        await session.abortTransaction()
+        throw new ApiErrors(error.status, error.message)
+    }finally{
+        session.endSession()
+    }
 });
 
 

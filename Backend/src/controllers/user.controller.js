@@ -640,7 +640,60 @@ const getUserDetails = asyncHandler(async (req, res) => {
     });
     if (!find) throw new ApiErrors(404, "User not found");
 
-    res.status(200).json(new ApiResponse("200", "user successfully fetch", find))
+    const userDetails = await User.aggregate([
+        {
+            $match:{
+                _id:find?._id
+            }
+        },
+        {
+            $lookup:{
+                from:"subscriptions",
+                localField:"_id",
+                foreignField:"follower",
+                as:"followingDoc"
+            }
+        },
+
+        {
+            $lookup:{
+                from:"subscriptions",
+                localField:"_id",
+                foreignField:"following",
+                as:"followerDoc"
+            }
+        },
+
+        {
+                $addFields:{
+                    follower:{$size:"$followerDoc"},
+                    following:{$size:"$followingDoc"},
+                    isFollowed:{
+                        $cond:{
+                            if:{$in:[req?.user?._id, "$followerDoc.follower"]},
+                            then:true,
+                            else:false
+                        }
+                    }
+                }
+        },
+        {
+            $project:{
+                fullName:1,
+                userName:1,
+                bio:1,
+                link:1,
+                coverImage:1,
+                profileImage:1,
+                follower:1,
+                following:1,
+                createdAt:1,
+                isFollowed:1
+            }
+        }
+    ])
+
+    res.status(200).json(new ApiResponse("200", "user successfully fetch", userDetails[0]))
 
 })
 

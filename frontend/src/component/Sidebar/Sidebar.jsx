@@ -51,12 +51,12 @@ function Sidebar() {
 
 
         },
-        {
-            icon: <svg viewBox="0 0 33 32" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M12.745 20.54l10.97-8.19c.539-.4 1.307-.244 1.564.38 1.349 3.288.746 7.241-1.938 9.955-2.683 2.714-6.417 3.31-9.83 1.954l-3.728 1.745c5.347 3.697 11.84 2.782 15.898-1.324 3.219-3.255 4.216-7.692 3.284-11.693l.008.009c-1.351-5.878.332-8.227 3.782-13.031L33 0l-4.54 4.59v-.014L12.743 20.544m-2.263 1.987c-3.837-3.707-3.175-9.446.1-12.755 2.42-2.449 6.388-3.448 9.852-1.979l3.72-1.737c-.67-.49-1.53-1.017-2.515-1.387-4.455-1.854-9.789-.931-13.41 2.728-3.483 3.523-4.579 8.94-2.697 13.561 1.405 3.454-.899 5.898-3.22 8.364C1.49 30.2.666 31.074 0 32l10.478-9.466"></path></g></svg>
-            , title: "grok",
-            path: "/grok"
+        // {
+        //     icon: <svg viewBox="0 0 33 32" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M12.745 20.54l10.97-8.19c.539-.4 1.307-.244 1.564.38 1.349 3.288.746 7.241-1.938 9.955-2.683 2.714-6.417 3.31-9.83 1.954l-3.728 1.745c5.347 3.697 11.84 2.782 15.898-1.324 3.219-3.255 4.216-7.692 3.284-11.693l.008.009c-1.351-5.878.332-8.227 3.782-13.031L33 0l-4.54 4.59v-.014L12.743 20.544m-2.263 1.987c-3.837-3.707-3.175-9.446.1-12.755 2.42-2.449 6.388-3.448 9.852-1.979l3.72-1.737c-.67-.49-1.53-1.017-2.515-1.387-4.455-1.854-9.789-.931-13.41 2.728-3.483 3.523-4.579 8.94-2.697 13.561 1.405 3.454-.899 5.898-3.22 8.364C1.49 30.2.666 31.074 0 32l10.478-9.466"></path></g></svg>
+        //     , title: "grok",
+        //     path: "/grok"
 
-        },
+        // },
         {
             icon: <svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: 'white' }} className="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-18jsvk2 r-lwhw9o r-cnnz9e"><g><path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5zM6.5 4c-.276 0-.5.22-.5.5v14.56l6-4.29 6 4.29V4.5c0-.28-.224-.5-.5-.5h-11z"></path></g></svg>
             , title: "bookmarks",
@@ -91,7 +91,7 @@ function Sidebar() {
                         <X image="xLight.png" />
                     </Link>
                 </div>
-                <ul className="flex flex-col gap-3 items-start ">
+                <ul className="flex flex-col gap-2 lg:gap-3 items-start ">
                     {SidebarData.map((item, index) => {
                         const isActive = location.pathname === item.path;
 
@@ -99,7 +99,7 @@ function Sidebar() {
                             <Link
                                 to={item.path}
                                 key={item.title}
-                                className={`flex items-center w-fit sm:gap-4 py-2 sm:px-4 px-2 rounded hover:bg-white/10 hover:rounded-full cursor-pointer 
+                                className={`flex items-center w-fit sm:gap-4  sm:p-3 p-2 xl:px-4 rounded hover:bg-white/15 hover:rounded-full cursor-pointer 
                 ${isActive ? 'bg-white/5 rounded-full' : ''}`}
                             >
                                 <span className="w-6 h-6 sm:w-7 sm:h-7">{item.icon}</span>
@@ -118,7 +118,7 @@ function Sidebar() {
                         <svg
                             viewBox="0 0 24 24"
                             aria-hidden="true"
-                            className="w-6 h-6 text-black "
+                            className="w-4 h-4 sm:w-7 sm:h-7 text-black "
                             fill="currentColor"
                         >
                             <g>
@@ -133,9 +133,9 @@ function Sidebar() {
 
 
 
-                <div onClick={handleComponent} className="flex items-center  relative justify-between gap-12 my-1 p-2 sm:px-3 sm:py-2 w-fit hover:bg-white/15 hover:rounded-full ">
+                <div onClick={handleComponent} className="flex items-center  relative justify-between gap-12 my-1 p-2 w-fit hover:bg-white/15 hover:rounded-full ">
                     <div className="flex items-center gap-2 ">
-                        <Avatar profileImage={memoizedUserData?.profileImage?.url} classname=" border-2  border-gray-900 w-12 h-12 object-cover" />
+                        <Avatar profileImage={memoizedUserData?.profileImage?.url} classname=" border-2  border-gray-900 w-10 h-10 sm:w-12 sm:h-12 object-cover" />
 
                         <div className='hidden xl:block overflow-hidden max-w-[8rem]'>
                             <h5 className="text-sm font-semibold leading-tigh truncate">{memoizedUserData?.fullName||"fullname"}</h5>

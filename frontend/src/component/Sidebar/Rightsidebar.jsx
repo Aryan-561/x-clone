@@ -23,7 +23,7 @@ function Rightsidebar() {
         dispatch(getRandomUser())
     }, [dispatch])
     return (
-        <Container className='hidden col-span-2 xl:col-span-3 h-screen px-4 py-1.5 lg:flex sticky top-0 flex-col border-l border-l-white/20 mr-4 items-center'>
+        <Container className='hidden col-span-2 xl:col-span-3 h-screen px-4 py-1.5 lg:flex sticky top-0 flex-col border-l border-l-white/20 mr-4 items-center overflow-scroll hide-scrollbar'>
             <form
                 onSubmit={handleSubmit(handleSearch)}
                 onBlur={() => { }}

@@ -76,8 +76,29 @@ const getUserFollower = asyncHandler(async(req, res)=>{
             }
         },
 
+        
         {
             $unwind:"$followerDetails"
+        },
+        {
+            $lookup:{
+                from:"subscriptions",
+                localField:"follower",
+                foreignField:"following",
+                as:"followingDoc"
+            }
+        },
+
+        {
+            $addFields:{
+                isFollowed: {
+                    $cond: {
+                        if: { $in: [req.user._id, "$followingDoc.follower"] },
+                        then: true,
+                        else: false
+                    }
+                }
+            }
         },
 
         {
@@ -86,7 +107,8 @@ const getUserFollower = asyncHandler(async(req, res)=>{
                 username:"$followerDetails.userName",
                 fullName:"$followerDetails.fullName",
                 profileImage:"$followerDetails.profileImage",
-                bio:"$followerDetails.bio"
+                bio:"$followerDetails.bio",
+                isFollowed:1
             }
         }
 
@@ -130,6 +152,27 @@ const getUserFollowing = asyncHandler(async(req, res)=>{
         },
 
         {
+            $lookup:{
+                from:"subscriptions",
+                localField:"following",
+                foreignField:"following",
+                as:"followingDoc"
+            }
+        },
+
+        {
+            $addFields:{
+                isFollowed: {
+                    $cond: {
+                        if: { $in: [req.user._id, "$followingDoc.follower"] },
+                        then: true,
+                        else: false
+                    }
+                }
+            }
+        },
+
+        {
             $unwind:"$followingDetails"
         },
 
@@ -139,7 +182,8 @@ const getUserFollowing = asyncHandler(async(req, res)=>{
                 username:"$followingDetails.userName",
                 fullName:"$followingDetails.fullName",
                 profileImage:"$followingDetails.profileImage",
-                bio:"$followingDetails.bio"
+                bio:"$followingDetails.bio",
+                isFollowed:1
             }
         }
 
