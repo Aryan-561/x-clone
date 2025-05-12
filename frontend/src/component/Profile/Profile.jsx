@@ -71,7 +71,7 @@ function Profile() {
                 <div> No Replies yet !</div>
             </div> : userComment?.data?.map((comment, index) =>
                 <Link to={`/${memoizedUserDetails?.userName}/comment/${comment?._id}`} key={index}>
-                    <Card forPost={false} key={comment._id} data={comment} />
+                    <Card forPost={false} key={comment._id} data={comment}  />
                 </Link>);
     }, [activityType, loading, userComment]);
 
@@ -98,7 +98,7 @@ function Profile() {
     }, [activityType, loading, likedComments]);
 
     return (
-        <Container className=' border-x   sm:w-[85%] lg:w-full border-white/10 col-span-5 w-full min-h-min relative '>
+        <Container className=' border-x pb-5   sm:w-[85%] lg:w-full border-gray-600 col-span-5 w-full min-h-min relative '>
             {/* Profile Header */}
             <div className=' flex justify-start items-center mb-1.5 relative bg-transparent'>
                 <div onClick={() => navigate(-1)} className=' text-xl p-1 hover:bg-white/15 rounded-full text-center h-1/12 mx-7'>
@@ -112,16 +112,16 @@ function Profile() {
 
             {/* Cover Image */}
             <div className=''>
-                <X className="sm:max-h-48 sm:min-h-48 max-h-28 w-full border border-white/5 bg-gray-400" image={memoizedUserDetails?.coverImage?.url || "/default/deafaultCoverimage.png"} />
+                <X className="sm:max-h-48 sm:min-h-48 max-h-28 w-full border-y border-gray-600 bg-gray-400" image={memoizedUserDetails?.coverImage?.url || "/default/deafaultCoverimage.png"} />
             </div>
 
             {/* Avatar */}
-            <div className='sm:bottom-16 bottom-12 relative'>
+            <div className='sm:bottom-16 bottom-12 relative' >
                 <Avatar profileImage={memoizedUserDetails?.profileImage?.url} classname=' border-[3px] absolute inset-x-6 border-black/80 h-15 sm:w-20 w-15 sm:h-20' />
             </div>
 
             {/* Profile Info */}
-            <div className='sm:ml-3.5 flex flex-col gap-y-1 border-white/35 min-h-32 mt-10 px-2 py-1.5'>
+            <div  className='sm:ml-3.5 flex flex-col gap-y-1 border-white/35 min-h-32 mt-10 px-2 py-1.5'>
                 <h1 className='font-semibold font-serif text-white text-2xl leading-tight truncate'>{memoizedUserDetails?.fullName || "Full Name"}</h1>
                 <h6 className='text-gray-400 text-sm mb-1 truncate'>@{memoizedUserDetails?.userName || "username"}</h6>
                 <p className='font-light font-sans text-white text-sm leading-tight'>{memoizedUserDetails?.bio || ""}</p>
@@ -135,10 +135,10 @@ function Profile() {
                 </div>
                 <div className='flex text-sm justify-start gap-3.5 items-center'>
                     <Link className='hover:underline' to={`/${memoizedUserDetails?.userName}/follower`}>
-                        {userPost?.data?.length > 1 ? userPost.data[0]?.userDetails?.follower ?? "0" : "0"} follower
+                        {memoizedUserDetails?.follower || 0} follower
                     </Link>
                     <Link className="hover:underline" to={`/${memoizedUserDetails?.userName}/following`}>
-                        {userPost?.data?.length > 1 ? userPost.data[0]?.userDetails?.following ?? "69" : "69"} following
+                        {memoizedUserDetails?.following || 0} following
                     </Link>
                 </div>
             </div>
@@ -159,7 +159,7 @@ function Profile() {
 
 
             {/* Activity Tabs */}
-            <div className='flex justify-around mx-2.5 my-2.5 items-center border border-white/5 rounded-md'>
+            <div className='flex justify-around  my-2.5 items-center border-b border-gray-600'>
                 <div onClick={() => setActivityType("post")} className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm ${activityType === "post" ? "bg-white/15" : ""}`}>Post</div>
                 <div onClick={() => setActivityType("replies")} className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm ${activityType === "replies" ? "bg-white/15" : ""}`}>Replies</div>
                 {isViewingOwnProfile && <>
@@ -169,7 +169,7 @@ function Profile() {
             </div>
 
             {/* Display Content Based on Activity Type */}
-            <div className='px-1.5 text-black'>
+            <div className=' min-h-48 h-auto w-full text-black'>
                 {loading ? (<EventLoading />) : <>
                     {activityType === "post" && userAllPost}
                     {activityType === "replies" && userAllComment}
