@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { FaArrowLeft } from "react-icons/fa6";
-import { Card, Container, EventLoading, X } from "../index";
+import { Button, Card, Container, EventLoading, X } from "../index";
 import { getCurrentUser, getUserPost, getAllLikePost, getAllLikeComment, getUserDetails, getAllUserComment } from '../../features';
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '../Card/Avatar';
@@ -8,6 +8,7 @@ import { formatJoinDate } from '../../data/date';
 import { SlCalender } from "react-icons/sl";
 import { FaLink } from "react-icons/fa6";
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { toggleFollowBtn, toggleSubscription } from '../../features/subscription/subscriptionSlice';
 
 function Profile() {
     const dispatch = useDispatch();
@@ -15,13 +16,19 @@ function Profile() {
     const { username } = useParams()
     const [activityType, setActivityType] = useState("post");
 
-    const { error, message, loading, currentUser, userPost, getUser } = useSelector((state) => state.user);
+    const { loading, currentUser, userPost, getUser } = useSelector((state) => state.user);
     const { likedComments, likedPosts } = useSelector((state) => state.like);
     const { userComment } = useSelector((state) => state.comment);
     const memoizedUserData = useMemo(() => currentUser?.data, [currentUser]);
 
     const memoizedUserDetails = useMemo(() => getUser?.data, [getUser]);
     const isViewingOwnProfile = username === memoizedUserData?.userName;
+
+    const handleFollowBtn = (e, id) => {
+        e.preventDefault()
+        dispatch(toggleSubscription(id))
+        dispatch(toggleFollowBtn({ id }))
+    }
 
     useEffect(() => {
         dispatch(getCurrentUser());
@@ -121,7 +128,7 @@ function Profile() {
             </div>
 
             {/* Profile Info */}
-            <div  className='sm:ml-3.5 flex flex-col gap-y-1 border-white/35 min-h-32 mt-10 px-2 py-1.5'>
+            <div className='sm:ml-3.5 flex flex-col gap-y-1 border-white/35 min-h-32 mt-10 px-2 py-1.5'>
                 <h1 className='font-semibold font-serif text-white text-2xl leading-tight truncate'>{memoizedUserDetails?.fullName || "Full Name"}</h1>
                 <h6 className='text-gray-400 text-sm mb-1 truncate'>@{memoizedUserDetails?.userName || "username"}</h6>
                 <p className='font-light font-sans text-white text-sm leading-tight'>{memoizedUserDetails?.bio || ""}</p>
@@ -135,10 +142,10 @@ function Profile() {
                 </div>
                 <div className='flex text-sm justify-start gap-3.5 items-center'>
                     <Link className='hover:underline' to={`/${memoizedUserDetails?.userName}/follower`}>
-                        {memoizedUserDetails?.follower || 0} follower
+                        {userPost?.data?.length > 1 ? userPost.data[0]?.userDetails?.follower ?? "0" : "0"} follower
                     </Link>
                     <Link className="hover:underline" to={`/${memoizedUserDetails?.userName}/following`}>
-                        {memoizedUserDetails?.following || 0} following
+                        {userPost?.data?.length > 1 ? userPost.data[0]?.userDetails?.following ?? "69" : "69"} following
                     </Link>
                 </div>
             </div>
@@ -177,7 +184,7 @@ function Profile() {
                     {isViewingOwnProfile && activityType === "likeComments" && userAllLikeComment}</>}
             </div>
 
-            
+
         </Container>
     );
 }

@@ -9,6 +9,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Login, Signup, Home, Explore, Profile, Bookmark, Post, Comment, UserList } from './pages/index.js';
 import { EditPage, LandingPage } from './component/index.js';
 import ComposePost from './pages/ComposePost/ComposePost.jsx'
+import Comingsoon from './pages/Comingsoon/Comingsoon.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -49,6 +50,18 @@ const router = createBrowserRouter([
       {
         path: "bookmarks",
         element: <Bookmark />
+      },
+      {
+        path:"messages",
+        element:<Comingsoon/>
+      },
+      {
+        path:"communities",
+        element:<Comingsoon/>
+      },
+      {
+        path:"grok",
+        element:<Comingsoon/>
       },
       {
         path: "/compose/edit",

@@ -772,7 +772,7 @@ const deletePost = asyncHandler(async (req, res) => {
     
         await Like.deleteMany({post:post._id}).session(session)
         
-        if(post.media){
+        if(post.publicId){
             await deleteCloudinary(post.media.publicId, post.media.resourseType)
         }
     
