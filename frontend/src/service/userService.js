@@ -180,7 +180,7 @@ class Userservice {
 
     async getUserDetails(username) {
         try {
-            const response = await axios.get(`${userBaseUrl}/username/${username}`
+            const response = await axios.get(`${userBaseUrl}/username/${username}`,{withCredentials: true}
             )
             console.log("response", response.data)
             return response.data
