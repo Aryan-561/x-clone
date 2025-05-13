@@ -3,7 +3,7 @@ import express from 'express';
 import cookieParser from "cookie-parser";
 import cors from 'cors';
 import morgan from "morgan";
-import { logger, errorHandler } from './Utils/logger.js';
+import { logger, errorHandler } from './utils/logger.js';
 
 // Middleware
 const app = express();
