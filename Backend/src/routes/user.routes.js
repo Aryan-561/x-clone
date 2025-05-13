@@ -49,7 +49,7 @@ router.route("/update-coverimage").patch(verifyJwt, upload.single('coverImage'),
 router.route("/update-profileimage").patch(verifyJwt, upload.single('profileImage'), updateUserProfileImage)
 router.route("/deleteuser").delete(verifyJwt, deleteUser)
 router.route("/search/:queries").get(search)
-router.route("/username/:queries").get(getUserDetails)
+router.route("/username/:queries").get(verifyJwt,getUserDetails)
 router.route("/randomuser").get(getRandomUsers)
 
 // routes/auth.js or controllers/auth.js

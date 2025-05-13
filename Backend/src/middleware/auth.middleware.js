@@ -8,7 +8,7 @@ import conf from "../conf/conf.js";
 const verifyJwt = asyncHandler(async (req, _, next) => {
     try {
         const token = req.cookies.accessToken;
-        // console.log("token", token);
+        console.log("token", token);
         if (!token) {
             throw new ApiErrors(401, "Unauthorized, please login");
         }
