@@ -5,7 +5,7 @@ import User from "../models/user.model.js";
 import { uploadCloudinary, deleteCloudinary } from "../utils/cloudinary.js";
 import conf from "../conf/conf.js";
 import jwt from "jsonwebtoken";
-import sendMail from "../Utils/sendmail.js";
+import sendMail from "../utils/sendmail.js";
 import { OAuth2Client } from 'google-auth-library';
 
 const client = new OAuth2Client(conf.googleClientID);
