@@ -193,7 +193,7 @@ class Userservice {
 
     async resendEmailVerification(email) {
         try {
-            const response = await axios.post(`${userBaseUrl}/resend-verification-email`, {
+            const response = await axios.post(`${userBaseUrl}/resend-verification`, {
                 email
             });
             return response.data;

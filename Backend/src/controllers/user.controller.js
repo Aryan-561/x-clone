@@ -93,7 +93,7 @@ const createUser = asyncHandler(async (req, res) => {
     // Creating a new user document
     const user = await User.create({
         userName,
-        fullName:fullName||"",
+        fullName: fullName || "",
         email,
         coverImage: coverImageUrl
             ? {
@@ -192,7 +192,7 @@ const verifyMail = asyncHandler(async (req, res) => {
 
 const resendVerificationEmail = asyncHandler(async (req, res) => {
     const { email } = req.body;
-
+    console.log("email", email);
     if (!email) {
         throw new ApiErrors(
             400,
@@ -220,10 +220,45 @@ const resendVerificationEmail = asyncHandler(async (req, res) => {
         to: email,
         subject: "Resend Email Verification",
         html: `
-            <h1>Hi ${user.userName}!</h1>
-            <p>Click the link below to verify your email address:</p>
-            <a href="${verificationUrl}">Verify Email</a>
-        `,
+    <div style="font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 40px 20px;">
+    <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); overflow: hidden;">
+        
+        <div style="background-color: #007bff; padding: 20px;">
+        <h2 style="color: #ffffff; margin: 0;">Welcome to X-Clone!</h2>
+        </div>
+
+        <div style="padding: 30px;">
+        <p style="font-size: 16px; color: #333333;">Hi <strong>${user.userName}</strong>,</p>
+        
+        <p style="font-size: 15px; color: #333333;">
+        Thank you for signing up! To get started, please confirm your email address by clicking the button below:
+        </p>
+
+        <div style="text-align: center; margin: 30px 0;">
+        <a href="${verificationUrl}" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            Re-Verify Email
+        </a>
+        </div>
+
+        <p style="font-size: 14px; color: #555555;">
+        Or copy and paste this URL into your browser:
+        </p>
+        <p style="font-size: 13px; color: #007bff; word-break: break-all;">${verificationUrl}</p>
+
+        <hr style="border: none; border-top: 1px solid #eeeeee; margin: 30px 0;">
+
+        <p style="font-size: 13px; color: #999999;">
+          If you didn't sign up for this account, you can safely ignore this email.
+        </p>
+      </div>
+
+      <div style="background-color: #f0f0f0; text-align: center; padding: 15px; font-size: 13px; color: #888888;">
+        © ${new Date().getFullYear()} X-Clone. All rights reserved.
+      </div>
+
+    </div>
+  </div>
+  `
     });
 
     return res.status(200).json({
@@ -711,7 +746,7 @@ const getRandomUsers = asyncHandler(async (req, res) => {
             }
         },
         {
-            $project:{
+            $project: {
                 fullName: 1,
                 userName: 1,
                 bio: 1,
@@ -724,7 +759,7 @@ const getRandomUsers = asyncHandler(async (req, res) => {
     ])
 
 
-    
+
     if (!users || users.length === 0) {
         throw new ApiErrors(404, "No users found");
     }

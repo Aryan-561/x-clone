@@ -64,7 +64,7 @@ function Explore() {
                 <Link to={`/${userName}`} key={_id}>
                   <ProfileSearch
                     userName={userName}
-                    profileImage={profileImage.url}
+                    profileImage={profileImage?.url}
                     bio={bio}
                     fullName={fullName}
                     follower={follower}
