@@ -28,7 +28,7 @@ function Profile() {
 
     const [isFollowed, setIsFollowed] = useState(false);
 
-    console.log("isFollowed:", isFollowed, new Date());
+    // console.log("isFollowed:", isFollowed, new Date());
 
     const handleFollowBtn = (e, id) => {
         e.preventDefault()
@@ -159,11 +159,12 @@ function Profile() {
                         <a target="_blank" href={memoizedUserDetails?.link || ""}>{memoizedUserDetails?.link || ""}</a>
                     </div>
                     <div className='flex text-[0.8rem] sm:text-[0.9rem] my-2 justify-start gap-3.5 items-center'>
-                        <Link className="hover:underline" to={`/${memoizedUserDetails?.userName}/following`}>
-                            {memoizedUserDetails?.following > 0 ? memoizedUserDetails?.following ?? "0" : "0"} <span className='text-gray-500'>Following</span>
-                        </Link>
+                    
                         <Link className='hover:underline' to={`/${memoizedUserDetails?.userName}/follower`}>
                             {memoizedUserDetails?.follower > 0 ? memoizedUserDetails?.follower ?? "0" : "0"} <span className='text-gray-500'>Followers</span>
+                        </Link>
+                        <Link className="hover:underline" to={`/${memoizedUserDetails?.userName}/following`}>
+                            {memoizedUserDetails?.following > 0 ? memoizedUserDetails?.following ?? "0" : "0"} <span className='text-gray-500'>Following</span>
                         </Link>
                     </div>
                 </div>
