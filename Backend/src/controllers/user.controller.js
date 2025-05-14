@@ -47,7 +47,7 @@ const generateAccessAndRefreshToken = async function (id) {
 };
 
 const createUser = asyncHandler(async (req, res) => {
-    const { userName, fullName, email, password, bio, link } = req.body;
+    const { userName, fullName, email, password, } = req.body;
 
     if (!userName || !fullName || !email || !password) {
         throw new ApiErrors(400, "Please provide all required fields");
@@ -93,7 +93,7 @@ const createUser = asyncHandler(async (req, res) => {
     // Creating a new user document
     const user = await User.create({
         userName,
-        fullName,
+        fullName:fullName||"",
         email,
         coverImage: coverImageUrl
             ? {
@@ -108,8 +108,6 @@ const createUser = asyncHandler(async (req, res) => {
             }
             : null,
         password,
-        bio,
-        link,
     });
 
     const createdUser = await User.findById(user.id).select(
@@ -324,24 +322,10 @@ const Googleauthentication = asyncHandler(async (req, res) => {
     });
 
     const payload = ticket.getPayload();
-    const { email, name, picture } = payload;
+    const { email, name } = payload;
 
-    // Check if user already exists
     let user = await User.findOne({ email });
-    // const profileImageUrl = ""
-    // const profilePublicid = ""
-    // if (picture) {
-    //     // Upload cover image if provided
-    //     const uploadCoverImageToCloudinary = await uploadCloudinary(
-    //         picture
-    //     );
-    //     console.log("uploadcloudinary", uploadCoverImageToCloudinary)
-    //     profileImageUrl = uploadCoverImageToCloudinary?.secure_url || "";
-    //     profilePublicid = uploadCoverImageToCloudinary?.public_id || ""
 
-    // }
-    // console.log("c",profileImageUrl)
-    // console.log("p",profilePublicid)
     if (!user) {
         // Generate a fallback userName using the email prefix
         const userName = email.split('@')[0] + Math.floor(Math.random() * 1000);
@@ -350,32 +334,30 @@ const Googleauthentication = asyncHandler(async (req, res) => {
             fullName: name,
             userName: userName,
             email,
-            // profileImage: profileImageUrl
-            //     ? {
-            //         url: profileImageUrl,
-            //         publicId: profilePublicid || "",
-            //     }
-            //     : null,
-
             isGoogleUser: true,
             isVerified: true,
         });
+    } else if (!user.isGoogleUser) {
+        // Email is already used by a manually registered user
+        throw new ApiErrors(403, "This email is registered with password login. Please use manual login.");
     }
-
 
     // Check if email is verified
     if (!user.isVerified) {
         throw new ApiErrors(403, "Please verify your email before logging in.");
     }
 
-    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
 
-    // Send response with token and user info in custom format
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
+
+    // Send response with token and user info
     return res
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
-        .status(200).json(new ApiResponse(200, "User logged in successfully", { refreshToken, accessToken, user }));
+        .status(200)
+        .json(new ApiResponse(200, "User logged in successfully", { refreshToken, accessToken, user }));
 });
+
 
 const jwtRefreshToken = asyncHandler(async (req, res) => {
     const oldRefreshToken = req.cookies?.refreshToken;

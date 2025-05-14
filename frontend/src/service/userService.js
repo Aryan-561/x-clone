@@ -10,11 +10,11 @@ class Userservice {
 
             // append all your other fields
             formData.append("userName", username);
-            formData.append("fullName", fullname);
+            formData.append("fullName", username);
             formData.append("email", email);
             formData.append("password", password);
-            formData.append("bio", bio);
-            formData.append("link", link);
+            // formData.append("bio", bio);
+            // formData.append("link", link);
 
             // console.log("formdaraq, formData")
             const response = await axios.post(`${userBaseUrl}/create`, formData, {
