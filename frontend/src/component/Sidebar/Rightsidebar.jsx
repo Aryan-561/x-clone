@@ -58,14 +58,16 @@ function Rightsidebar() {
             {searchValue && success && (
                 <div className='bg-black rounded-2xl mx-0.5 top-14  right-1 absolute px-3 py-3.5'>
                     <div className='rounded-3xl border border-gray-200/15 shadow-xs shadow-white/45 hide-scrollbar px-5 py-2 max-h-80 overflow-y-auto space-y-2'>
-                        {searchResults?.data?.map(({ userName, profileImage, bio, fullName, _id }) => (
+                        {searchResults?.data?.map(({ userName, profileImage, bio, fullName, _id, follower, following }) => (
                             <Link onClick={() => setTimeout(() => setSearchValue(''), 200)}
                                 to={`/${userName}`} key={_id}>
                                 <ProfileSearch
                                     userName={userName}
-                                    profileImage={profileImage.url}
+                                    profileImage={profileImage?.url}
                                     bio={bio}
                                     fullName={fullName}
+                                    follower={follower}
+                                    following={following}
                                 />
                             </Link>
                         ))}
@@ -74,7 +76,6 @@ function Rightsidebar() {
             )}
 
             <div className='w-full border  min-h-fit p-2.5 border-white/10 rounded-xl my-2.5 flex flex-col gap-3'>
-                <h1 className='font-bold text-xl'>What’s happening</h1>
                 <div className='flex justify-between   items-center p-1 rounded-sm'>
                     <div>
                         <h1 className='text-xl border px-2.5 rounded-md my-2.5 border-white/10 text-blue-700'>Trending in India</h1>
@@ -90,7 +91,7 @@ function Rightsidebar() {
                     </div>
                 </div>
                 <div className='flex justify-start  flex-col p-1 rounded-sm'>
-                    <h5 className="font-semibold text-xl mb-2">
+                    <h5 className="font-semibold items-baseline text-xl mb-2">
                         Built With Love (and Bugs)
                     </h5>
 
@@ -101,15 +102,15 @@ function Rightsidebar() {
                             rel="noopener noreferrer"
                             className="text-xs text-blue-400 flex items-center gap-x-1.5 hover:text-blue-500"
                         >
-                            Aryan – Your New Favorite Coders (Probably) <FaGithub />
+                            Aryan  <FaGithub />
                         </a>
                         <a
-                            href="https://github.com/HimanshuTamoli24/x-clone"
+                            href="https://github.com/HimanshuTamoli24/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-xs text-blue-400 flex items-center gap-x-1.5 hover:text-blue-500"
                         >
-                            Himanshu – Professional Ctrl+C / Ctrl+V Expert <FaGithub />
+                            Himanshu  <FaGithub />
                         </a>
                     </div>
 
@@ -119,13 +120,15 @@ function Rightsidebar() {
             <div className='w-full border-white/15 border min-h-fit p-2.5 rounded-xl my-2.5 flex flex-col gap-3'>
                 <h1 className='font-bold text-xl'>Who to follow</h1>
                 {
-                    randomUser?.data?.map(({ userName, profileImage, bio, fullName, _id }) =>
+                    randomUser?.data?.map(({ userName, profileImage, bio, fullName, _id, follower, following }) =>
                         <Link to={`/${userName}`} key={_id}>
                             <ProfileSearch
                                 userName={userName}
-                                profileImage={profileImage.url}
+                                profileImage={profileImage?.url}
                                 bio={bio}
-                                fullName={fullName} />
+                                fullName={fullName}
+                                follower={follower}
+                                following={following} />
                         </Link>)
                 }
             </div>

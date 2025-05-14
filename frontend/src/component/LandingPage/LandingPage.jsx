@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, X } from '../index';
-import GoogleAuthentication from '../google-authentication/Googleauthentication';
+import {Googleauthentication} from '../';
 import { useNavigate } from 'react-router-dom';
 
 function LandingPage() {
@@ -22,7 +22,7 @@ function LandingPage() {
 
                 {/* Auth Section */}
                 <div className="w-full max-w-sm flex flex-col gap-5">
-                    <GoogleAuthentication />
+                    <Googleauthentication />
 
                     {/* Divider */}
                     <div className="flex items-center my-2">

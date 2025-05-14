@@ -28,7 +28,7 @@ function Profile() {
 
     const [isFollowed, setIsFollowed] = useState(false);
 
-    console.log("isFollowed:", isFollowed, new Date());
+    // console.log("isFollowed:", isFollowed, new Date());
 
     const handleFollowBtn = (e, id) => {
         e.preventDefault()
@@ -51,7 +51,7 @@ function Profile() {
         if (username) {
             dispatch(getUserDetails(username));
         }
-    }, [ username, isViewingOwnProfile]);
+    }, [username, isViewingOwnProfile]);
 
 
     useEffect(() => {
@@ -99,7 +99,7 @@ function Profile() {
 
     const userAllLikePost = useMemo(() => {
         if (activityType !== "likePosts" || loading) return null;
-        return !likedPosts?.data?.length || likedPosts?.data?.length > 0 ?
+        return !likedPosts?.data?.length || likedPosts?.data?.length === 0 ?
             <div className="w-full h-[40vh] text-white flex justify-center items-center text-lg sm:text-xl lg:text-2xl font-semibold">
                 <div>No like post by user yet!</div>
             </div> : likedPosts?.data?.map((post, index) =>
@@ -145,7 +145,7 @@ function Profile() {
             {/* Profile Info */}
             <div className='sm:ml-3.5 flex justify-between  gap-x-8 gap-y-1  border-white/35 min-h-32 mt-10 sm:mt-15 px-2 py-1.5'>
                 <div className='flex flex-col justify-start items-start gap-2'>
-                    <div>     
+                    <div>
                         <div className='font-semibold text-white text-lg sm:text-2xl  leading-tight truncate'>{memoizedUserDetails?.fullName || "Full Name"}</div>
                         <div className='text-gray-500  text-sm/4 sm:text-base/4 '>@{memoizedUserDetails?.userName || "username"}</div>
                     </div>
@@ -159,11 +159,12 @@ function Profile() {
                         <a target="_blank" href={memoizedUserDetails?.link || ""}>{memoizedUserDetails?.link || ""}</a>
                     </div>
                     <div className='flex text-[0.8rem] sm:text-[0.9rem] my-2 justify-start gap-3.5 items-center'>
-                        <Link className="hover:underline" to={`/${memoizedUserDetails?.userName}/following`}>
-                            {memoizedUserDetails?.following > 0 ? memoizedUserDetails?.following ?? "0" : "0"} <span className='text-gray-500'>Following</span>
-                        </Link>
+                    
                         <Link className='hover:underline' to={`/${memoizedUserDetails?.userName}/follower`}>
                             {memoizedUserDetails?.follower > 0 ? memoizedUserDetails?.follower ?? "0" : "0"} <span className='text-gray-500'>Followers</span>
+                        </Link>
+                        <Link className="hover:underline" to={`/${memoizedUserDetails?.userName}/following`}>
+                            {memoizedUserDetails?.following > 0 ? memoizedUserDetails?.following ?? "0" : "0"} <span className='text-gray-500'>Following</span>
                         </Link>
                     </div>
                 </div>
@@ -203,7 +204,7 @@ function Profile() {
                 <div onClick={() => setActivityType("post")} className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm ${activityType === "post" ? "bg-white/15" : ""}`}>Post</div>
                 <div onClick={() => setActivityType("replies")} className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm ${activityType === "replies" ? "bg-white/15" : ""}`}>Replies</div>
                 {isViewingOwnProfile && <>
-                    <div className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm ${activityType === "likePosts" ? "bg-white/15" : ""}} onClick={() => setActivityType("likePosts")`}>Likes</div>
+                    <div className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm ${activityType === "likePosts" ? "bg-white/15" : ""}} `} onClick={() => setActivityType("likePosts")}>Likes</div>
                     <div onClick={() => setActivityType("likeComments")} className={`w-full text-center hover:bg-white/5 py-0.5 rounded-sm px-1.5 whitespace-nowrap ${activityType === "likeComments" ? "bg-white/15" : ""}`} >Comments</div>
                 </>}
             </div>

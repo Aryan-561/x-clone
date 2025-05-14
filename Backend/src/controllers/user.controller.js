@@ -47,7 +47,7 @@ const generateAccessAndRefreshToken = async function (id) {
 };
 
 const createUser = asyncHandler(async (req, res) => {
-    const { userName, fullName, email, password, bio, link } = req.body;
+    const { userName, fullName, email, password, } = req.body;
 
     if (!userName || !fullName || !email || !password) {
         throw new ApiErrors(400, "Please provide all required fields");
@@ -93,7 +93,7 @@ const createUser = asyncHandler(async (req, res) => {
     // Creating a new user document
     const user = await User.create({
         userName,
-        fullName,
+        fullName: fullName || "",
         email,
         coverImage: coverImageUrl
             ? {
@@ -108,8 +108,6 @@ const createUser = asyncHandler(async (req, res) => {
             }
             : null,
         password,
-        bio,
-        link,
     });
 
     const createdUser = await User.findById(user.id).select(
@@ -194,7 +192,7 @@ const verifyMail = asyncHandler(async (req, res) => {
 
 const resendVerificationEmail = asyncHandler(async (req, res) => {
     const { email } = req.body;
-
+    console.log("email", email);
     if (!email) {
         throw new ApiErrors(
             400,
@@ -222,10 +220,45 @@ const resendVerificationEmail = asyncHandler(async (req, res) => {
         to: email,
         subject: "Resend Email Verification",
         html: `
-            <h1>Hi ${user.userName}!</h1>
-            <p>Click the link below to verify your email address:</p>
-            <a href="${verificationUrl}">Verify Email</a>
-        `,
+    <div style="font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 40px 20px;">
+    <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); overflow: hidden;">
+        
+        <div style="background-color: #007bff; padding: 20px;">
+        <h2 style="color: #ffffff; margin: 0;">Welcome to X-Clone!</h2>
+        </div>
+
+        <div style="padding: 30px;">
+        <p style="font-size: 16px; color: #333333;">Hi <strong>${user.userName}</strong>,</p>
+        
+        <p style="font-size: 15px; color: #333333;">
+        Thank you for signing up! To get started, please confirm your email address by clicking the button below:
+        </p>
+
+        <div style="text-align: center; margin: 30px 0;">
+        <a href="${verificationUrl}" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            Re-Verify Email
+        </a>
+        </div>
+
+        <p style="font-size: 14px; color: #555555;">
+        Or copy and paste this URL into your browser:
+        </p>
+        <p style="font-size: 13px; color: #007bff; word-break: break-all;">${verificationUrl}</p>
+
+        <hr style="border: none; border-top: 1px solid #eeeeee; margin: 30px 0;">
+
+        <p style="font-size: 13px; color: #999999;">
+          If you didn't sign up for this account, you can safely ignore this email.
+        </p>
+      </div>
+
+      <div style="background-color: #f0f0f0; text-align: center; padding: 15px; font-size: 13px; color: #888888;">
+        © ${new Date().getFullYear()} X-Clone. All rights reserved.
+      </div>
+
+    </div>
+  </div>
+  `
     });
 
     return res.status(200).json({
@@ -324,24 +357,10 @@ const Googleauthentication = asyncHandler(async (req, res) => {
     });
 
     const payload = ticket.getPayload();
-    const { email, name, picture } = payload;
+    const { email, name } = payload;
 
-    // Check if user already exists
     let user = await User.findOne({ email });
-    // const profileImageUrl = ""
-    // const profilePublicid = ""
-    // if (picture) {
-    //     // Upload cover image if provided
-    //     const uploadCoverImageToCloudinary = await uploadCloudinary(
-    //         picture
-    //     );
-    //     console.log("uploadcloudinary", uploadCoverImageToCloudinary)
-    //     profileImageUrl = uploadCoverImageToCloudinary?.secure_url || "";
-    //     profilePublicid = uploadCoverImageToCloudinary?.public_id || ""
 
-    // }
-    // console.log("c",profileImageUrl)
-    // console.log("p",profilePublicid)
     if (!user) {
         // Generate a fallback userName using the email prefix
         const userName = email.split('@')[0] + Math.floor(Math.random() * 1000);
@@ -350,32 +369,30 @@ const Googleauthentication = asyncHandler(async (req, res) => {
             fullName: name,
             userName: userName,
             email,
-            // profileImage: profileImageUrl
-            //     ? {
-            //         url: profileImageUrl,
-            //         publicId: profilePublicid || "",
-            //     }
-            //     : null,
-
             isGoogleUser: true,
             isVerified: true,
         });
+    } else if (!user.isGoogleUser) {
+        // Email is already used by a manually registered user
+        throw new ApiErrors(403, "This email is registered with password login. Please use manual login.");
     }
-
 
     // Check if email is verified
     if (!user.isVerified) {
         throw new ApiErrors(403, "Please verify your email before logging in.");
     }
 
-    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
 
-    // Send response with token and user info in custom format
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
+
+    // Send response with token and user info
     return res
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
-        .status(200).json(new ApiResponse(200, "User logged in successfully", { refreshToken, accessToken, user }));
+        .status(200)
+        .json(new ApiResponse(200, "User logged in successfully", { refreshToken, accessToken, user }));
 });
+
 
 const jwtRefreshToken = asyncHandler(async (req, res) => {
     const oldRefreshToken = req.cookies?.refreshToken;
@@ -642,53 +659,53 @@ const getUserDetails = asyncHandler(async (req, res) => {
 
     const userDetails = await User.aggregate([
         {
-            $match:{
-                _id:find?._id
+            $match: {
+                _id: find?._id
             }
         },
         {
-            $lookup:{
-                from:"subscriptions",
-                localField:"_id",
-                foreignField:"follower",
-                as:"followingDoc"
-            }
-        },
-
-        {
-            $lookup:{
-                from:"subscriptions",
-                localField:"_id",
-                foreignField:"following",
-                as:"followerDoc"
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "follower",
+                as: "followingDoc"
             }
         },
 
         {
-                $addFields:{
-                    follower:{$size:"$followerDoc"},
-                    following:{$size:"$followingDoc"},
-                    isFollowed:{
-                        $cond:{
-                            if:{$in:[req?.user?._id, "$followerDoc.follower"]},
-                            then:true,
-                            else:false
-                        }
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "following",
+                as: "followerDoc"
+            }
+        },
+
+        {
+            $addFields: {
+                follower: { $size: "$followerDoc" },
+                following: { $size: "$followingDoc" },
+                isFollowed: {
+                    $cond: {
+                        if: { $in: [req?.user?._id, "$followerDoc.follower"] },
+                        then: true,
+                        else: false
                     }
                 }
+            }
         },
         {
-            $project:{
-                fullName:1,
-                userName:1,
-                bio:1,
-                link:1,
-                coverImage:1,
-                profileImage:1,
-                follower:1,
-                following:1,
-                createdAt:1,
-                isFollowed:1
+            $project: {
+                fullName: 1,
+                userName: 1,
+                bio: 1,
+                link: 1,
+                coverImage: 1,
+                profileImage: 1,
+                follower: 1,
+                following: 1,
+                createdAt: 1,
+                isFollowed: 1
             }
         }
     ])
@@ -700,11 +717,51 @@ const getUserDetails = asyncHandler(async (req, res) => {
 // for random user sugestion
 const getRandomUsers = asyncHandler(async (req, res) => {
     const users = await User.aggregate([
-        { $sample: { size: 2 } }
-    ]);
+        { $match: { _id: { $ne: req.user?._id } } },
+
+        { $sample: { size: 2 } },
+
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "follower",
+                as: "followingDoc"
+            }
+        },
+
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "following",
+                as: "followerDoc"
+            }
+        },
+
+        {
+            $addFields: {
+                follower: { $size: "$followerDoc" },
+                following: { $size: "$followingDoc" },
+            }
+        },
+        {
+            $project: {
+                fullName: 1,
+                userName: 1,
+                bio: 1,
+                link: 1,
+                profileImage: 1,
+                follower: 1,
+                following: 1,
+            }
+        }
+    ])
+
+
 
     if (!users || users.length === 0) {
-        throw new ApiErrors(200, "No users found");
+        throw new ApiErrors(404, "No users found");
     }
 
     res.status(200).json(new ApiResponse(200, "Random users fetched", users));

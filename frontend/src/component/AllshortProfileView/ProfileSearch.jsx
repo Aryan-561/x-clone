@@ -14,7 +14,7 @@ function ProfileSearch({ children, follower, following, profileImage, fullName, 
                     <h1 className='font-semibold hover:underline text-white text-xl leading-tight'>{fullName || "Fullname"}</h1>
                     <h6 className='text-gray-300 text-xs mb-1'>@{userName || "username"}</h6>
                     <p className='text-gray-400 text-xs line-clamp-2 max-w-sm'>
-                        {bio || "A man doesn't die when he stops breathing. A man dies when he is forgotten."}
+                        {bio || ""}
                     </p>
                     <div
                         className="  text-blue-500 hover:text-blue-700 transition-colors truncate break-words text-[12px] max-w-full "
@@ -23,7 +23,7 @@ function ProfileSearch({ children, follower, following, profileImage, fullName, 
                     </div>
                     <div className='flex text-sm font-sans mt-3 text-white/90 gap-x-2.5'>
                         <div className='hover:underline'>{follower ||  "0"}{""} Follower</div>
-                        <div className='hover:underline'>{follower || "0"}{""} Following</div>
+                        <div className='hover:underline'>{following || "0"}{""} Following</div>
                     </div>
                 </div>
             </div>
