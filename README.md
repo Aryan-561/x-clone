@@ -1,6 +1,7 @@
 # 🐦 X Clone – Full-Stack Twitter Clone (MERN)
 
-A complete full-stack Twitter (X) clone built using the MERN stack, offering a modern and responsive UI with powerful social features. Users can post, like, reply, follow, bookmark, and authenticate securely with JWT and Google OAuth. With media uploads, email verification, and protected APIs, it's built for both performance and scalability.
+**<small>A complete full-stack Twitter (X) clone built using the MERN stack, offering a modern and responsive UI with powerful social features. Users can post, like, reply, follow, bookmark, and authenticate securely with JWT and Google OAuth. With media uploads, email verification, and protected APIs, it's built for both performance and scalability.</small>**
+
 ---
 
 ## 🚀 Features
@@ -65,9 +66,9 @@ x-clone/
 ## 📡 API Routes
 EXAMPLE OF API URL:
 
-Frontend Live Demo: [https://notxclone.vercel.app/signup](https://notxclone.vercel.app/signup)
+Frontend Live Demo: [https://notxclone.vercel.app](https://notxclone.vercel.app)
 
-Backend Railway Dashboard / API URL: [https://xclone.up.railway.app/api/v1/users/login](https://xclone.up.railway.app/api/v1/users/login)
+Backend Railway Dashboard / API URL: [https://xclone.up.railway.app/api/v1/users](https://xclone.up.railway.app/api/v1/users)
 
 ### 🔐 User Routes – `/api/v1/users`
 
@@ -210,7 +211,7 @@ Frontend deployed on Vercel for fast, global CDN delivery and seamless React app
 
 You can also run the app locally by adding your own domain or using localhost.
 
-Frontend Live Demo: [https://notxclone.vercel.app/signup](https://notxclone.vercel.app/signup)
+Frontend Live Demo: [https://notxclone.vercel.app](https://notxclone.vercel.app)
 
 Backend Railway Dashboard / API URL: [https://railway.app/project/your-project-id](https://railway.app/project/your-project-id) (replace with your backend service provider project link)
 
