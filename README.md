@@ -1,7 +1,6 @@
 # 🐦 X Clone – Full-Stack Twitter Clone (MERN)
 
-A powerful full-stack Twitter (X) clone built using the **MERN stack**, supporting social features like posting, liking, replying, following, bookmarking, Google OAuth, media uploads, and email verification.
-
+A complete full-stack Twitter (X) clone built using the MERN stack, offering a modern and responsive UI with powerful social features. Users can post, like, reply, follow, bookmark, and authenticate securely with JWT and Google OAuth. With media uploads, email verification, and protected APIs, it's built for both performance and scalability.
 ---
 
 ## 🚀 Features
@@ -65,7 +64,7 @@ x-clone/
 
 ## 📡 API Routes
 
-### 🔐 User Routes – `/api/users`
+### 🔐 User Routes – `/api/v1/users`
 
 | Method | Endpoint                  | Description                              |
 | ------ | ------------------------- | ---------------------------------------- |
@@ -85,7 +84,7 @@ x-clone/
 | POST   | `/resend-verification`    | Resend verification email                |
 | POST   | `/google-login`           | Google login                             |
 
-### 📨 Subscription Routes – `/api/subscriptions`
+### 📨 Subscription Routes – `/api/v1/subscriptions`
 
 | Method | Endpoint               | Description          |
 | ------ | ---------------------- | -------------------- |
@@ -93,7 +92,7 @@ x-clone/
 | GET    | `/:userId/follower`    | Get user followers   |
 | GET    | `/:userId/following`   | Get user followings  |
 
-### 📝 Post Routes – `/api/posts`
+### 📝 Post Routes – `/api/v1/posts`
 
 | Method | Endpoint          | Description                |
 | ------ | ----------------- | -------------------------- |
@@ -105,7 +104,7 @@ x-clone/
 | GET    | `/:postId`        | Get post by ID             |
 | DELETE | `/delete/:postId` | Delete post                |
 
-### 💬 Comment Routes – `/api/comments`
+### 💬 Comment Routes – `/api/v1/comments`
 
 | Method | Endpoint              | Description          |
 | ------ | --------------------- | -------------------- |
@@ -118,7 +117,7 @@ x-clone/
 | GET    | `/post/:postId`       | Get comments on post |
 | GET    | `/c/:username`        | Get user's comments  |
 
-### ❤️ Like Routes – `/api/likes`
+### ❤️ Like Routes – `/api/v1/likes`
 
 | Method | Endpoint                     | Description         |
 | ------ | ---------------------------- | ------------------- |
@@ -127,7 +126,7 @@ x-clone/
 | GET    | `/posts`                     | Get liked posts     |
 | GET    | `/comments`                  | Get liked comments  |
 
-### 📌 Bookmark Routes – `/api/bookmarks`
+### 📌 Bookmark Routes – `/api/v1/bookmarks`
 
 | Method | Endpoint                | Description                 |
 | ------ | ----------------------- | --------------------------- |
@@ -168,10 +167,9 @@ VITE_GOOGLE_CLIENT_ID=your_google_client_id
 
 ### 1. Clone the Repository
 
-```bash
-git clone https://github.com/yourusername/x-clone.git
-cd x-clone
-```
+* git clone https://github.com/HimanshuTamoli24/x-clone.git
+* cd x-clone
+
 
 ### 2. Backend Setup
 
@@ -197,6 +195,14 @@ npm run dev
 * 💬 Direct messaging and group messaging
 * 🔍 Advanced search & filtering
 * 🛠️ Admin dashboard
+
+---
+
+## 🚀 Deployment
+
+* Backend hosted on Railway
+* Frontend deployed on Vercel
+
 
 ---
 
