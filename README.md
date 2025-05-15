@@ -63,6 +63,11 @@ x-clone/
 ---
 
 ## 📡 API Routes
+EXAMPLE OF API URL:
+
+Frontend Live Demo: [https://notxclone.vercel.app/signup](https://notxclone.vercel.app/signup)
+
+Backend Railway Dashboard / API URL: [https://xclone.up.railway.app/api/v1/users/login](https://xclone.up.railway.app/api/v1/users/login)
 
 ### 🔐 User Routes – `/api/v1/users`
 
@@ -197,11 +202,18 @@ npm run dev
 * 🛠️ Admin dashboard
 
 ---
-
 ## 🚀 Deployment
 
-* Backend hosted on Railway
-* Frontend deployed on Vercel
+Backend hosted on Railway for reliable and scalable server infrastructure.
+
+Frontend deployed on Vercel for fast, global CDN delivery and seamless React app hosting.
+
+You can also run the app locally by adding your own domain or using localhost.
+
+Frontend Live Demo: [https://notxclone.vercel.app/signup](https://notxclone.vercel.app/signup)
+
+Backend Railway Dashboard / API URL: [https://railway.app/project/your-project-id](https://railway.app/project/your-project-id) (replace with your backend service provider project link)
+
 
 
 ---
