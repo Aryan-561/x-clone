@@ -40,11 +40,11 @@ function Profile() {
         setIsFollowed(getUser?.data?.isFollowed);
     }, [getUser]);
 
-    // useEffect(()=>{
+    useEffect(()=>{
 
-    //     dispatch(getCurrentUser());
-    //     console.log("here",new Date)
-    // },[])
+        dispatch(getCurrentUser());
+        console.log("here",new Date)
+    },[])
 
     useEffect(() => {
 
