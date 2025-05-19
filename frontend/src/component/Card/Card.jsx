@@ -27,7 +27,7 @@ function Card({ data, forPost=true }) {
       const commentId = data._id
       dispatch(deleteComment({commentId}))
       setIsDeleted(true)
-      console.log(data._id," Post deleted.")
+      console.log(data._id," Comment deleted.")
     }
   }
 
@@ -36,8 +36,8 @@ function Card({ data, forPost=true }) {
       {!isDeleted &&
         <div className="text-white   bg-black   border-b border-gray-600 p-2 sm:p-4 ">
         <div className="flex gap-2 relative">
-          {(data?.userDetails?.userId==user?._id || data?.createdBy?._id==user?._id || data?.commentBy?._id==user?._id) &&
-          <div className="absolute right-2 top-1">
+          {user?._id && (data?.userDetails?.userId==user?._id || data?.createdBy?._id==user?._id || data?.commentBy?._id==user?._id) &&
+          <div className="absolute right-1 sm:right-2 top-1">
             <Button  className={`hover:bg-white/10 hover:text-red-500 p-2 rounded-full cursor-pointer text-center`} onBtnClick={handleDeleteBtn}>
               <FiTrash2/>
             </Button>
