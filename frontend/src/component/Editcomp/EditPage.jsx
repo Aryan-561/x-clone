@@ -123,7 +123,7 @@ function EditPage() {
                                 {...register("fullName", {
                                     required: "Full name is required",
                                     maxLength: {
-                                        value: 16,
+                                        value: 20,
                                         message: "Full name must not exceed 16 characters"
                                     }
                                 })}

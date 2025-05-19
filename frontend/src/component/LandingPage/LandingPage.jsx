@@ -1,23 +1,23 @@
 import React from 'react';
 import { Container, X } from '../index';
-import {Googleauthentication} from '../';
+import { Googleauthentication } from '../';
 import { useNavigate } from 'react-router-dom';
 
 function LandingPage() {
     const navigate = useNavigate();
 
     return (
-        <Container className="bg-black text-white min-h-screen w-full flex">
+        <Container className="bg-black text-white min-h-screen w-full flex flex-col lg:flex-row justify-center items-center px-6 sm:px-12 md:px-20">
             {/* Left Side - X Logo */}
-            <div className="w-1/2 hidden lg:flex justify-center items-center">
-                <X className="w-[350px] h-[350px]" image="xLight.png" imageAlt="X Logo" />
+            <div className="w-full lg:w-1/2 hidden lg:flex justify-center items-center mb-10 lg:mb-0">
+                <X className="w-[200px] md:w-[250px] lg:w-[300px] h-auto" image="xLight.png" imageAlt="X Logo" />
             </div>
 
             {/* Right Side - Signup/Login UI */}
-            <div className="w-full lg:w-1/2 flex flex-col justify-center items-start px-8 sm:px-16 gap-10">
+            <div className="w-full lg:w-1/2 flex flex-col justify-center items-center gap-10">
                 <div className="flex flex-col gap-4">
-                    <h1 className="text-6xl sm:text-7xl font-extrabold">Happening now</h1>
-                    <h2 className="text-2xl sm:text-3xl font-semibold">Join today.</h2>
+                    <h1 className="text-5xl md:text-5xl lg:text-6xl font-extrabold">Happening now</h1>
+                    <h2 className="text-xl md:text-xl lg:text-2xl font-semibold">Join today.</h2>
                 </div>
 
                 {/* Auth Section */}
@@ -34,7 +34,7 @@ function LandingPage() {
                     {/* Create Account */}
                     <button
                         onClick={() => navigate('/signup')}
-                        className="bg-blue-600 hover:bg-blue-700 transition text-white font-semibold py-2 rounded-full text-lg w-full"
+                        className="bg-blue-600 hover:bg-blue-700 transition text-white font-semibold py-2 rounded-full text-sm md:text-lg lg:text-xl  w-full"
                     >
                         Create Account
                     </button>
@@ -44,7 +44,7 @@ function LandingPage() {
                     </p>
 
                     <div className="mt-6">
-                        <h3 className="text-lg font-bold mb-2">Already have an account?</h3>
+                        <h3 className="text-lg font-bold text-center mb-2">Already have an account?</h3>
                         <button
                             onClick={() => navigate('/login')}
                             className="border border-zinc-600 hover:bg-indigo-300/10 font-serif transition text-blue-500 font-semibold py-2 rounded-full text-lg w-full"
@@ -55,6 +55,7 @@ function LandingPage() {
                 </div>
             </div>
         </Container>
+
     );
 }
 
