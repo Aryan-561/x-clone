@@ -21,7 +21,7 @@ const GoogleAuthentication = () => {
             const decoded = jwtDecode(credential);
             console.log("Decoded User Info:", decoded);
 
-            dispatch(Googleauthentication(credential));
+            await Promise.resolve(dispatch(Googleauthentication(credential)));
             navigate("/home")
             
         } catch (err) {
