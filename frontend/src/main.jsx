@@ -1,5 +1,5 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -10,6 +10,11 @@ import { Login, Signup, Home, Explore, Profile, Bookmark, Post, Comment, UserLis
 import { EditPage, LandingPage } from './component/index.js';
 import ComposePost from './pages/ComposePost/ComposePost.jsx'
 import Comingsoon from './pages/Comingsoon/Comingsoon.jsx';
+import { injectStore } from './utils/axios.instance';
+
+// Inject store into axios instance
+injectStore(store);
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -89,9 +94,7 @@ const router = createBrowserRouter([
 
 ]);
 
-
-
-createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <RouterProvider router={router} />

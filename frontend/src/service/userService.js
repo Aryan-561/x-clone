@@ -1,111 +1,93 @@
-
-import { userBaseUrl,postBaseUrl } from "../constants";
 import axios from "axios";
+import { axiosPrivate } from '../utils/axios.instance';
+
 class Userservice {
     async createUser({ profileImage, coverImage, username, fullname, email, password, bio, link }) {
         try {
             const formData = new FormData()
             formData.append("profileImage", profileImage);
             formData.append("coverImage", coverImage);
-
-            // append all your other fields
             formData.append("userName", username);
             formData.append("fullName", username);
             formData.append("email", email);
             formData.append("password", password);
-            // formData.append("bio", bio);
-            // formData.append("link", link);
 
-            // console.log("formdaraq, formData")
-            const response = await axios.post(`${userBaseUrl}/create`, formData, {
+            const response = await axios.post('http://localhost:4444/api/v1/users/create', formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
             });
-            console.log("response", response.data)
-            return response.data
-
+            console.log("Create user response:", response.data);
+            return response.data;
         } catch (error) {
-            console.log("Userservice :: createUser :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: createUser :: Errors ${error.response?.data?.message || "something went wrong while createUser"}`)
+            console.error("Create user error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to create user");
         }
     }
 
     async loginUser({ username, email, password }) {
         try {
-            const response = await axios.post(`${userBaseUrl}/login`, {
+            const response = await axiosPrivate.post('/users/login', {
                 userName: username,
                 email,
                 password
-
-            },
-                { withCredentials: true })
-            console.log("response", response.data);
-            return response.data
+            });
+            console.log("Login response:", response.data);
+            return response.data;
         } catch (error) {
-            console.log("Userservice :: loginUser :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: loginUser :: Errors ${error.response?.data?.message || "something went wrong while loginUser"}`)
+            console.error("Login error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to login");
         }
     }
 
     async deleteUser() {
         try {
-            const response = await axios.delete(`${userBaseUrl}/deleteuser`, {
-                withCredentials: true,
-            })
-            console.log("response", response.data)
-            return response.data
+            const response = await axiosPrivate.delete('/users/deleteuser');
+            console.log("Delete user response:", response.data);
+            return response.data;
         } catch (error) {
-            console.log("Userservice :: deleteUser :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: deleteUser :: Errors ${error.response?.data?.message || "something went wrong while deleteUser"}`)
+            console.error("Delete user error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to delete user");
         }
     }
 
     async jwtRefreshToken() {
         try {
-            const response = await axios.post(`${userBaseUrl}/re-refreshtoken`,
-                {},
-                {
-                    withCredentials: true
-                }
-            )
-            console.log("response", response.data)
-            return response.data
-
+            console.log("Attempting to refresh token...");
+            const response = await axiosPrivate.post('/users/re-refreshtoken');
+            console.log("Refresh token response:", response.data);
+            return response.data;
         } catch (error) {
-            console.log("Userservice :: jwtRefreshToken :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: jwtRefreshToken :: Errors ${error.response?.data?.message || "something went wrong while jwtRefreshToken"}`)
+            console.error("Token refresh error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to refresh token");
         }
     }
 
     async logoutUser() {
         try {
-            const response = await axios.get(`${userBaseUrl}/logout`, { withCredentials: true })
-            console.log("response", response.data)
-            return response.data
+            const response = await axiosPrivate.get('/users/logout');
+            console.log("Logout response:", response.data);
+            return response.data;
         } catch (error) {
-            console.log("Userservice :: logoutUser :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: logoutUser :: Errors ${error.response?.data?.message || "something went wrong while logoutUser"}`)
-
+            console.error("Logout error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to logout");
         }
     }
 
     async updateUserAccountDetails({ username, fullname, email, bio, link }) {
         try {
-            const response = await axios.post(`${userBaseUrl}/update-account-details`, {
+            const response = await axiosPrivate.post('/users/update-account-details', {
                 userName: username,
                 fullName: fullname,
                 email,
                 bio,
                 link
-            }, {
-                withCredentials: true
-            })
-            console.log("response", response.data)
-            return response.data
+            });
+            console.log("Update account response:", response.data);
+            return response.data;
         } catch (error) {
-            console.log("Userservice :: updateUserAccountDetails :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: updateUserAccountDetails :: Errors ${error.response?.data?.message || "something went wrong while updateUserAccountDetails"}`)
+            console.error("Update account error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to update account");
         }
     }
 
@@ -113,19 +95,16 @@ class Userservice {
         try {
             const formData = new FormData()
             formData.append("coverImage", coverImage)
-            const response = await axios.patch(`${userBaseUrl}/update-coverImage`, formData,
-                {
-                    withCredentials: true,
-                    headers: {
-                        "Content-Type": "multipart/form-data"
-                    }
-                })
-            console.log("response", response.data)
-            return response.data
+            const response = await axiosPrivate.patch('/users/update-coverImage', formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+            console.log("Update cover image response:", response.data);
+            return response.data;
         } catch (error) {
-            console.log("Userservice :: updateUserCoverImage :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: updateUserCoverImage :: Errors ${error.response?.data?.message || "something went wrong while updateUserCoverImage"}`)
-
+            console.error("Update cover image error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to update cover image");
         }
     }
 
@@ -133,121 +112,96 @@ class Userservice {
         try {
             const formData = new FormData()
             formData.append("profileImage", profileImage)
-            const response = await axios.patch(`${userBaseUrl}/update-profileimage`, formData,
-                {
-                    withCredentials: true,
-                    headers: {
-                        "Content-Type": "multipart/form-data"
-                    }
-                })
-            console.log("response", response.data)
-            return response.data
+            const response = await axiosPrivate.patch('/users/update-profileimage', formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+            console.log("Update profile image response:", response.data);
+            return response.data;
         } catch (error) {
-            console.log("Userservice :: updateUserProfileImage :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: updateUserProfileImage :: Errors ${error.response?.data?.message || "something went wrong while updateUserProfileImage"}`)
-
+            console.error("Update profile image error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to update profile image");
         }
     }
 
     async getCurrentUser() {
         try {
-            const response = await axios.get(`${userBaseUrl}`, {
-                withCredentials: true
-            })
-
-            console.log("response", response.data)
-            return response.data
-
+            const response = await axiosPrivate.get('/users');
+            console.log("Get current user response:", response.data);
+            return response.data;
         } catch (error) {
-            console.log("Userservice :: getCurrentUser :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: getCurrentUser :: Errors ${error.response?.data?.message || "something went wrong while getCurrentUser"}`)
+            console.error("Get current user error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to get current user");
         }
-
     }
 
     async search(search) {
         try {
-            const response = await axios.get(`${userBaseUrl}/search/${search}`
-            )
-            console.log("response", response.data)
-            return response.data
+            const response = await axiosPrivate.get(`/users/search/${search}`);
+            console.log("Search response:", response.data);
+            return response.data;
         } catch (error) {
-
-            console.log("Userservice :: searchUser :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: searchUser :: Errors ${error.response?.data?.message || "something went wrong while searchUser"}`)
+            console.error("Search error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to search");
         }
     }
 
     async getUserDetails(username) {
         try {
-            const response = await axios.get(`${userBaseUrl}/username/${username}`,{withCredentials: true}
-            )
-            console.log("response", response.data)
-            return response.data
+            const response = await axiosPrivate.get(`/users/username/${username}`);
+            console.log("Get user details response:", response.data);
+            return response.data;
         } catch (error) {
-
-            console.log("Userservice :: getUserDetails :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: getUserDetails :: Errors ${error.response?.data?.message || "something went wrong while getUserDetails"}`)
+            console.error("Get user details error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to get user details");
         }
     }
 
     async resendEmailVerification(email) {
         try {
-            const response = await axios.post(`${userBaseUrl}/resend-verification`, {
-                email
-            });
+            const response = await axiosPrivate.post('/users/resend-verification', { email });
+            console.log("Resend verification response:", response.data);
             return response.data;
         } catch (error) {
-            console.log("Userservice :: resendEmailVerification :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: resendEmailVerification :: Errors ${error.response?.data?.message || "Something went wrong"}`);
+            console.error("Resend verification error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to resend verification");
         }
     }
 
-    async getUserPost( username) {
+    async getUserPost(username) {
         try {
-            const response = await axios.get(`${postBaseUrl}/user/${username}`, {
-                withCredentials: true
-            });
-            console.log("response", response.data);
+            const response = await axiosPrivate.get(`/post/user/${username}`);
+            console.log("Get user posts response:", response.data);
             return response.data;
         } catch (error) {
-            console.log("Userservice :: getUserPost :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: getUserPost :: Errors ${error.response?.data?.message || "something went wrong while getUserPost"}`);
+            console.error("Get user posts error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to get user posts");
         }
     }
 
     async Googleauthentication(credential) {
         try {
-            const response = await axios.post(`${userBaseUrl}/google-login`, {
-                credential
-            }, {
-                withCredentials: true
-            });
-            console.log("response", response.data);
+            const response = await axiosPrivate.post('/users/google-login', { credential });
+            console.log("Google auth response:", response.data);
             return response.data;
         } catch (error) {
-            console.log("Userservice :: Googleauthentication :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: Googleauthentication :: Errors ${error.response?.data?.message || "something went wrong while Googleauthentication"}`);
+            console.error("Google auth error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to authenticate with Google");
         }
     }
+
     async getRandomUser() {
         try {
-            const response = await axios.get(`${userBaseUrl}/randomuser`, {
-                withCredentials: true
-            });
-            console.log("response", response.data);
+            const response = await axiosPrivate.get('/users/randomuser');
+            console.log("Get random user response:", response.data);
             return response.data;
         } catch (error) {
-            console.log("Userservice :: getRandomUser :: Errors", error.response?.data?.message);
-            throw new Error(`Userservice :: getRandomUser :: Errors ${error.response?.data?.message || "something went wrong while getRandomUser"}`);
+            console.error("Get random user error:", error.response?.data?.message || error.message);
+            throw new Error(error.response?.data?.message || "Failed to get random user");
         }
     }
-
-
-
 }
 
 const userServices = new Userservice();
-export {
-    userServices
-}
+export { userServices };

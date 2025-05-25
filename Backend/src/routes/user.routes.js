@@ -41,7 +41,7 @@ router.route("/login").post(parseFormData, loginuser)
 router.route("/logout").get(verifyJwt, logoutUser)
 
 //  for refreshing token
-router.route("/re-refreshtoken").post(verifyJwt, jwtRefreshToken)
+router.route("/re-refreshtoken").post(jwtRefreshToken)
 
 //  for updating user details
 router.route("/update-account-details").post(parseFormData, verifyJwt, updateUserAccountDetails)

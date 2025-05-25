@@ -6,34 +6,56 @@ import conf from "../conf/conf.js";
 
 // Middleware to verify JWT token and attach user to request object
 const verifyJwt = asyncHandler(async (req, _, next) => {
+    console.log('Auth middleware - Request path:', req.path);
+    console.log('Auth middleware - Cookies:', req.cookies);
+    console.log('Auth middleware - Headers:', req.headers);
+    
     try {
-        const token = req.cookies.accessToken;
-        console.log("token", token);
+        const token = req.cookies?.accessToken;
+        console.log("Access token status:", token ? "Present" : "Not present");
+        
         if (!token) {
+            console.log("No access token found in cookies");
             throw new ApiErrors(401, "Unauthorized, please login");
         }
-        const decoded = jwt.verify(token, conf.accessSecretToken);
-        const user = await User.findById(decoded.id).select(" -password -refreshToken");
-        if (!user) {
-            throw new ApiErrors(404, "User not found, please re-check user details");
+
+        try {
+            console.log("Attempting to verify token...");
+            const decoded = jwt.verify(token, conf.accessSecretToken);
+            console.log("Token decoded successfully:", {
+                userId: decoded.id,
+                email: decoded.email,
+                exp: new Date(decoded.exp * 1000).toISOString()
+            });
+
+            const user = await User.findById(decoded.id).select("-password -refreshToken");
+            if (!user) {
+                console.log("User not found for decoded token ID:", decoded.id);
+                throw new ApiErrors(404, "User not found");
+            }
+
+            console.log("User authenticated successfully:", user._id.toString());
+            req.user = user;
+            next();
+        } catch (error) {
+            console.error("Token verification error:", {
+                name: error.name,
+                message: error.message,
+                expiredAt: error.expiredAt ? new Date(error.expiredAt).toISOString() : undefined
+            });
+            
+            if (error.name === "TokenExpiredError") {
+                throw new ApiErrors(401, "Token expired");
+            }
+            if (error.name === "JsonWebTokenError") {
+                throw new ApiErrors(401, "Invalid token");
+            }
+            throw error;
         }
-
-        // decode information from accesstoken and add to req.user
-        req.user = user
-        next()
-
     } catch (error) {
-
-        console.error("Error verifying token", error);
-        if (error.name === "TokenExpiredError") {
-            throw new ApiErrors(401, "Session expired, please re-login");
-        }
-        if (error.name === "JsonWebTokenError") {
-            throw new ApiErrors(401, "Invalid token, please login again");
-        }
-
-        throw new ApiErrors(500, "Failed to authenticate token");
-
+        console.error("Auth middleware error:", error);
+        next(error);
     }
-})
-export default verifyJwt
+});
+
+export default verifyJwt;
