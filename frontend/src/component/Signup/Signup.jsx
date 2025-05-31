@@ -113,7 +113,7 @@ function Signup() {
     };
 
     return (
-        <Container className="w-full flex-col inset-0 absolute bg-black flex items-center justify-center text-white px-3">
+        <Container className="w-full flex-col bg-gray-800 flex items-center justify-center text-white p-3">
             {!showVerificationPrompt ? (
                 <div className="w-full max-w-xl text-center bg-black px-8 shadow-white/50 rounded-2xl shadow-sm">
                     {/* Close Button */}
@@ -121,7 +121,7 @@ function Signup() {
                         <X className="w-16 rounded-full" image="xLight.png" imageAlt="close" />
                     </div>
 
-                    <h1 className="text-3xl font-semibold font-serif mb-6 whitespace-nowrap">Create your account</h1>
+                    <h1 className="text-xl md:text-3xl  font-semibold font-serif mb-6 whitespace-nowrap">Create your account</h1>
 
                     {/* Google Auth */}
                     <div className="flex items-center justify-center w-full py-3">

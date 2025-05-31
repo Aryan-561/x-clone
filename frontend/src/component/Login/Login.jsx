@@ -31,13 +31,13 @@ function Login() {
     };
 
     return (
-        <Container className="w-full  inset-0 absolute bg-gray-950/85 flex items-center justify-center text-white px-3">
+        <Container className="w-full  bg-gray-800 flex items-center justify-center text-white p-3">
             <div className="w-full max-w-xl text-center bg-black p-8 shadow-white/50 rounded-2xl shadow-sm">
                 {/* Close Button */}
                 <div className="w-full flex justify-center mb-4">
                     <X className="w-16 rounded-full" image="xLight.png" imageAlt="close" />
                 </div>
-                <h1 className="text-3xl font-semibold font-serif mb-6">Sign in to X</h1>
+                <h1 className="text-xl md:text-3xl  font-semibold font-serif mb-6">Sign in to X</h1>
 
                 {/* Google Login */}
                 <div className="flex items-center justify-center w-full py-3">
