@@ -12,7 +12,7 @@ export const formatJoinDate = (dateString, withTime = false) => {
         })}`;
     }
 
-    return `Joined on ${date.toLocaleString('en-US', {
+    return `Joined  ${date.toLocaleString('en-US', {
         month: 'long',
         year: 'numeric',
     })}`;
