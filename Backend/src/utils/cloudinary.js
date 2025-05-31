@@ -19,18 +19,16 @@ const uploadCloudinary = async (filepath, resourceType = "auto") => {
             resource_type: "auto",
             folder: "tweetDb",
         });
-        console.log(" uploaded media file :", uploadedMedia.secure_url);
+// console.log(" uploaded media file :", uploadedMedia.secure_url)
 
         await fs.unlink(filepath);
-        console.log("Temporary media file deleted:", filepath);
+// console.log("Temporary media file deleted:", filepath)
         // console.log("response:", uploadedMedia);
             
         return uploadedMedia;
     } catch (error) {
         await fs.unlink(filepath);
-
-        console.log("Error uploading media file:", error);
-        throw new ApiErrors(500, "Failed to upload media file:", error);
+// console.log("Error uploading media file:", error)
     }
 };
 
@@ -54,15 +52,11 @@ const deleteCloudinary = async (publicId, resourceType="image") => {
 
 
         const deleteMedia = await cloudinary.uploader.destroy(publicId,{resource_type:resourceType});
-
-        console.log("delete media files", deleteMedia);
-        return deleteMedia;
-
+// console.log("delete media files", deleteMedia)
+// console.log("delete media files", deleteMedia)
     } catch (error) {
-        
-        console.log("Error deleting media:", error);
+// console.log("Error deleting media:", error)
 
-        throw new ApiErrors(500, "Failed to delete media file", error);
-    }
+// console.log("Error deleting media:", error)
 };
 export { uploadCloudinary, deleteCloudinary };

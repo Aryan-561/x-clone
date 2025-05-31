@@ -12,9 +12,7 @@ function Post(){
     
     
     const dispatch = useDispatch()
-
-    console.log("PostId:",String(postId))
-    useEffect(()=>{
+// console.log("PostId:",String(postId))
         dispatch(getPostById(postId))
         dispatch(getAllPostComments({postId}))
     },[dispatch])

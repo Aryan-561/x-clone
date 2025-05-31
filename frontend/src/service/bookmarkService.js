@@ -11,15 +11,11 @@ export class BookmarkService{
         try {
             
             const response = await axiosInstance.post(`/t/post/${postId}`,{},{withCredentials: true,})
-            
-            console.log(response.data)
-            return response.data
+// console.log(response.data)
 
         } catch (error) {
-            
-            console.log("Bookmark Service :: toggleBookmarkedPost :: Errors", error.response?.data?.message);
-
-            throw new Error(`Bookmark Service :: toggleBookmarkedPost :: Errors ${error.response?.data?.message || "something went wrong while toggleBookmarkedPost"}`)
+// console.log("Bookmark Service :: toggleBookmarkedPost :: Errors", error.response?.data?.message)
+// console.log("Bookmark Service :: toggleBookmarkedPost :: Errors", error.response?.data?.message)
 
         }
     }
@@ -28,55 +24,43 @@ export class BookmarkService{
         try {
             
             const response = await axiosInstance.post(`/t/comment/${commentId}`,{},{withCredentials: true,})
-            
-            console.log(response.data)
+// console.log(response.data)
             return response.data
-
-        } catch (error) {
-            
-            console.log("Bookmark Service :: toggleBookmarkedComment :: Errors", error.response?.data?.message);
+// console.log(response.data)
+// console.log("Bookmark Service :: toggleBookmarkedComment :: Errors", error.response?.data?.message)
 
             throw new Error(`Bookmark Service :: toggleBookmarkedComment :: Errors ${error.response?.data?.message || "something went wrong while toggleBookmarkedComment"}`)
-
-        }
+// console.log("Bookmark Service :: toggleBookmarkedComment :: Errors", error.response?.data?.message)
     }
 
     async getAllbookmarkedPost(){
         try {
             
             const response = await axiosInstance.get(`/posts`,{withCredentials: true,})
-            
-            console.log(response.data)
+// console.log(response.data)
             return response.data
 
         } catch (error) {
-            
-            console.log("Bookmark Service :: getAllbookmarkedPost :: Errors", error.response?.data?.message);
-
+// console.log(response.data)
             throw new Error(`Bookmark Service :: getAllbookmarkedPost :: Errors ${error.response?.data?.message || "something went wrong while getAllbookmarkedPost"}`)
 
         }
-    }
-
+// console.log("Bookmark Service :: getAllbookmarkedPost :: Errors", error.response?.data?.message)
 
     async getAllbookmarkedComment(){
         try {
             
             const response = await axiosInstance.get(`/comments`,{withCredentials: true,})
-            
-            console.log(response.data)
+// console.log(response.data)
             return response.data
 
         } catch (error) {
-            
-            console.log("Bookmark Service :: getAllbookmarkedComment :: Errors", error.response?.data?.message);
+// console.log("Bookmark Service :: getAllbookmarkedComment :: Errors", error.response?.data?.message)
 
-            throw new Error(`Bookmark Service :: getAllbookmarkedComment :: Errors ${error.response?.data?.message || "something went wrong while getAllbookmarkedComment"}`)
-
+// console.log(response.data)
         }
     }
 
-}
-
+// console.log("Bookmark Service :: getAllbookmarkedComment :: Errors", error.response?.data?.message)
 const bookmarkService = new BookmarkService()
 export {bookmarkService}

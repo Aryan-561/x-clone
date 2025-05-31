@@ -15,12 +15,10 @@ const GoogleAuthentication = () => {
                 console.error("No Google credential received.");
                 return;
             }
-
-            console.log("Google Credential JWT:", credential);
-
+// console.log("Google Credential JWT:", credential)
             const decoded = jwtDecode(credential);
-            console.log("Decoded User Info:", decoded);
-
+// console.log("Decoded User Info:", decoded)
+// console.log("Decoded User Info:", decoded)
             await Promise.resolve(dispatch(Googleauthentication(credential)));
             navigate("/home")
             

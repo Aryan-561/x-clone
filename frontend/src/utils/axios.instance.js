@@ -50,14 +50,13 @@ axiosPrivate.interceptors.response.use(
         // Check if error is due to token expiration
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
-            console.log('Token expired, attempting refresh...');
+// console.log('Token expired, attempting refresh...')
 
             try {
                 if (!store) {
                     throw new Error('Redux store is not initialized');
                 }
-
-                console.log('Dispatching refresh token action...');
+// console.log('Dispatching refresh token action...')
                 const response = await axiosPrivate.post('/users/re-refreshtoken');
                 
                 if (response.data) {

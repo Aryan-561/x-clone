@@ -43,7 +43,7 @@ function Profile() {
     useEffect(()=>{
 
         dispatch(getCurrentUser());
-        console.log("here",new Date)
+// console.log("here",new Date)
     },[])
 
     useEffect(() => {

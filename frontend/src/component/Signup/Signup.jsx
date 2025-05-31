@@ -56,8 +56,8 @@ function Signup() {
 
     const handleCheckVerification = async () => {
         try {
-            console.log("password", newPassword)
-            console.log("email", newEmail)
+// console.log("password", newPassword)
+// console.log("email", newEmail)
 
             const resultAction = await dispatch(loginUser({
                 email: newEmail,

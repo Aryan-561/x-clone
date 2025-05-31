@@ -401,7 +401,7 @@ const getUserPost = asyncHandler(async (req, res) => {
     if (!user) {
         throw new ApiErrors(404, "User not found!");
     }
-    console.log("user",user)
+// console.log("user",user)
     const userId = user?._id;
 
     if (!isValidObjectId(userId)) {

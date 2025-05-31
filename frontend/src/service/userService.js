@@ -17,7 +17,7 @@ class Userservice {
                     "Content-Type": "multipart/form-data"
                 }
             });
-            console.log("Create user response:", response.data);
+// console.log("Create user response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Create user error:", error.response?.data?.message || error.message);
@@ -32,7 +32,7 @@ class Userservice {
                 email,
                 password
             });
-            console.log("Login response:", response.data);
+// console.log("Login response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Login error:", error.response?.data?.message || error.message);
@@ -43,7 +43,7 @@ class Userservice {
     async deleteUser() {
         try {
             const response = await axiosPrivate.delete('/users/deleteuser');
-            console.log("Delete user response:", response.data);
+// console.log("Delete user response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Delete user error:", error.response?.data?.message || error.message);
@@ -53,9 +53,9 @@ class Userservice {
 
     async jwtRefreshToken() {
         try {
-            console.log("Attempting to refresh token...");
+// console.log("Attempting to refresh token...")
             const response = await axiosPrivate.post('/users/re-refreshtoken');
-            console.log("Refresh token response:", response.data);
+// console.log("Refresh token response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Token refresh error:", error.response?.data?.message || error.message);
@@ -66,7 +66,7 @@ class Userservice {
     async logoutUser() {
         try {
             const response = await axiosPrivate.get('/users/logout');
-            console.log("Logout response:", response.data);
+// console.log("Logout response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Logout error:", error.response?.data?.message || error.message);
@@ -83,7 +83,7 @@ class Userservice {
                 bio,
                 link
             });
-            console.log("Update account response:", response.data);
+// console.log("Update account response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Update account error:", error.response?.data?.message || error.message);
@@ -100,7 +100,7 @@ class Userservice {
                     "Content-Type": "multipart/form-data"
                 }
             });
-            console.log("Update cover image response:", response.data);
+// console.log("Update cover image response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Update cover image error:", error.response?.data?.message || error.message);
@@ -117,7 +117,7 @@ class Userservice {
                     "Content-Type": "multipart/form-data"
                 }
             });
-            console.log("Update profile image response:", response.data);
+// console.log("Update profile image response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Update profile image error:", error.response?.data?.message || error.message);
@@ -128,7 +128,7 @@ class Userservice {
     async getCurrentUser() {
         try {
             const response = await axiosPrivate.get('/users');
-            console.log("Get current user response:", response.data);
+// console.log("Get current user response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Get current user error:", error.response?.data?.message || error.message);
@@ -139,7 +139,7 @@ class Userservice {
     async search(search) {
         try {
             const response = await axiosPrivate.get(`/users/search/${search}`);
-            console.log("Search response:", response.data);
+// console.log("Search response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Search error:", error.response?.data?.message || error.message);
@@ -150,7 +150,7 @@ class Userservice {
     async getUserDetails(username) {
         try {
             const response = await axiosPrivate.get(`/users/username/${username}`);
-            console.log("Get user details response:", response.data);
+// console.log("Get user details response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Get user details error:", error.response?.data?.message || error.message);
@@ -161,7 +161,7 @@ class Userservice {
     async resendEmailVerification(email) {
         try {
             const response = await axiosPrivate.post('/users/resend-verification', { email });
-            console.log("Resend verification response:", response.data);
+// console.log("Resend verification response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Resend verification error:", error.response?.data?.message || error.message);
@@ -172,7 +172,7 @@ class Userservice {
     async getUserPost(username) {
         try {
             const response = await axiosPrivate.get(`/post/user/${username}`);
-            console.log("Get user posts response:", response.data);
+// console.log("Get user posts response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Get user posts error:", error.response?.data?.message || error.message);
@@ -183,7 +183,7 @@ class Userservice {
     async Googleauthentication(credential) {
         try {
             const response = await axiosPrivate.post('/users/google-login', { credential });
-            console.log("Google auth response:", response.data);
+// console.log("Google auth response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Google auth error:", error.response?.data?.message || error.message);
@@ -194,7 +194,7 @@ class Userservice {
     async getRandomUser() {
         try {
             const response = await axiosPrivate.get('/users/randomuser');
-            console.log("Get random user response:", response.data);
+// console.log("Get random user response:", response.data)
             return response.data;
         } catch (error) {
             console.error("Get random user error:", error.response?.data?.message || error.message);

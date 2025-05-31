@@ -21,13 +21,13 @@ function Card({ data, forPost=true }) {
       const postId = data._id
       dispatch(deletePost(postId))
       setIsDeleted(true)
-      console.log(data._id," Post deleted.")
+// console.log(data._id," Post deleted.")
     }
     if((data?.userDetails?.userId==user?._id||data?.commentBy?._id==user?._id)&& !forPost){
       const commentId = data._id
       dispatch(deleteComment({commentId}))
       setIsDeleted(true)
-      console.log(data._id," Comment deleted.")
+// console.log(data._id," Comment deleted.")
     }
   }
 

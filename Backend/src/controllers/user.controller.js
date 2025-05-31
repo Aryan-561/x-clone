@@ -77,7 +77,7 @@ const createUser = asyncHandler(async (req, res) => {
         const uploadCoverImageToCloudinary = await uploadCloudinary(
             coverImageFile
         );
-        console.log("uploadcloudinary", uploadCoverImageToCloudinary)
+// console.log("uploadcloudinary", uploadCoverImageToCloudinary)
         coverImageUrl = uploadCoverImageToCloudinary?.secure_url || "";
         coverPublicid = uploadCoverImageToCloudinary?.public_id || ""
 
@@ -195,7 +195,7 @@ const verifyMail = asyncHandler(async (req, res) => {
 
 const resendVerificationEmail = asyncHandler(async (req, res) => {
     const { email } = req.body;
-    console.log("email", email);
+// console.log("email", email)
     if (!email) {
         throw new ApiErrors(
             400,
