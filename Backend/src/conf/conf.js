@@ -11,5 +11,7 @@ export default {
     nodemailAuth: process.env.NODEMAIL_AUTH,
     nodemailPass: process.env.NODEMAIL_PASS,
     googleClientID: process.env.GOOGLE_CLIENT_ID,
-    jwtSecret: process.env.JWT_SECRET
+    jwtSecret: process.env.JWT_SECRET,
+    backend: process.env.BACKEND_URL
+
 }

@@ -13,7 +13,7 @@ app.use(express.static('public'));
 
 // Enable CORS (Cross-Origin Resource Sharing)
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: conf.backend,
     credentials: true,
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
 }));
@@ -55,6 +55,7 @@ import likeRouter from './routes/like.routes.js';
 import commentRouter from './routes/comment.routes.js';
 import subscriptionRouter from "./routes/subscription.routes.js";
 import bookmarkRouter from "./routes/bookmark.routes.js";
+import conf from './conf/conf.js';
 
 // Add routes
 app.use("/api/v1/users", UserRouter);
