@@ -92,8 +92,8 @@ function Login() {
                 </form>
 
                 {/* Show error or message */}
-                {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
-                {message && <p className={`${error?"text-red-500 text-sm text-center mt-2":"text-green-500 text-sm text-center mt-2"}`}>{message}</p>}
+                {/* {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+                {message && <p className={`${error?"text-red-500 text-sm text-center mt-2":"text-green-500 text-sm text-center mt-2"}`}>{message}</p>} */}
 
                 {/* Signup Link */}
                 <p className="text-sm text-zinc-400 text-center my-6">
