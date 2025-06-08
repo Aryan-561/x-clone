@@ -12,7 +12,7 @@ class Userservice {
             formData.append("email", email);
             formData.append("password", password);
 
-            const response = await axios.post('https://xclone.up.railway.app/api/v1/users/create', formData, {
+            const response = await axios.post('http://localhost:4444/api/v1/users/create', formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }

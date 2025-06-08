@@ -189,8 +189,8 @@ function Signup() {
                     </form>
 
                     {/* Error & Message */}
-                    {/* {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
-                    {message && <p className="text-green-500 text-sm text-center mt-2">{message}</p>} */}
+                    {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+                    {message && <p className="text-green-500 text-sm text-center mt-2">{message}</p>}
 
                     <p className="text-sm text-zinc-400 text-center my-6">
                         Already have an account?{' '}
