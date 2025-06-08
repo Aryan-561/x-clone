@@ -19,7 +19,9 @@ function Login() {
                 email: data.email,
                 password: data.password,
             }))
-// console.log("Login successful", result)
+
+            console.log("Login successful", result);
+            // Navigate after successful login
             navigate("/home");
             reset();
         } catch (err) {

@@ -10,10 +10,10 @@ class CommentService {
             }, {
                 withCredentials: true
             });
-// console.log("CommentService :: createComment :: response", response)
+            console.log("CommentService :: createComment :: response", response);
             return response.data;
         } catch (error) {
-// console.log("CommentService :: createComment :: Error", error.response?.data?.message)
+            console.log("CommentService :: createComment :: Error", error.response?.data?.message);
             throw new Error(`CommentService :: createComment :: ${error.response?.data?.message || "Something went wrong"}`);
         }
     }
@@ -25,10 +25,10 @@ class CommentService {
             }, {
                 withCredentials: true
             });
-// console.log("CommentService :: updateComment :: response", response)
+            console.log("CommentService :: updateComment :: response", response);
             return response.data;
         } catch (error) {
-// console.log("CommentService :: updateComment :: Error", error.response?.data?.message)
+            console.log("CommentService :: updateComment :: Error", error.response?.data?.message);
             throw new Error(`CommentService :: updateComment :: ${error.response?.data?.message || "Something went wrong"}`);
         }
     }
@@ -38,10 +38,10 @@ class CommentService {
             const response = await axios.delete(`${commentBaseUrl}/${commentId}`, {
                 withCredentials: true
             });
-// console.log("CommentService :: deleteComment :: response", response)
+            console.log("CommentService :: deleteComment :: response", response);
             return response.data;
         } catch (error) {
-// console.log("CommentService :: deleteComment :: Error", error.response?.data?.message)
+            console.log("CommentService :: deleteComment :: Error", error.response?.data?.message);
             throw new Error(`CommentService :: deleteComment :: ${error.response?.data?.message || "Something went wrong"}`);
         }
     }
@@ -51,10 +51,10 @@ class CommentService {
             const response = await axios.get(`${commentBaseUrl}/${commentId}`, {
                 withCredentials: true
             });
-// console.log("CommentService :: getComment :: response", response)
+            console.log("CommentService :: getComment :: response", response);
             return response.data;
         } catch (error) {
-// console.log("CommentService :: getComment :: Error", error.response?.data?.message)
+            console.log("CommentService :: getComment :: Error", error.response?.data?.message);
             throw new Error(`CommentService :: getComment :: ${error.response?.data?.message || "Something went wrong"}`);
         }
     }
@@ -64,10 +64,10 @@ class CommentService {
             const response = await axios.get(`${commentBaseUrl}/post/${postId}`, {
                 withCredentials: true
             });
-// console.log("CommentService :: getAllPostComments :: response", response)
+            console.log("CommentService :: getAllPostComments :: response", response);
             return response.data;
         } catch (error) {
-// console.log("CommentService :: getAllPostComments :: Error", error.response?.data?.message)
+            console.log("CommentService :: getAllPostComments :: Error", error.response?.data?.message);
             throw new Error(`CommentService :: getAllPostComments :: ${error.response?.data?.message || "Something went wrong"}`);
         }
     }
@@ -77,10 +77,10 @@ class CommentService {
             const response = await axios.get(`${commentBaseUrl}/replies/${commentId}`, {
                 withCredentials: true
             });
-// console.log("CommentService :: getCommentReplies :: response", response)
+            console.log("CommentService :: getCommentReplies :: response", response);
             return response.data;
         } catch (error) {
-// console.log("CommentService :: getCommentReplies :: Error", error.response?.data?.message)
+            console.log("CommentService :: getCommentReplies :: Error", error.response?.data?.message);
             throw new Error(`CommentService :: getCommentReplies :: ${error.response?.data?.message || "Something went wrong"}`);
         }
     }
@@ -90,10 +90,10 @@ class CommentService {
             const response = await axios.get(`${commentBaseUrl}/c/${username}`, {
                 withCredentials: true
             });
-// console.log("CommentService :: getAllUserComment :: response", response.data)
+            console.log("CommentService :: getAllUserComment :: response", response.data);
             return response.data;
         } catch (error) {
-// console.log("CommentService :: getAllUserComment :: Error", error.response?.data?.message)
+            console.log("CommentService :: getAllUserComment :: Error", error.response?.data?.message);
             throw new Error(`CommentService :: getAllUserComment :: ${error.response?.data?.message || "Something went wrong in getAllUserComment"}`);
         }
     }
@@ -104,10 +104,10 @@ class CommentService {
             }, {
                 withCredentials: true
             });
-// console.log("CommentService :: createReplyComment :: response", response)
+            console.log("CommentService :: createReplyComment :: response", response);
             return response.data;
         } catch (error) {
-// console.log("CommentService :: createReplyComment :: Error", error.response?.data?.message)
+            console.log("CommentService :: createReplyComment :: Error", error.response?.data?.message);
             throw new Error(`CommentService :: createReplyComment :: ${error.response?.data?.message || "Something went wrong"}`);
         }
     }

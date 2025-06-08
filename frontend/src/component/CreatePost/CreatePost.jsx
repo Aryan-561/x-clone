@@ -31,12 +31,12 @@ function CreatePost({classname, isPost=true, forReply=false}) {
   };
 
   const handleFile = (file) => {
-// console.log(fileInputRef)
+    console.log(fileInputRef)
     setType(file.type.split("/")[0]);
     setMedia(file)
     const reader = new FileReader();
     reader.onloadend = () => {
-// console.log(reader)
+      console.log(reader);
       setPreview(reader.result);
     };
     reader.readAsDataURL(file);

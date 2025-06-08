@@ -12,10 +12,10 @@ export class PostService {
             const response = await axiosInstance.get('/', {
                 withCredentials: true,
             });
-// console.log(response.data)
+            console.log(response.data)
             return response.data;
         } catch (error) {
-// console.log("Post Service :: getAllPost :: Errors", error.response?.data?.message)
+            console.log("Post Service :: getAllPost :: Errors", error.response?.data?.message);
             throw new Error(`Post Service :: getAllPost :: Errors ${error.response?.data?.message || "something went wrong while getAllPost"}`)
         }
     }
@@ -25,7 +25,7 @@ export class PostService {
             const response = await axiosInstance.get(`/user/${userId}`,{withCredentials: true,});
             return response.data;
         } catch (error) {
-// console.log("Post Service :: getUserPost :: Errors", error.response?.data?.message)
+            console.log("Post Service :: getUserPost :: Errors", error.response?.data?.message);
             throw new Error(`Post Service :: getUserPost :: Errors ${error.response?.data?.message || "something went wrong while getUserPost"}`)
         }
     }
@@ -33,10 +33,10 @@ export class PostService {
     async getFollowingUserPost() {
         try {
             const response = await axiosInstance.get(`/following`,{withCredentials: true,});
-// console.log(response.data)
+            console.log(response.data)
             return response.data;
         } catch (error) {
-// console.log("Post Service :: getFollowingUserPost :: Errors", error.response?.data?.message)
+            console.log("Post Service :: getFollowingUserPost :: Errors", error.response?.data?.message);
             throw new Error(`Post Service :: getFollowingUserPost :: Errors ${error.response?.data?.message || "something went wrong while getFollowingUserPost"}`)
         }
     }
@@ -44,10 +44,10 @@ export class PostService {
     async getPostById(postId){
         try {
             const response = await axiosInstance.get(`/${postId}`,{withCredentials: true,})
-// console.log(response.data)
+            console.log(response.data)
             return response.data
         } catch (error) {
-// console.log("Post Service :: getPostById :: Errors", error.response?.data?.message)
+            console.log("Post Service :: getPostById :: Errors", error.response?.data?.message);
             throw new Error(`Post Service :: getPostById :: Errors ${error.response?.data?.message || "something went wrong while getPostById"}`)
         }
     }
@@ -63,10 +63,10 @@ export class PostService {
                 },
                 withCredentials: true,
             })
-// console.log(response.data)
+            console.log(response.data)
             return response.data
         } catch (error) {
-// console.log("Post Service :: createPost :: Errors", error.response?.data?.message)
+            console.log("Post Service :: createPost :: Errors", error.response?.data?.message);
             throw new Error(`Post Service :: createPost :: Errors ${error.response?.data?.message || "something went wrong while createPost"}`)
         }
     }
@@ -79,10 +79,10 @@ export class PostService {
                 },
                 withCredentials: true
             })
-// console.log(response.data)
+            console.log(response.data)
             return response.data
         } catch (error) {
-// console.log("Post Service :: updatePost :: Errors", error.response?.data?.message)
+            console.log("Post Service :: updatePost :: Errors", error.response?.data?.message);
             throw new Error(`Post Service :: updatePost :: Errors ${error.response?.data?.message || "something went wrong while updatePost"}`)
         }
    }
@@ -90,10 +90,10 @@ export class PostService {
    async deletePost(postId){
         try {
             const response = await axiosInstance.delete(`/delete/${postId}`,{withCredentials: true,})
-// console.log(response.data)
+            console.log(response.data)
             return response.data
         } catch (error) {
-// console.log("Post Service :: deletePost :: Errors", error.response?.data?.message)
+            console.log("Post Service :: deletePost :: Errors", error.response?.data?.message);
             throw new Error(`Post Service :: deletePost :: Errors ${error.response?.data?.message || "something went wrong while deletePost"}`)
         }
     }

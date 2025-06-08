@@ -7,10 +7,10 @@ class Likeservice {
             const response = await axios.post(`${likeBaseUrl}/toggle/post/${postId}`, {}, {
                 withCredentials: true
             })
-// console.log("response", response.data)
+            console.log("response", response.data)
             return response.data
         } catch (error) {
-// console.log("Likeservice :: togglePostLike :: Errors", error.response?.data?.message)
+            console.log("Likeservice :: togglePostLike :: Errors", error.response?.data?.message);
             throw new Error(`Likeservice :: togglePostLike :: Errors ${error.response?.data?.message || "something went wrong while togglePostLike "}`)
         }
     }
@@ -19,10 +19,10 @@ class Likeservice {
             const response = await axios.post(`${likeBaseUrl}/toggle/comment/${commentId}`, {}, {
                 withCredentials: true
             })
-// console.log("response", response.data)
+            console.log("response", response.data)
             return response.data
         } catch (error) {
-// console.log("Likeservice :: toggleCommentLike :: Errors", error.response?.data?.message)
+            console.log("Likeservice :: toggleCommentLike :: Errors", error.response?.data?.message);
             throw new Error(`Likeservice :: toggleCommentLike :: Errors ${error.response?.data?.message || "something went wrong while toggleCommentLike "}`)
         }
     }
@@ -31,10 +31,10 @@ class Likeservice {
             const response = await axios.get(`${likeBaseUrl}/posts`, {
                 withCredentials: true
             })
-// console.log("response", response.data)
+            console.log("response", response.data)
             return response.data
         } catch (error) {
-// console.log("Likeservice :: getAllLikePost :: Errors", error.response?.data?.message)
+            console.log("Likeservice :: getAllLikePost :: Errors", error.response?.data?.message);
             throw new Error(`Likeservice :: getAllLikePost :: Errors ${error.response?.data?.message || "something went wrong while getAllLikePost "}`)
 
         }
@@ -44,10 +44,10 @@ class Likeservice {
             const response = await axios.get(`${likeBaseUrl}/comments`, {
                 withCredentials: true
             })
-// console.log("response", response.data)
+            console.log("response", response.data)
             return response.data
         } catch (error) {
-// console.log("Likeservice :: getAllLikeComment :: Errors", error.response?.data?.message)
+            console.log("Likeservice :: getAllLikeComment :: Errors", error.response?.data?.message);
             throw new Error(`Likeservice :: getAllLikeComment :: Errors ${error.response?.data?.message || "something went wrong while getAllLikeComment "}`)
 
         }

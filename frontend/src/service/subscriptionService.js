@@ -11,11 +11,12 @@ export class SubscriptionService{
         try {
             
             const response = await axiosInstance.post(`/toggle/${followingId}`, {}, {withCredentials: true,})
-// console.log(response.data)
+            console.log(response.data)
             return response.data
 
         } catch (error) {
-// console.log("Subscription Service :: toggleSubscription :: Errors", error.response?.data?.message)
+
+            console.log("Subscription Service :: toggleSubscription :: Errors", error.response?.data?.message);
 
             throw new Error(`Subscription Service :: toggleSubscription :: Errors ${error.response?.data?.message || "something went wrong while toggleSubscription"}`)
 
@@ -26,11 +27,13 @@ export class SubscriptionService{
         try {
             
             const response = await axiosInstance.get(`/${userId}/follower`,{withCredentials: true,})
-// console.log(response.data)
+
+            console.log(response.data)
             return response.data
 
         } catch (error) {
-// console.log("Subscription Service :: getUserFollower :: Errors", error.response?.data?.message)
+            
+            console.log("Subscription Service :: getUserFollower :: Errors", error.response?.data?.message);
 
             throw new Error(`Subscription Service :: getUserFollower :: Errors ${error.response?.data?.message || "something went wrong while getUserFollower"}`)
 
@@ -42,11 +45,13 @@ export class SubscriptionService{
         try {
             
             const response = await axiosInstance.get(`/${userId}/following`,{withCredentials: true,})
-// console.log(response.data)
+
+            console.log(response.data)
             return response.data
 
         } catch (error) {
-// console.log("Subscription Service :: getUserFollowing :: Errors", error.response?.data?.message)
+            
+            console.log("Subscription Service :: getUserFollowing :: Errors", error.response?.data?.message);
 
             throw new Error(`Subscription Service :: getUserFollowing :: Errors ${error.response?.data?.message || "something went wrong while getUserFollowing"}`)
 

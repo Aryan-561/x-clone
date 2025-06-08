@@ -7,7 +7,7 @@ import { toggleSubscription } from "../../features/subscription/subscriptionSlic
 function CommentReplies() {
     
     const { replies, loading, commentByid } = useSelector((state) => state.comment);
-// console.log(commentByid)
+    console.log(commentByid)
     
     
     const navigate =useNavigate()
