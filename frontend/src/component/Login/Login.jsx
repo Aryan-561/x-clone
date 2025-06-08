@@ -12,13 +12,13 @@ function Login() {
     const navigate = useNavigate();
     const { handleSubmit, register, formState: { errors }, reset } = useForm();
 
-    const loginSubmit =  (data) => {
+    const loginSubmit =  async(data) => {
         try {
             // Dispatch the login action
-            const result =  dispatch(loginUser({
+            const result =  await Promise.resolve( dispatch(loginUser({
                 email: data.email,
                 password: data.password,
-            }))
+            })))
 
             console.log("Login successful", result);
             // Navigate after successful login
