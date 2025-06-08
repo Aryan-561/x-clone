@@ -113,9 +113,9 @@ function Signup() {
     };
 
     return (
-        <Container className="w-full flex-col bg-gray-800 flex items-center justify-center text-white p-3">
+        <Container className="w-full min-h-screen flex-col bg-gray-900 flex items-center justify-center text-white p-3 sm:p-6">
             {!showVerificationPrompt ? (
-                <div className="w-full max-w-xl text-center bg-black px-8 shadow-white/50 rounded-2xl shadow-sm">
+                <div className="w-full max-w-xl text-center bg-black px-4 sm:px-8 shadow-white/50 rounded-2xl shadow-sm">
                     {/* Close Button */}
                     <div className="w-full flex justify-center mb-4">
                         <X className="w-16 rounded-full" image="xLight.png" imageAlt="close" />

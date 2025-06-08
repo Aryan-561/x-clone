@@ -31,8 +31,8 @@ function Login() {
     };
 
     return (
-        <Container className="w-full  bg-gray-800 flex items-center justify-center text-white p-3">
-            <div className="w-full max-w-xl text-center bg-black p-8 shadow-white/50 rounded-2xl shadow-sm">
+        <Container className="w-full min-h-screen  bg-gray-900 flex items-center justify-center text-white p-3 sm:p-6">
+            <div className="w-full max-w-xl text-center bg-black p-4 sm:p-8 shadow-white/50 rounded-2xl shadow-sm">
                 {/* Close Button */}
                 <div className="w-full flex justify-center mb-4">
                     <X className="w-16 rounded-full" image="xLight.png" imageAlt="close" />
