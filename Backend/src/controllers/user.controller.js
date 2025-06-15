@@ -11,10 +11,9 @@ import { OAuth2Client } from 'google-auth-library';
 const client = new OAuth2Client(conf.googleClientID);
 const options = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Lax',
+    secure: true,
+    sameSite: 'None',
     path: '/',
-    domain: 'localhost',
     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
 };
 
