@@ -7,7 +7,7 @@ export const injectStore = _store => {
 };
 
 const axiosPrivate = axios.create({
-    baseURL: 'http://localhost:4444/api/v1',
+    baseURL: import.meta.env.VITE_API_BASE_URL_PRODUCTION+ '/api/v1',
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json'
