@@ -1,4 +1,4 @@
-import axios from "axios";
+
 import { axiosPrivate } from '../utils/axios.instance';
 
 class Userservice {
@@ -12,7 +12,7 @@ class Userservice {
             formData.append("email", email);
             formData.append("password", password);
 
-            const response = await axios.post('http://localhost:4444/api/v1/users/create', formData, {
+            const response = await axiosPrivate.post('http://localhost:4444/api/v1/users/create', formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }

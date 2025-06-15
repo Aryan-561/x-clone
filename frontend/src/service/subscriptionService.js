@@ -1,16 +1,13 @@
-import axios from 'axios'
 
+import { axiosPrivate } from '../utils/axios.instance';
 
-const axiosInstance = axios.create({
-    baseURL:`http://localhost:4444/api/v1/subscription`
-})
 
 export class SubscriptionService{
     
     async toggleSubscription(followingId){
         try {
             
-            const response = await axiosInstance.post(`/toggle/${followingId}`, {}, {withCredentials: true,})
+            const response = await axiosPrivate.post(`/subscription/toggle/${followingId}`, {}, {withCredentials: true,})
             console.log(response.data)
             return response.data
 
@@ -26,7 +23,7 @@ export class SubscriptionService{
     async getUserFollower(userId){
         try {
             
-            const response = await axiosInstance.get(`/${userId}/follower`,{withCredentials: true,})
+            const response = await axiosPrivate.get(`/subscription/${userId}/follower`,{withCredentials: true,})
 
             console.log(response.data)
             return response.data
@@ -44,7 +41,7 @@ export class SubscriptionService{
     async getUserFollowing(userId){
         try {
             
-            const response = await axiosInstance.get(`/${userId}/following`,{withCredentials: true,})
+            const response = await axiosPrivate.get(`/subscription/${userId}/following`,{withCredentials: true,})
 
             console.log(response.data)
             return response.data

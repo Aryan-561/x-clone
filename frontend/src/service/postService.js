@@ -1,15 +1,12 @@
-import axios from 'axios'
 
+import { axiosPrivate } from '../utils/axios.instance';
 
-const axiosInstance = axios.create({
-    baseURL:`http://localhost:4444/api/v1/post`
-})
 
 export class PostService {
     
     async getAllPost() {
         try {
-            const response = await axiosInstance.get('/', {
+            const response = await axiosPrivate.get('/post', {
                 withCredentials: true,
             });
             console.log(response.data)
@@ -22,7 +19,7 @@ export class PostService {
 
     async getUserPost(userId) {
         try {
-            const response = await axiosInstance.get(`/user/${userId}`,{withCredentials: true,});
+            const response = await axiosPrivate.get(`/post/user/${userId}`,{withCredentials: true,});
             return response.data;
         } catch (error) {
             console.log("Post Service :: getUserPost :: Errors", error.response?.data?.message);
@@ -32,7 +29,7 @@ export class PostService {
 
     async getFollowingUserPost() {
         try {
-            const response = await axiosInstance.get(`/following`,{withCredentials: true,});
+            const response = await axiosPrivate.get(`/post/following`,{withCredentials: true,});
             console.log(response.data)
             return response.data;
         } catch (error) {
@@ -43,7 +40,7 @@ export class PostService {
 
     async getPostById(postId){
         try {
-            const response = await axiosInstance.get(`/${postId}`,{withCredentials: true,})
+            const response = await axiosPrivate.get(`/post/${postId}`,{withCredentials: true,})
             console.log(response.data)
             return response.data
         } catch (error) {
@@ -57,7 +54,7 @@ export class PostService {
             const formData = new FormData()
             formData.append('text', text)
             formData.append('media',media)
-            const response = await axiosInstance.post(`/create`, formData,{
+            const response = await axiosPrivate.post(`/post/create`, formData,{
                 headers:{
                     'Content-Type':'multipart/form-data'
                 },
@@ -73,7 +70,7 @@ export class PostService {
 
    async updatePost({postId,text}){
         try {
-            const response = await axiosInstance.patch(`/update/${postId}`,{text},{
+            const response = await axiosPrivate.patch(`/post/update/${postId}`,{text},{
                 headers:{
                     'content-type':'application/json; charset=UTF-8'
                 },
@@ -89,7 +86,7 @@ export class PostService {
 
    async deletePost(postId){
         try {
-            const response = await axiosInstance.delete(`/delete/${postId}`,{withCredentials: true,})
+            const response = await axiosPrivate.delete(`/post/delete/${postId}`,{withCredentials: true,})
             console.log(response.data)
             return response.data
         } catch (error) {

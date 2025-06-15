@@ -1,16 +1,14 @@
-import axios from 'axios'
+
+import { axiosPrivate } from '../utils/axios.instance';
 
 
-const axiosInstance = axios.create({
-    baseURL:`http://localhost:4444/api/v1/bookmark`
-})
 
 export class BookmarkService{
 
     async toggleBookmarkedPost(postId){
         try {
             
-            const response = await axiosInstance.post(`/t/post/${postId}`,{},{withCredentials: true,})
+            const response = await axiosPrivate.post(`/bookmark/t/post/${postId}`,{},{withCredentials: true,})
             
             console.log(response.data)
             return response.data
@@ -27,7 +25,7 @@ export class BookmarkService{
     async toggleBookmarkedComment(commentId){
         try {
             
-            const response = await axiosInstance.post(`/t/comment/${commentId}`,{},{withCredentials: true,})
+            const response = await axiosPrivate.post(`/bookmark/t/comment/${commentId}`,{},{withCredentials: true,})
             
             console.log(response.data)
             return response.data
@@ -44,7 +42,7 @@ export class BookmarkService{
     async getAllbookmarkedPost(){
         try {
             
-            const response = await axiosInstance.get(`/posts`,{withCredentials: true,})
+            const response = await axiosPrivate.get(`/bookmark/posts`,{withCredentials: true,})
             
             console.log(response.data)
             return response.data
@@ -62,7 +60,7 @@ export class BookmarkService{
     async getAllbookmarkedComment(){
         try {
             
-            const response = await axiosInstance.get(`/comments`,{withCredentials: true,})
+            const response = await axiosPrivate.get(`/bookmark/comments`,{withCredentials: true,})
             
             console.log(response.data)
             return response.data

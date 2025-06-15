@@ -1,10 +1,10 @@
-import { likeBaseUrl } from "../constants";
-import axios from "axios";
+
+import { axiosPrivate } from '../utils/axios.instance';
 
 class Likeservice {
     async togglePostLike(postId) {
         try {
-            const response = await axios.post(`${likeBaseUrl}/toggle/post/${postId}`, {}, {
+            const response = await axiosPrivate.post(`/like/toggle/post/${postId}`, {}, {
                 withCredentials: true
             })
             console.log("response", response.data)
@@ -16,7 +16,7 @@ class Likeservice {
     }
     async toggleCommentLike(commentId) {
         try {
-            const response = await axios.post(`${likeBaseUrl}/toggle/comment/${commentId}`, {}, {
+            const response = await axiosPrivate.post(`/like/toggle/comment/${commentId}`, {}, {
                 withCredentials: true
             })
             console.log("response", response.data)
@@ -28,7 +28,7 @@ class Likeservice {
     }
     async getAllLikePost() {
         try {
-            const response = await axios.get(`${likeBaseUrl}/posts`, {
+            const response = await axiosPrivate.get(`/like/posts`, {
                 withCredentials: true
             })
             console.log("response", response.data)
@@ -41,7 +41,7 @@ class Likeservice {
     }
     async getAllLikeComment() {
         try {
-            const response = await axios.get(`${likeBaseUrl}/comments`, {
+            const response = await axiosPrivate.get(`/like/comments`, {
                 withCredentials: true
             })
             console.log("response", response.data)

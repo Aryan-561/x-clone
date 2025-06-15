@@ -1,11 +1,11 @@
-import axios from "axios";
-import { commentBaseUrl } from "../constants";
+
+import { axiosPrivate } from '../utils/axios.instance';
 
 class CommentService {
 
     async createComment({ postId, text }) {
         try {
-            const response = await axios.post(`${commentBaseUrl}/create/${postId}`, {
+            const response = await axiosPrivate.post(`/comment/create/${postId}`, {
                 text
             }, {
                 withCredentials: true
@@ -20,7 +20,7 @@ class CommentService {
 
     async updateComment({ commentId, text }) {
         try {
-            const response = await axios.put(`${commentBaseUrl}/${commentId}`, {
+            const response = await axiosPrivate.put(`/comment/${commentId}`, {
                 text
             }, {
                 withCredentials: true
@@ -35,7 +35,7 @@ class CommentService {
 
     async deleteComment({ commentId }) {
         try {
-            const response = await axios.delete(`${commentBaseUrl}/${commentId}`, {
+            const response = await axiosPrivate.delete(`/comment/${commentId}`, {
                 withCredentials: true
             });
             console.log("CommentService :: deleteComment :: response", response);
@@ -48,7 +48,7 @@ class CommentService {
 
     async getComment(commentId) {
         try {
-            const response = await axios.get(`${commentBaseUrl}/${commentId}`, {
+            const response = await axiosPrivate.get(`/comment/${commentId}`, {
                 withCredentials: true
             });
             console.log("CommentService :: getComment :: response", response);
@@ -61,7 +61,7 @@ class CommentService {
 
     async getAllPostComments({ postId }) {
         try {
-            const response = await axios.get(`${commentBaseUrl}/post/${postId}`, {
+            const response = await axiosPrivate.get(`/comment/post/${postId}`, {
                 withCredentials: true
             });
             console.log("CommentService :: getAllPostComments :: response", response);
@@ -74,7 +74,7 @@ class CommentService {
 
     async getCommentReplies({ commentId }) {
         try {
-            const response = await axios.get(`${commentBaseUrl}/replies/${commentId}`, {
+            const response = await axiosPrivate.get(`/comment}/replies/${commentId}`, {
                 withCredentials: true
             });
             console.log("CommentService :: getCommentReplies :: response", response);
@@ -87,7 +87,7 @@ class CommentService {
 
     async getAllUserComment(username) {
         try {
-            const response = await axios.get(`${commentBaseUrl}/c/${username}`, {
+            const response = await axiosPrivate.get(`/comment/c/${username}`, {
                 withCredentials: true
             });
             console.log("CommentService :: getAllUserComment :: response", response.data);
@@ -99,7 +99,7 @@ class CommentService {
     }
     async createReplyComment({ commentId, text }) {
         try {
-            const response = await axios.post(`${commentBaseUrl}/reply/${commentId}`, {
+            const response = await axiosPrivate.post(`/comment/reply/${commentId}`, {
                 text
             }, {
                 withCredentials: true
