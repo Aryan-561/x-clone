@@ -13,7 +13,7 @@ app.use(express.static('public'));
 
 // Enable CORS (Cross-Origin Resource Sharing)
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173","https://notxclone.vercel.app"],
     credentials: true,
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
 }));
