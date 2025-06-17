@@ -34,7 +34,7 @@ function CommentReplies() {
               </div>
               <div className="flex flex-col gap-1 text-white   bg-black   border-b border-gray-600 p-2 sm:p-4 ">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                  <Link className="flex items-center gap-2" to={`/${commentByid?.userDetails?.username}`}>
                     <Avatar userDetails={commentByid?.userDetails} />
                     <div className="flex flex-col">
                       <div className="font-bold text-xs/5   sm:text-lg/5 p-0 m-0">
@@ -44,7 +44,7 @@ function CommentReplies() {
                         @{commentByid?.userDetails?.username}
                       </div>
                     </div>
-                  </div>
+                  </Link>
                   {!commentByid?.userDetails?.isFollowed || false && (
                     <Button
                       key={commentByid?._id}

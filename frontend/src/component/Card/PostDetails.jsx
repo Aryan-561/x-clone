@@ -48,7 +48,7 @@ function PostDetails() {
               </div>
               <div className="flex flex-col gap-1 text-white   bg-black   border-b border-gray-600 p-2 sm:p-4 ">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                  <Link className="flex items-center gap-2" to={`/${post?.userDetails?.username}`}>
                     <Avatar userDetails={post?.userDetails} />
                     <div className="flex flex-col">
                       <div className="font-bold text-xs/5   sm:text-lg/5 p-0 m-0">
@@ -58,7 +58,7 @@ function PostDetails() {
                         @{post?.userDetails?.username}
                       </div>
                     </div>
-                  </div>
+                  </Link>
                   {!isFollowed && (
                     <Button
                       className={`bg-white text-black py-1 px-3 font-semibold cursor-pointer hover:bg-white/85`}
