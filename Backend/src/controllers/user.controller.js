@@ -123,7 +123,7 @@ const createUser = asyncHandler(async (req, res) => {
         expiresIn: "1h",
     });
 
-    const verificationUrl = `http://localhost:4444/api/v1/users/verify-email?token=${emailToken}`;
+    const verificationUrl = `${process.env.API_BASE_URL_PRODUCTION}/api/v1/users/verify-email?token=${emailToken}`;
     await sendMail({
         to: email,
         subject: "Verify Your Email",
@@ -217,7 +217,7 @@ const resendVerificationEmail = asyncHandler(async (req, res) => {
         expiresIn: "1h",
     });
 
-    const verificationUrl = `http://localhost:4444/api/v1/users/verify-email?token=${emailToken}`;
+    const verificationUrl = `${process.env.API_BASE_URL_PRODUCTION}/api/v1/users/verify-email?token=${emailToken}`;
 
     await sendMail({
         to: email,
