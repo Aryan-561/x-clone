@@ -198,7 +198,7 @@ function Signup() {
                     </p>
                 </div>
             ) : (
-                <div className="bg-black text-white flex flex-col items-center justify-center min-h-1/4 w-full max-w-xl text-center px-8 shadow-white/50 rounded-2xl shadow-sm">
+                <div className="bg-black text-white flex flex-col items-center justify-center min-h-1/4 w-full max-w-xl text-center px-8 py-6 shadow-white/50 rounded-2xl shadow-sm">
                     <h1 className="text-2xl font-semibold mb-4">Verify Your Email</h1>
                     <p className="text-gray-400 mb-6 text-center max-w-md">
                         A verification link has been sent to your email. Once you've clicked the link, come back here and continue.
