@@ -29,6 +29,31 @@ function PostDetails() {
     dispatch(toggleSubscription(post?.userDetails?.userId));
     setIsFollowed(true);
   };
+
+  function linkifyText(text) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text?.split(urlRegex)?.map((part, index) => {
+    if (urlRegex.test(part)) {
+      return (
+        <a
+          key={index}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sky-500 underline break-words"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          {part}
+        </a>
+      );
+    } else {
+      return part;
+    }
+  });
+}
+  
   return (
     <>
       <Container className="col-span-5 w-full sm:w-[85%] lg:w-full   pb-4 border border-t-0 border-gray-600">
@@ -70,7 +95,7 @@ function PostDetails() {
                 </div>
                 <div>
 
-                  <div className="text-sm sm:text-lg py-2">{post?.text}</div>
+                  <div className="text-sm sm:text-lg py-2 whitespace-pre-wrap">{linkifyText(post?.text)}</div>
                   <div>{post?.media && <Media media={post?.media} />}</div>
                 </div>
 

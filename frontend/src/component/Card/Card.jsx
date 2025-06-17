@@ -31,6 +31,31 @@ function Card({ data, forPost=true }) {
     }
   }
 
+  function linkifyText(text) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text?.split(urlRegex)?.map((part, index) => {
+    if (urlRegex.test(part)) {
+      return (
+        <a
+          key={index}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sky-500 underline break-words"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          {part}
+        </a>
+      );
+    } else {
+      return part;
+    }
+  });
+}
+
+
   return (
     <>
       {!isDeleted &&
@@ -57,7 +82,7 @@ function Card({ data, forPost=true }) {
             </div>
 
             {/* text or content */}
-            <div className="text-sm sm:text-lg  ">{data?.text}</div>
+            <div className="text-sm sm:text-lg  whitespace-pre-wrap">{linkifyText(data?.text)}</div>
 
             {/* Media  */}
             {(data?.media) && (
