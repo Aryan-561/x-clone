@@ -68,7 +68,7 @@ EXAMPLE OF API URL:
 
 Frontend Live Demo: [https://notxclone.vercel.app](https://notxclone.vercel.app)
 
-Backend Railway Dashboard / API URL: [https://xclone.up.railway.app/api/v1/users](https://xclone.up.railway.app/api/v1/users)
+Backend Railway Dashboard / API URL: [https://x-clone-production-f9ba.up.railway.app/api/v1/users](https://x-clone-production-f9ba.up.railway.app/api/v1/users)
 
 ### 🔐 User Routes – `/api/v1/users`
 
@@ -148,23 +148,29 @@ Backend Railway Dashboard / API URL: [https://xclone.up.railway.app/api/v1/users
 ### Backend `.env`
 
 ```env
-MONGODB_URI=your_mongodb_uri
-ACCESS_TOKEN=access_token_secret
-REFRESH_TOKEN=refresh_token_secret
+MONGODB_URI=
+ACCESS_TOKEN=
+REFRESH_TOKEN=
 PORT=4444
-CLOUD_NAME=your_cloud_name
-CLOUD_API_KEY=your_api_key
-CLOUD_API_SECRET=your_api_secret
-NODEMAIL_AUTH=your_email
-NODEMAIL_PASS=your_email_app_password
-GOOGLE_CLIENT_ID=your_google_client_id
-JWT_SECRET=your_jwt_secret
+CLOUD_NAME=
+CLOUD_API_KEY=
+CLOUD_API_SECRET=
+NODEMAIL_AUTH=
+NODEMAIL_PASS=
+GOOGLE_CLIENT_ID=
+JWT_SECRET=
+NODE_ENV = 
+DOMAIN_NAME = 
 ```
 
 ### Frontend `.env`
 
 ```env
-VITE_GOOGLE_CLIENT_ID=your_google_client_id
+VITE_GOOGLE_CLIENT_ID=
+
+VITE_API_BASE_URL_DEVELOPMENT=
+
+VITE_API_BASE_URL_PRODUCTION=
 ```
 
 ---
@@ -230,4 +236,5 @@ Backend Railway Dashboard / API URL: [https://railway.app/project/your-project-i
 ### Himanshu Tamoli
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-HimanshuTamoli24-blue?style=flat\&logo=linkedin)](https://www.linkedin.com/in/himanshutamoli24)
-[![GitHub](https://img.shields.io/badge/GitHub-HimanshuTamoli24-black?style=flat\&logo=github)](https://github.com/HimanshuTamoli24)
+[![Portfolio](https://img.shields.io/badge/Portfolio-HimanshuTamoli24-black?style=flat)](https://HimanshuTamoli.me)
+
